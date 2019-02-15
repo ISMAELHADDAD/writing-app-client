@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../logo.svg'
+import logoHub from '../../ideasHub_2.png'
 import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
@@ -41,7 +42,7 @@ class DiscussionPage extends Component {
             <Navbar.Brand>
               <Navbar.Item renderAs="a" href="#">
                 <img
-                  src="https://bulma.io/images/bulma-logo-white.png"
+                  src={logoHub}
                   alt="Bulma: a modern CSS framework based on Flexbox"
                   width="112"
                   height="28"

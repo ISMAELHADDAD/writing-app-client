@@ -3,7 +3,7 @@ import axios from 'axios';
 class API {
 
   static async getDiscussion(id) {
-    let res = await axios.get(`http://localhost:3000/discussions/${id}`);
+    let res = await axios.get(`https://ideashub-api.herokuapp.com/discussions/${id}`);
     return res.data;
   }
 
