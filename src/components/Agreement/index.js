@@ -15,9 +15,9 @@ class Agreement extends Component {
   render() {
 
     let dialog;
-    if (!this.props.point.accepted) {
+    if (!this.props.point.isAccepted) {
       dialog = <Box>
-                <p>{this.props.point.proposedFrom} a propuesto esto:</p>
+                <p>{this.props.point.proposed_by_AvatarName} a propuesto esto:</p>
                 <Button color='success'>Aceptar</Button>
                 <Button color='danger'>Rechazar</Button>
                </Box>

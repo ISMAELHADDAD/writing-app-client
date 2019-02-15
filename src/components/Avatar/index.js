@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import gender from '../../gender.png'
 
+import API from '../../services/api/app';
+
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Card, Media, Heading, Content } from 'react-bulma-components';
 
@@ -9,8 +11,13 @@ class Avatar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      user: {}
     };
+  }
+
+  componentDidMount() {
+    //API calls here
+    this.setState({user: API.getUserById(this.props.avatar.assigned_to_UserID)});
   }
 
   render() {
@@ -22,7 +29,7 @@ class Avatar extends Component {
             <Media>
               <Media.Item>
                 <Heading size={4}>{this.props.avatar.name}</Heading>
-                <Heading subtitle size={6}>asignado a: <a href="#">@{this.props.avatar.userAssigned}</a></Heading>
+                <Heading subtitle size={6}>asignado a: <a href="#">@{this.state.user.name}</a></Heading>
               </Media.Item>
             </Media>
             <Content style={{textAlign: 'left'}}>

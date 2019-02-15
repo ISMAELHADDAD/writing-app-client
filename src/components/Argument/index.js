@@ -16,12 +16,12 @@ class Argument extends Component {
   render() {
 
     let speech;
-    if (this.props.from == 'one') {
+    if (this.props.argument.from_AvatarID == this.props.avatarOneID) {
       speech = <Columns>
                 <Columns.Column size={"two-thirds"}>
                   <Box>
-                    <Heading>#{this.props.num}</Heading>
-                    <p>{this.props.argument}</p>
+                    <Heading>#{this.props.argument.num}</Heading>
+                    <p>{this.props.argument.content}</p>
                     <hr/>
                     <Level>
                       <Level.Side align="left">
@@ -48,8 +48,8 @@ class Argument extends Component {
                 </Columns.Column>
                 <Columns.Column size={"two-thirds"}>
                   <Box>
-                    <Heading>#{this.props.num}</Heading>
-                    <p>{this.props.argument}</p>
+                    <Heading>#{this.props.argument.num}</Heading>
+                    <p>{this.props.argument.content}</p>
                     <hr/>
                     <Level>
                       <Level.Side align="left">
