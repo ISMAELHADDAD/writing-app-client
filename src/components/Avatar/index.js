@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+
+//Images
 import gender from '../../gender.png'
 
+//API
 import API from '../../services/api/app';
 
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-import { Card, Media, Heading, Content } from 'react-bulma-components';
+//UI framework
+import { Card, Icon, Image, Label } from 'semantic-ui-react'
 
 class Avatar extends Component {
 
@@ -22,19 +25,19 @@ class Avatar extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: '#08B2E3', textAlign: 'center'}}>
-        <img src={gender}/>
-        <Card>
-          <Card.Content style={{backgroundColor: 'rgba(53, 148, 204, 0.11)'}}>
-            <Media>
-              <Media.Item>
-                <Heading size={4}>{this.props.avatar.name}</Heading>
-                <Heading subtitle size={6}>asignado a: <a href="#">@{this.state.user.name}</a></Heading>
-              </Media.Item>
-            </Media>
-            <Content style={{textAlign: 'left'}}>
-              {this.props.avatar.opinion}
-            </Content>
+      <div>
+        <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' size='small' circular centered/>
+        <Card fluid>
+          <Card.Content>
+            <Card.Header>{this.props.avatar.name}</Card.Header>
+            <Card.Description>{this.props.avatar.opinion}</Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <Label image>
+              <img src='https://react.semantic-ui.com/images/avatar/small/ade.jpg' />
+              @{this.state.user.name}
+              <Icon name='delete' />
+            </Label>
           </Card.Content>
         </Card>
       </div>

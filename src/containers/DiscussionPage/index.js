@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
+
+//Images
 import logo from '../../logo.svg'
 import logoHub from '../../ideasHub_2.png'
+
+//Components
 import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 
+//API
 import API from '../../services/api/app';
 
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-import { Heading, Container, Section, Box, Columns, Table, Navbar } from 'react-bulma-components';
+//UI framework
 import Headroom from 'react-headroom';
-import { Link, Element} from 'react-scroll'
+import { Link, Element} from 'react-scroll';
+
+import { Container, Row, Col } from 'react-grid-system';
+import { Table, Card } from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -35,88 +42,75 @@ class DiscussionPage extends Component {
       <div>
         <Headroom style={{backgroundColor: '#00d1b2'}}>
           <Container>
-          <Navbar
-            color={'primary'}
-            active={true}
-          >
-            <Navbar.Brand>
-              <Navbar.Item renderAs="a" href="#">
-                <img
-                  src={logoHub}
-                  alt="Bulma: a modern CSS framework based on Flexbox"
-                  width="112"
-                  height="28"
-                />
-              </Navbar.Item>
-            </Navbar.Brand>
-              <Navbar.Menu active={true}>
-                <Navbar.Container>
-                  <Navbar.Item href="#"><Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'white'}}>Titulo</Link></Navbar.Item>
-                  <Navbar.Item href="#"><Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'white'}}>Argumentos</Link></Navbar.Item>
-                  <Navbar.Item href="#"><Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'white'}}>Puntos de concordancia</Link></Navbar.Item>
-                </Navbar.Container>
-              </Navbar.Menu>
-          </Navbar>
-        </Container>
+            <img
+              src={logoHub}
+              alt="Ideas hub: Plataforma para recopilar tus ideas"
+              width="112"
+              height="28"
+            />
+            <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'white'}}>Titulo</Link>
+            <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'white'}}>Argumentos</Link>
+            <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'white'}}>Puntos de concordancia</Link>
+
+          </Container>
         </Headroom>
 
         <Element name="test1" className="element" >
-          <Section style={{backgroundColor: '#FFFFEA'}}>
-            <Container>
+          <Container>
 
+
+              <h1>{this.state.discussion.topicTitle}</h1>
               <p>
-                <Heading>{this.state.discussion.topicTitle}</Heading>
-                <Heading subtitle size={6}>
-                  {this.state.discussion.topicDescription}
-                </Heading>
+                {this.state.discussion.topicDescription}
               </p>
 
-            </Container>
-          </Section>
+
+          </Container>
         </Element>
 
-        <Element name="test2" className="element" >
-          <Section style={{backgroundColor: '#08B2E3'}}>
-            <Container>
-              <Columns>
-                <Columns.Column size={1}/>
-                <Columns.Column size={4}>
-                  {this.state.discussion.avatarOne &&
-                  <Avatar avatar={this.state.discussion.avatarOne}/>}
-                </Columns.Column>
-                <Columns.Column size={2}/>
-                <Columns.Column size={4}>
-                  {this.state.discussion.avatarTwo &&
-                  <Avatar avatar={this.state.discussion.avatarTwo}/>}
-                </Columns.Column>
-                <Columns.Column size={1}/>
-               </Columns>
-            </Container>
+        <Container>
+          <Card fluid>
+            <br/>
+            <Element name="test2" className="element" >
+              <Container>
+                <Row>
+                  <Col sm={1}/>
+                  <Col sm={4}>
+                    {this.state.discussion.avatarOne &&
+                    <Avatar avatar={this.state.discussion.avatarOne}/>}
+                  </Col>
+                  <Col sm={2}/>
+                  <Col sm={4}>
+                    {this.state.discussion.avatarTwo &&
+                    <Avatar avatar={this.state.discussion.avatarTwo}/>}
+                  </Col>
+                  <Col sm={1}/>
+                </Row>
+              </Container>
+              <br/>
+              <Container>
+                {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
+                   <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
+                ))}
+              </Container>
+            </Element>
 
-            <Container>
-              {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
-                 <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
-              ))}
-            </Container>
-          </Section>
-        </Element>
-
-        <Element name="test3" className="element" >
-          <Section style={{backgroundColor: '#D8D8D8'}}>
-            <Container>
-              <Box>
-                <Heading subtitle size={3} style={{textAlign: 'center'}}>Tabla de puntos en acuerdo y en desacuerdo</Heading>
+            <Element name="test3" className="element" >
+              <Container>
+                <br/>
+                <br/>
+                <h1 style={{textAlign: 'center'}}>Tabla de puntos en acuerdo y en desacuerdo</h1>
                 <Table>
-                  <tbody>
+                  <Table.Body>
                     {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
                       <Agreement point={item} isAgree={item.isAgree}/>
                     ))}
-                  </tbody>
+                  </Table.Body>
                 </Table>
-              </Box>
-            </Container>
-          </Section>
-        </Element>
+              </Container>
+            </Element>
+          </Card>
+        </Container>
       </div>
     );
   }
