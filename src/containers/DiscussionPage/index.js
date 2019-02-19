@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './styles.css'
 
 //Images
 import logo from '../../logo.svg'
@@ -18,7 +19,7 @@ import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card, Button, Icon } from 'semantic-ui-react';
+import { Table, Card, Button, Icon, Header, Segment, Menu, Input } from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -41,20 +42,39 @@ class DiscussionPage extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#eee'}}>
-        <Headroom style={{backgroundColor: '#00d1b2'}}>
+        <Segment style={{marginBottom: '0px'}} inverted color='grey'>
+        <Headroom>
           <Container>
-            <img
-              src={logoHub}
-              alt="Ideas hub: Plataforma para recopilar tus ideas"
-              width="112"
-              height="28"
-            />
-            <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'white'}}>Titulo</Link>
-            <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'white'}}>Argumentos</Link>
-            <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'white'}}>Puntos de concordancia</Link>
-
+            <Menu stackable>
+              <Menu.Item>
+                <img src='https://react.semantic-ui.com/logo.png' />
+              </Menu.Item>
+              <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
+                <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Titulo</Link>
+              </Menu.Item>
+              <Menu.Item className='botonMenu'
+                name='argumentos'
+                active={false}
+                onClick={this.handleItemClick}
+              >
+                <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
+              </Menu.Item>
+              <Menu.Item className='botonMenu'
+                name='puntos de concordancia'
+                active={false}
+                onClick={this.handleItemClick}
+              >
+                <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+              </Menu.Item>
+              <Menu.Menu position='right'>
+                <Menu.Item>
+                  <Input icon='search' placeholder='Search argument...' />
+                </Menu.Item>
+              </Menu.Menu>
+            </Menu>
           </Container>
         </Headroom>
+      </Segment>
 
         <Element name="test1" className="element" >
           <Card fluid>
@@ -103,7 +123,9 @@ class DiscussionPage extends Component {
               <Container>
                 <br/>
                 <br/>
-                <h1 style={{textAlign: 'center'}}>Tabla de puntos en acuerdo y en desacuerdo</h1>
+                <Header as='h2' attached='top' style={{textAlign: 'center'}}>
+                  Tabla de puntos en acuerdo y en desacuerdo
+                </Header>
                 <Table>
                   <Table.Body>
                     {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
@@ -115,7 +137,7 @@ class DiscussionPage extends Component {
                       <Table.HeaderCell />
                       <Table.HeaderCell colSpan='4'>
                         <Button floated='right' icon labelPosition='left' primary size='small'>
-                          <Icon name='add' /> Add Point
+                          <Icon name='add' /> Añadir punto
                         </Button>
                       </Table.HeaderCell>
                     </Table.Row>
