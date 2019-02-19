@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 //Images
 import logo from '../../logo.svg'
 import logoHub from '../../ideasHub_2.png'
+import landscape from '../../landscape.png'
 
 //Components
 import Argument from '../../components/Argument';
@@ -17,7 +18,7 @@ import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card } from 'semantic-ui-react';
+import { Table, Card, Button, Icon } from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -39,7 +40,7 @@ class DiscussionPage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: '#eee'}}>
         <Headroom style={{backgroundColor: '#00d1b2'}}>
           <Container>
             <img
@@ -56,16 +57,19 @@ class DiscussionPage extends Component {
         </Headroom>
 
         <Element name="test1" className="element" >
-          <Container>
+          <Card fluid>
+            <Container>
 
+                <br/>
+                <h1>{this.state.discussion.topicTitle}</h1>
+                <p>
+                  {this.state.discussion.topicDescription}
+                </p>
+                <br/>
 
-              <h1>{this.state.discussion.topicTitle}</h1>
-              <p>
-                {this.state.discussion.topicDescription}
-              </p>
-
-
-          </Container>
+            </Container>
+          </Card>
+          <br/>
         </Element>
 
         <Container>
@@ -106,6 +110,16 @@ class DiscussionPage extends Component {
                       <Agreement point={item} isAgree={item.isAgree}/>
                     ))}
                   </Table.Body>
+                  <Table.Footer fullWidth>
+                    <Table.Row>
+                      <Table.HeaderCell />
+                      <Table.HeaderCell colSpan='4'>
+                        <Button floated='right' icon labelPosition='left' primary size='small'>
+                          <Icon name='add' /> Add Point
+                        </Button>
+                      </Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Footer>
                 </Table>
               </Container>
             </Element>

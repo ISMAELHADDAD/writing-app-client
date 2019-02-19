@@ -40,6 +40,7 @@ class Avatar extends Component {
             </Label>
           </Card.Content>
         </Card>
+        <br/>
       </div>
     );
   }
