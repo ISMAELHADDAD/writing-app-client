@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-//Images
-import gender from '../../gender.png'
-
 //API
 import API from '../../services/api/app';
 
@@ -34,7 +31,7 @@ class Avatar extends Component {
           </Card.Content>
           <Card.Content extra>
             <Label image>
-              <img src='https://react.semantic-ui.com/images/avatar/small/ade.jpg' />
+              <img src='https://react.semantic-ui.com/images/avatar/small/ade.jpg' alt=''/>
               @{this.state.user.name}
               <Icon name='delete' />
             </Label>

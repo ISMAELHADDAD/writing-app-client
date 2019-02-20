@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
-//Images
-import star from '../../star.svg'
-
 //UI framework
 import { Row, Col } from 'react-grid-system';
-import { Card, Icon } from 'semantic-ui-react'
+import { Card, Icon, Button, Rating } from 'semantic-ui-react'
 
 class Argument extends Component {
 
@@ -28,11 +25,11 @@ class Argument extends Component {
                       <Card.Description>{this.props.argument.content}</Card.Description>
                     </Card.Content>
                     <Card.Content extra>
-                      <Icon name='star' /><Icon name='star' /><Icon name='star' /><Icon name='star' /><Icon name='star' />
-                      <a>
+                      <Rating icon='star' defaultRating={0} maxRating={5} />
+                      <Button basic floated='right'>
                         <Icon name='comment'/>
                         Comentarios
-                      </a>
+                      </Button>
                     </Card.Content>
                   </Card>
                 </Col>
@@ -48,11 +45,11 @@ class Argument extends Component {
                       <Card.Description>{this.props.argument.content}</Card.Description>
                     </Card.Content>
                     <Card.Content extra>
-                      <Icon name='star' /><Icon name='star' /><Icon name='star' /><Icon name='star' /><Icon name='star' />
-                      <a>
-                        <Icon name='comment' floated='right'/>
+                      <Rating icon='star' defaultRating={0} maxRating={5} />
+                      <Button basic floated='right'>
+                        <Icon name='comment'/>
                         Comentarios
-                      </a>
+                      </Button>
                     </Card.Content>
                   </Card>
                 </Col>

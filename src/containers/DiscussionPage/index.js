@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import './styles.css'
 
-//Images
-import logo from '../../logo.svg'
-import logoHub from '../../ideasHub_2.png'
-import landscape from '../../landscape.png'
-
 //Components
 import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
@@ -47,7 +42,7 @@ class DiscussionPage extends Component {
           <Container>
             <Menu stackable>
               <Menu.Item>
-                <img src='https://react.semantic-ui.com/logo.png' />
+                <img src='https://react.semantic-ui.com/logo.png' alt=''/>
               </Menu.Item>
               <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
                 <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Titulo</Link>
