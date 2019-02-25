@@ -15,7 +15,7 @@ import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card, Button, Icon, Header, Segment, Menu, Input } from 'semantic-ui-react';
+import { Table, Card, Button, Icon, Header, Segment, Menu, Input, TextArea, Form, Dropdown } from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -23,7 +23,24 @@ class DiscussionPage extends Component {
     super(props);
     this.state = {
       discussion: {},
-      textEditorSidebarVisibility: false
+      textEditorSidebarVisibility: false,
+      agreePointVisibility: false,
+      agreeSelect: [
+        {
+          text: 'Acuerdo',
+          value: true
+        },
+        {
+          text: 'Desacuerdo',
+          value: false
+        }
+      ],
+      avatarSelect: [],
+      whoProposed: null,
+      proposedText: '',
+      isAgree: null,
+      validAgree: false,
+      validAvatar: false
     };
     //this.handleClick = this.handleClick.bind(this);
   }
@@ -31,6 +48,22 @@ class DiscussionPage extends Component {
   handleTextEditorSidebarVisibility = () => {
     this.setState({ textEditorSidebarVisibility: !this.state.textEditorSidebarVisibility })
   }
+
+  handleAgreePointVisibility = () => {
+    this.setState({ agreePointVisibility: !this.state.agreePointVisibility })
+  }
+
+  handleAgreePointChangeSelect = (event, data) => {
+    this.setState({ isAgree: data.value, validAgree: true });
+  };
+
+  handleAgreePointAvatarChangeSelect = (event, data) => {
+    this.setState({ whoProposed: data.value, validAvatar: true });
+  };
+
+  handleAgreePointChangeText = (event, data) => {
+    this.setState({ proposedText: data.value });
+  };
 
   handleSendArgument = (who, textContent) => {
     API.sendArgument(this.state.discussion.id, {
@@ -49,11 +82,43 @@ class DiscussionPage extends Component {
     });
   }
 
+  handleSendAgreement = () => {
+    API.sendAgreement(this.state.discussion.id, {
+      'user_id': 1,
+      'avatar_id': this.state.whoProposed,
+      'content': this.state.proposedText,
+      'isAgree': this.state.isAgree
+    })
+    .then(agreement => {
+      this.setState(prevState => ({
+        ...this.state,
+        discussion: {
+          ...this.state.discussion,
+          agreements: [...prevState.discussion.agreements, agreement]
+        }
+      }));
+    });
+  }
+
   componentDidMount() {
     //API calls here
     API.getDiscussion(this.props.id)
       .then(discussion => {
-        this.setState({discussion: discussion});
+        this.setState({...this.state,
+          discussion: discussion,
+          avatarSelect: [
+            {
+              text: discussion.avatarOne.name,
+              value: discussion.avatarOne.id,
+              image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+            },
+            {
+              text: discussion.avatarTwo.name,
+              value: discussion.avatarTwo.id,
+              image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+            }
+          ]
+        });
       })
   }
 
@@ -155,12 +220,37 @@ class DiscussionPage extends Component {
                     {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
                       <Agreement point={item} isAgree={item.isAgree}/>
                     ))}
+                    <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
+                      <Table.Cell colSpan='3'>
+                        <Row>
+                          <Col sm={2}>
+                            <Dropdown compact placeholder='' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                          </Col>
+                          <Col sm={3}>
+                            <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                          </Col>
+                          <Col sm={7}>
+                            <Form>
+                              <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
+                            </Form>
+                          </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                          <Col>
+                            <Button disabled={!(this.state.validAgree && this.state.validAvatar)} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleSendAgreement}>
+                              <Icon name='send' /> Enviar
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Table.Cell>
+                    </Table.Row>
                   </Table.Body>
                   <Table.Footer fullWidth>
                     <Table.Row>
                       <Table.HeaderCell />
                       <Table.HeaderCell colSpan='4'>
-                        <Button floated='right' icon labelPosition='left' primary size='small'>
+                        <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
                           <Icon name='add' /> Añadir punto
                         </Button>
                       </Table.HeaderCell>
