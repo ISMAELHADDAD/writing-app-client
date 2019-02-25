@@ -5,6 +5,7 @@ import './styles.css'
 import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
+import TextEditorSidebar from '../../components/TextEditorSidebar';
 
 //API
 import API from '../../services/api/app';
@@ -21,9 +22,31 @@ class DiscussionPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      discussion: {}
+      discussion: {},
+      textEditorSidebarVisibility: false
     };
     //this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleTextEditorSidebarVisibility = () => {
+    this.setState({ textEditorSidebarVisibility: !this.state.textEditorSidebarVisibility })
+  }
+
+  handleSendArgument = (who, textContent) => {
+    API.sendArgument(this.state.discussion.id, {
+      'user_id': 1,
+      'avatar_id': who,
+      'content': textContent
+    })
+    .then(argument => {
+      this.setState(prevState => ({
+        ...this.state,
+        discussion: {
+          ...this.state.discussion,
+          arguments: [...prevState.discussion.arguments, argument]
+        }
+      }));
+    });
   }
 
   componentDidMount() {
@@ -60,6 +83,12 @@ class DiscussionPage extends Component {
                 onClick={this.handleItemClick}
               >
                 <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+              </Menu.Item>
+              <Menu.Item
+              >
+                <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                  <Icon name='add' /> Añadir argumento
+                </Button>
               </Menu.Item>
               <Menu.Menu position='right'>
                 <Menu.Item>
@@ -142,6 +171,16 @@ class DiscussionPage extends Component {
             </Element>
           </Card>
         </Container>
+
+        <Container>
+          <TextEditorSidebar
+            visible={this.state.textEditorSidebarVisibility}
+            avatarOne={this.state.discussion.avatarOne}
+            avatarTwo={this.state.discussion.avatarTwo}
+            passClick={this.handleSendArgument}
+          />
+        </Container>
+
       </div>
     );
   }
