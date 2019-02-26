@@ -224,7 +224,7 @@ class DiscussionPage extends Component {
                       <Table.Cell colSpan='3'>
                         <Row>
                           <Col sm={2}>
-                            <Dropdown compact placeholder='' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                            <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
                           </Col>
                           <Col sm={3}>
                             <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
@@ -270,6 +270,15 @@ class DiscussionPage extends Component {
             passClick={this.handleSendArgument}
           />
         </Container>
+
+        <Header as='h4' block>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+        </Header>
 
       </div>
     );
