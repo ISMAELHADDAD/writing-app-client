@@ -24,6 +24,16 @@ class API {
     let res = await axios.post(`http://localhost:3000/discussions/${discussionId}/agreements`, object);
     return res.data;
   }
+
+  static async acceptAgreement(discussionId, agreementId, object) {
+    let res = await axios.put(`http://localhost:3000/discussions/${discussionId}/agreements/${agreementId}`, object);
+    return res.data;
+  }
+
+  static async rejectAgreement(discussionId, agreementId, object) {
+    let res = await axios.put(`http://localhost:3000/discussions/${discussionId}/agreements/${agreementId}`, object);
+    return res.data;
+  }
 }
 
 export default API

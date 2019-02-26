@@ -22,6 +22,7 @@ class DiscussionPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user_id_LoggedIn: 1,
       discussion: {},
       textEditorSidebarVisibility: false,
       agreePointVisibility: false,
@@ -40,9 +41,10 @@ class DiscussionPage extends Component {
       proposedText: '',
       isAgree: null,
       validAgree: false,
-      validAvatar: false
+      validAvatar: false,
+      user_avatars: []
     };
-    //this.handleClick = this.handleClick.bind(this);
+
   }
 
   handleTextEditorSidebarVisibility = () => {
@@ -67,7 +69,7 @@ class DiscussionPage extends Component {
 
   handleSendArgument = (who, textContent) => {
     API.sendArgument(this.state.discussion.id, {
-      'user_id': 1,
+      'user_id': this.state.user_id_LoggedIn,
       'avatar_id': who,
       'content': textContent
     })
@@ -84,7 +86,7 @@ class DiscussionPage extends Component {
 
   handleSendAgreement = () => {
     API.sendAgreement(this.state.discussion.id, {
-      'user_id': 1,
+      'user_id': this.state.user_id_LoggedIn,
       'avatar_id': this.state.whoProposed,
       'content': this.state.proposedText,
       'isAgree': this.state.isAgree
@@ -97,6 +99,46 @@ class DiscussionPage extends Component {
           agreements: [...prevState.discussion.agreements, agreement]
         }
       }));
+    });
+  }
+
+  handleRejectedAgreement = (agreementId, avatarId) => {
+    API.rejectAgreement(this.state.discussion.id, agreementId, {
+      'user_id': this.state.user_id_LoggedIn,
+      'avatar_id': avatarId,
+      'isAccepted': false
+    })
+    .then(message => {
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements.slice()
+            .filter(i => i.id !== agreementId)
+        }
+      });
+    });
+  }
+
+  handleAcceptedAgreement = (agreementId, avatarId) => {
+    API.rejectAgreement(this.state.discussion.id, agreementId, {
+      'user_id': this.state.user_id_LoggedIn,
+      'avatar_id': avatarId,
+      'isAccepted': false
+    })
+    .then(message => {
+      let newAgreement = this.state.discussion.agreements.slice().find(i => i.id === agreementId)
+      newAgreement.isAccepted = true
+
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements.slice().map(agreement => {
+            if (agreement.id === agreementId)
+              return newAgreement;
+            return agreement;
+          })
+        }
+      });
     });
   }
 
@@ -119,7 +161,13 @@ class DiscussionPage extends Component {
             }
           ]
         });
-      })
+        if (this.state.user_id_LoggedIn === discussion.avatarOne.assigned_to_UserID)
+          this.setState({...this.state,
+            user_avatars: [...this.state.user_avatars, discussion.avatarOne.id]});
+        if (this.state.user_id_LoggedIn === discussion.avatarTwo.assigned_to_UserID)
+          this.setState({...this.state,
+            user_avatars: [...this.state.user_avatars, discussion.avatarTwo.id]});
+      });
   }
 
   render() {
@@ -218,7 +266,13 @@ class DiscussionPage extends Component {
                 <Table>
                   <Table.Body>
                     {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
-                      <Agreement point={item} isAgree={item.isAgree}/>
+                      <Agreement
+                        point={item}
+                        isAgree={item.isAgree}
+                        user_avatars={this.state.user_avatars}
+                        passAcceptClick={this.handleAcceptedAgreement}
+                        passRejectClick={this.handleRejectedAgreement}
+                      />
                     ))}
                     <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
                       <Table.Cell colSpan='3'>

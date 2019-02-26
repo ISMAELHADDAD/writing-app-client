@@ -12,10 +12,24 @@ class Agreement extends Component {
     };
   }
 
+  handleAcceptClick = () => {
+    this.props.user_avatars.forEach(aID => {
+      if (aID !== this.props.point.proposed_by_AvatarID)
+        this.props.passAcceptClick(this.props.point.id, aID);
+    });
+  };
+
+  handleRejectClick = () => {
+    this.props.user_avatars.forEach(aID => {
+      if (aID !== this.props.point.proposed_by_AvatarID)
+        this.props.passRejectClick(this.props.point.id, aID);
+    });
+  };
+
   render() {
 
     let dialog;
-    if (!this.props.point.isAccepted) {
+    if (!this.props.point.isAccepted && this.props.user_avatars.includes(this.props.point.proposed_by_AvatarID)) {
       dialog = <Card>
                 <Card.Content>
                   <Card.Description>
@@ -24,13 +38,21 @@ class Agreement extends Component {
                   </Card.Content>
                   <Card.Content extra>
                   <div className='ui two buttons'>
-                    <Button basic color='green'>
+                    <Button basic color='green' onClick={this.handleAcceptClick}>
                       Aceptar
                     </Button>
-                    <Button basic color='red'>
+                    <Button basic color='red' onClick={this.handleRejectClick}>
                       Rechazar
                     </Button>
                   </div>
+                </Card.Content>
+              </Card>
+    } else if (!this.props.point.isAccepted) {
+      dialog = <Card>
+                <Card.Content>
+                  <Card.Description>
+                    Esperando respuesta
+                  </Card.Description>
                 </Card.Content>
               </Card>
     } else {
