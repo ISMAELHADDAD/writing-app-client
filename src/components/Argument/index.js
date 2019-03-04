@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import star from '../../star.svg'
 
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-import { Box, Columns, Icon, Level, Heading } from 'react-bulma-components';
+//UI framework
+import { Row, Col } from 'react-grid-system';
+import { Card, Icon, Button, Rating } from 'semantic-ui-react'
 
 class Argument extends Component {
 
@@ -16,61 +16,50 @@ class Argument extends Component {
   render() {
 
     let speech;
-    if (this.props.argument.from_AvatarID == this.props.avatarOneID) {
-      speech = <Columns>
-                <Columns.Column size={"two-thirds"}>
-                  <Box>
-                    <Heading>#{this.props.argument.num}</Heading>
-                    <p>{this.props.argument.content}</p>
-                    <hr/>
-                    <Level>
-                      <Level.Side align="left">
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                      </Level.Side>
-                      <Level.Side align="right">
-                        <a href="#">Comentarios</a>
-                      </Level.Side>
-                    </Level>
-                  </Box>
-                </Columns.Column>
-                <Columns.Column>
-
-                </Columns.Column>
-               </Columns>
+    if (this.props.argument.from_AvatarID === this.props.avatarOneID) {
+      speech = <Row>
+                <Col sm={8}>
+                  <Card fluid>
+                    <Card.Content>
+                      <Card.Header>#{this.props.argument.num}</Card.Header>
+                      <Card.Description>{this.props.argument.content}</Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                      <Rating icon='star' defaultRating={0} maxRating={5} />
+                      <Button basic floated='right'>
+                        <Icon name='comment'/>
+                        Comentarios
+                      </Button>
+                    </Card.Content>
+                  </Card>
+                </Col>
+                <Col sm={4}></Col>
+              </Row>
     } else {
-      speech = <Columns>
-                <Columns.Column>
-
-                </Columns.Column>
-                <Columns.Column size={"two-thirds"}>
-                  <Box>
-                    <Heading>#{this.props.argument.num}</Heading>
-                    <p>{this.props.argument.content}</p>
-                    <hr/>
-                    <Level>
-                      <Level.Side align="left">
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                        <img src={star} height="32" width="32"/>
-                      </Level.Side>
-                      <Level.Side align="right">
-                        <a href="#">Comentarios</a>
-                      </Level.Side>
-                    </Level>
-                  </Box>
-                </Columns.Column>
-               </Columns>
+      speech = <Row>
+                <Col sm={4}></Col>
+                <Col sm={8}>
+                  <Card fluid>
+                    <Card.Content>
+                      <Card.Header>#{this.props.argument.num}</Card.Header>
+                      <Card.Description>{this.props.argument.content}</Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                      <Rating icon='star' defaultRating={0} maxRating={5} />
+                      <Button basic floated='right'>
+                        <Icon name='comment'/>
+                        Comentarios
+                      </Button>
+                    </Card.Content>
+                  </Card>
+                </Col>
+              </Row>
     }
 
     return (
       <div>
         {speech}
+        <br />
       </div>
     );
   }

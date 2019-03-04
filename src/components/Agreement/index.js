@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-import { Box, Button } from 'react-bulma-components';
+//UI framework
+import { Table, Icon, Card, Button } from 'semantic-ui-react';
 
 class Agreement extends Component {
 
@@ -12,27 +12,61 @@ class Agreement extends Component {
     };
   }
 
+  handleAcceptClick = () => {
+    this.props.user_avatars.forEach(aID => {
+      if (aID !== this.props.point.proposed_by_AvatarID)
+        this.props.passAcceptClick(this.props.point.id, aID);
+    });
+  };
+
+  handleRejectClick = () => {
+    this.props.user_avatars.forEach(aID => {
+      if (aID !== this.props.point.proposed_by_AvatarID)
+        this.props.passRejectClick(this.props.point.id, aID);
+    });
+  };
+
   render() {
 
     let dialog;
-    if (!this.props.point.isAccepted) {
-      dialog = <Box>
-                <p>{this.props.point.proposed_by_AvatarName} a propuesto esto:</p>
-                <Button color='success'>Aceptar</Button>
-                <Button color='danger'>Rechazar</Button>
-               </Box>
+    if (!this.props.point.isAccepted && this.props.user_avatars.includes(this.props.point.proposed_by_AvatarID)) {
+      dialog = <Card>
+                <Card.Content>
+                  <Card.Description>
+                    <strong>{this.props.point.proposed_by_AvatarName}</strong> a propuesto esto:
+                  </Card.Description>
+                  </Card.Content>
+                  <Card.Content extra>
+                  <div className='ui two buttons'>
+                    <Button basic color='green' onClick={this.handleAcceptClick}>
+                      Aceptar
+                    </Button>
+                    <Button basic color='red' onClick={this.handleRejectClick}>
+                      Rechazar
+                    </Button>
+                  </div>
+                </Card.Content>
+              </Card>
+    } else if (!this.props.point.isAccepted) {
+      dialog = <Card>
+                <Card.Content>
+                  <Card.Description>
+                    Esperando respuesta
+                  </Card.Description>
+                </Card.Content>
+              </Card>
     } else {
-      dialog = <Button disabled={true}>Aceptado</Button>
+      dialog = <Button color='green' disabled={true}>Aceptado</Button>
     }
 
     return (
-      <tr style={this.props.isAgree ? {backgroundColor: '#96C0B7'} : {backgroundColor: '#ec9191'}}>
-        <td>{this.props.isAgree ? 'Acuerdo':'Desacuerdo'}</td>
-        <td>{this.props.point.content}</td>
-        <td style={{textAlign: 'center'}}>
+      <Table.Row positive={this.props.isAgree} negative={!this.props.isAgree}>
+        <Table.Cell>{this.props.isAgree ? (<Icon color='green' name='checkmark' size='large' />):(<Icon color='red' name='times' size='large' />)}</Table.Cell>
+        <Table.Cell>{this.props.point.content}</Table.Cell>
+        <Table.Cell collapsing style={{textAlign: 'center'}}>
           {dialog}
-        </td>
-      </tr>
+        </Table.Cell>
+      </Table.Row>
     );
   }
 }
