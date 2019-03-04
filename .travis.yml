@@ -11,4 +11,5 @@ deploy:
   app: ideashub-client
   on: master
   run:
+    - heroku-postbuild
     - npm start
