@@ -6,6 +6,7 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
+import Login from '../../components/Login';
 
 //API
 import API from '../../services/api/app';
@@ -197,11 +198,13 @@ class DiscussionPage extends Component {
               >
                 <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
               </Menu.Item>
-              <Menu.Item
-              >
+              <Menu.Item>
                 <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                   <Icon name='add' /> Añadir argumento
                 </Button>
+              </Menu.Item>
+              <Menu.Item>
+                <Login/>
               </Menu.Item>
               <Menu.Menu position='right'>
                 <Menu.Item>
@@ -253,6 +256,7 @@ class DiscussionPage extends Component {
                 {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
                    <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
                 ))}
+                <br/>
               </Container>
             </Element>
 
@@ -267,6 +271,7 @@ class DiscussionPage extends Component {
                   <Table.Body>
                     {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
                       <Agreement
+                        key={item.id}
                         point={item}
                         isAgree={item.isAgree}
                         user_avatars={this.state.user_avatars}

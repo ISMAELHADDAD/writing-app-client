@@ -35,6 +35,11 @@ class API {
     let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object);
     return res.data;
   }
+
+  static async varifyGoogleTokenId(object) {
+    let res = await axios.post(`${ENDPOINT}/tokensignin`, object);
+    return res.data;
+  }
 }
 
 export default API
