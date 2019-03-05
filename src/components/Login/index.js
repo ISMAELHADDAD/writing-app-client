@@ -19,6 +19,7 @@ class Login extends Component {
     API.varifyGoogleTokenId({id_token: response.tokenId})
       .then(result => {
         console.log(result)
+        this.props.getUserId(result.user_id);
       })
   }
 
