@@ -77,7 +77,6 @@ class DiscussionPage extends Component {
     })
     .then(argument => {
       this.setState(prevState => ({
-        ...this.state,
         discussion: {
           ...this.state.discussion,
           arguments: [...prevState.discussion.arguments, argument]
@@ -114,7 +113,7 @@ class DiscussionPage extends Component {
       this.setState({
         discussion: {
           ...this.state.discussion,
-          agreements: this.state.discussion.agreements.slice()
+          agreements: this.state.discussion.agreements
             .filter(i => i.id !== agreementId)
         }
       });
@@ -122,23 +121,21 @@ class DiscussionPage extends Component {
   }
 
   handleAcceptedAgreement = (agreementId, avatarId) => {
-    API.rejectAgreement(this.state.discussion.id, agreementId, {
+    API.acceptAgreement(this.state.discussion.id, agreementId, {
       'user_id': this.state.user_id_LoggedIn,
       'avatar_id': avatarId,
       'isAccepted': false
     })
     .then(message => {
-      let newAgreement = this.state.discussion.agreements.slice().find(i => i.id === agreementId)
+      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
       newAgreement.isAccepted = true
 
       this.setState({
         discussion: {
           ...this.state.discussion,
-          agreements: this.state.discussion.agreements.slice().map(agreement => {
-            if (agreement.id === agreementId)
-              return newAgreement;
-            return agreement;
-          })
+          agreements: this.state.discussion.agreements.map(agreement =>
+            (agreement.id === agreementId)? newAgreement : agreement
+          )
         }
       });
     });
@@ -212,7 +209,7 @@ class DiscussionPage extends Component {
                     <img src='https://react.semantic-ui.com/logo.png' alt=''/>
                   </Menu.Item>
                   <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
-                    <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Titulo</Link>
+                    <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
                   </Menu.Item>
                   <Menu.Item className='botonMenu'
                     name='argumentos'
@@ -269,7 +266,7 @@ class DiscussionPage extends Component {
                 <Sticky offset={100} context={this.argumentsRef.current}>
                   <Menu vertical>
                     <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
-                      <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Titulo</Link>
+                      <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
                     </Menu.Item>
                     <Menu.Item className='botonMenu'
                       name='argumentos'
