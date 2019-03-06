@@ -14,23 +14,32 @@ class API {
     return res.data;
   }
 
-  static async sendArgument(discussionId, object) {
-    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/arguments`, object);
+  static async sendArgument(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/arguments`, object, {headers: headers});
     return res.data;
   }
 
-  static async sendAgreement(discussionId, object) {
-    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/agreements`, object);
+  static async sendAgreement(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/agreements`, object, {headers: headers});
     return res.data;
   }
 
-  static async acceptAgreement(discussionId, agreementId, object) {
-    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object);
+  static async acceptAgreement(token, discussionId, agreementId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object, {headers: headers});
     return res.data;
   }
 
-  static async rejectAgreement(discussionId, agreementId, object) {
-    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object);
+  static async rejectAgreement(token, discussionId, agreementId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object, {headers: headers});
+    return res.data;
+  }
+
+  static async varifyGoogleTokenId(object) {
+    let res = await axios.post(`${ENDPOINT}/tokensignin`, object);
     return res.data;
   }
 }
