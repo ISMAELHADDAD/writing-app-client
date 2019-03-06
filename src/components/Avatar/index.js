@@ -17,7 +17,15 @@ class Avatar extends Component {
 
   componentDidMount() {
     //API calls here
-    this.setState({user: API.getUserById(this.props.avatar.assigned_to_UserID)});
+    API.getUserById(this.props.avatar.assigned_to_UserID)
+    .then(result =>{
+      this.setState({
+        user: {
+          name: result.name,
+          image_url: result.image_url
+        }
+      })
+    })
   }
 
   render() {
@@ -31,7 +39,7 @@ class Avatar extends Component {
           </Card.Content>
           <Card.Content extra>
             <Label image>
-              <img src='https://react.semantic-ui.com/images/avatar/small/ade.jpg' alt=''/>
+              <img src={this.state.user.image_url} alt=''/>
               @{this.state.user.name}
               <Icon name='delete' />
             </Label>
