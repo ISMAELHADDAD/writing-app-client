@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 //API
 import API from '../../services/api/app';
 
+// React Context API
+import AuthContext from "../../AuthContext";
+
 //UI framework
 import { Card, Icon, Image, Label } from 'semantic-ui-react'
 
@@ -41,7 +44,9 @@ class Avatar extends Component {
             <Label image>
               <img src={this.state.user.image_url} alt=''/>
               @{this.state.user.name}
-              <Icon name='delete' />
+              {this.context.logged_in &&
+                <Icon name='delete' />
+              }
             </Label>
           </Card.Content>
         </Card>
@@ -50,5 +55,7 @@ class Avatar extends Component {
     );
   }
 }
+
+Avatar.contextType = AuthContext
 
 export default Avatar;

@@ -10,20 +10,22 @@ import TextEditorSidebar from '../../components/TextEditorSidebar';
 //API
 import API from '../../services/api/app';
 
+// React Context API
+import AuthContext from "../../AuthContext";
+
 //UI framework
 import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card, Button, Icon, Header, Menu, Input,
-  TextArea, Form, Dropdown, Rail, Sticky, Responsive} from 'semantic-ui-react';
+import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
+  Rail, Sticky, Responsive} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      user_id_LoggedIn: 1,
       discussion: {},
       textEditorSidebarVisibility: false,
       agreePointVisibility: false,
@@ -42,10 +44,17 @@ class DiscussionPage extends Component {
       proposedText: '',
       isAgree: null,
       validAgree: false,
-      validAvatar: false,
-      user_avatars: []
+      validAvatar: false
     };
     this.argumentsRef = React.createRef();
+  }
+
+  userIsParticipating() {
+    return (
+      this.context.authUser.id === this.state.discussion.avatarOne.assigned_to_UserID
+      ||
+      this.context.authUser.id === this.state.discussion.avatarTwo.assigned_to_UserID
+    )
   }
 
   handleTextEditorSidebarVisibility = () => {
@@ -70,7 +79,7 @@ class DiscussionPage extends Component {
 
   handleSendArgument = (who, textContent) => {
     API.sendArgument(this.state.discussion.id, {
-      'user_id': this.state.user_id_LoggedIn,
+      'user_id': this.context.authUser.id,
       'avatar_id': who,
       'content': textContent
     })
@@ -86,7 +95,7 @@ class DiscussionPage extends Component {
 
   handleSendAgreement = () => {
     API.sendAgreement(this.state.discussion.id, {
-      'user_id': this.state.user_id_LoggedIn,
+      'user_id': this.context.authUser.id,
       'avatar_id': this.state.whoProposed,
       'content': this.state.proposedText,
       'isAgree': this.state.isAgree
@@ -104,7 +113,7 @@ class DiscussionPage extends Component {
 
   handleRejectedAgreement = (agreementId, avatarId) => {
     API.rejectAgreement(this.state.discussion.id, agreementId, {
-      'user_id': this.state.user_id_LoggedIn,
+      'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
       'isAccepted': false
     })
@@ -121,9 +130,9 @@ class DiscussionPage extends Component {
 
   handleAcceptedAgreement = (agreementId, avatarId) => {
     API.acceptAgreement(this.state.discussion.id, agreementId, {
-      'user_id': this.state.user_id_LoggedIn,
+      'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'isAccepted': false
+      'isAccepted': true
     })
     .then(message => {
       let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
@@ -159,12 +168,6 @@ class DiscussionPage extends Component {
             }
           ]
         });
-        if (this.state.user_id_LoggedIn === discussion.avatarOne.assigned_to_UserID)
-          this.setState({...this.state,
-            user_avatars: [...this.state.user_avatars, discussion.avatarOne.id]});
-        if (this.state.user_id_LoggedIn === discussion.avatarTwo.assigned_to_UserID)
-          this.setState({...this.state,
-            user_avatars: [...this.state.user_avatars, discussion.avatarTwo.id]});
       });
   }
 
@@ -194,16 +197,13 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  <Menu.Item>
-                    <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
-                      <Icon name='add' /> Añadir argumento
-                    </Button>
-                  </Menu.Item>
-                  <Menu.Menu position='right'>
+                  {this.context.logged_in && this.userIsParticipating &&
                     <Menu.Item>
-                      <Input icon='search' placeholder='Buscar argumento...' />
+                      <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                        <Icon name='add' /> Añadir argumento
+                      </Button>
                     </Menu.Item>
-                  </Menu.Menu>
+                  }
                 </Menu>
               </Container>
           </Headroom>
@@ -248,11 +248,13 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    <Menu.Item>
-                      <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
-                        <Icon name='add' /> Argumento
-                      </Button>
-                    </Menu.Item>
+                    {this.context.logged_in && this.userIsParticipating &&
+                      <Menu.Item>
+                        <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                          <Icon name='add' /> Argumento
+                        </Button>
+                      </Menu.Item>
+                    }
                   </Menu>
                 </Sticky>
               </Rail>
@@ -298,47 +300,52 @@ class DiscussionPage extends Component {
                           key={item.id}
                           point={item}
                           isAgree={item.isAgree}
-                          user_avatars={this.state.user_avatars}
+                          avatarOne={this.state.discussion.avatarOne}
+                          avatarTwo={this.state.discussion.avatarTwo}
                           passAcceptClick={this.handleAcceptedAgreement}
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
-                        <Table.Cell colSpan='3'>
-                          <Row>
-                            <Col sm={2}>
-                              <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
-                            </Col>
-                            <Col sm={3}>
-                              <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
-                            </Col>
-                            <Col sm={7}>
-                              <Form>
-                                <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
-                              </Form>
-                            </Col>
-                          </Row>
-                          <br/>
-                          <Row>
-                            <Col>
-                              <Button disabled={!(this.state.validAgree && this.state.validAvatar)} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleSendAgreement}>
-                                <Icon name='send' /> Enviar
-                              </Button>
-                            </Col>
-                          </Row>
-                        </Table.Cell>
-                      </Table.Row>
+                      {this.context.logged_in && this.userIsParticipating &&
+                        <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
+                          <Table.Cell colSpan='3'>
+                            <Row>
+                              <Col sm={2}>
+                                <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                              </Col>
+                              <Col sm={3}>
+                                <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                              </Col>
+                              <Col sm={7}>
+                                <Form>
+                                  <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
+                                </Form>
+                              </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                              <Col>
+                                <Button disabled={!(this.state.validAgree && this.state.validAvatar)} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleSendAgreement}>
+                                  <Icon name='send' /> Enviar
+                                </Button>
+                              </Col>
+                            </Row>
+                          </Table.Cell>
+                        </Table.Row>
+                      }
                     </Table.Body>
-                    <Table.Footer fullWidth>
-                      <Table.Row>
-                        <Table.HeaderCell />
-                        <Table.HeaderCell colSpan='4'>
-                          <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
-                            <Icon name='add' /> Añadir punto
-                          </Button>
-                        </Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Footer>
+                    {this.context.logged_in && this.userIsParticipating &&
+                      <Table.Footer fullWidth>
+                        <Table.Row>
+                          <Table.HeaderCell />
+                          <Table.HeaderCell colSpan='4'>
+                            <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
+                              <Icon name='add' /> Añadir punto
+                            </Button>
+                          </Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Footer>
+                    }
                   </Table>
                 </Container>
               </Element>
@@ -368,5 +375,7 @@ class DiscussionPage extends Component {
     );
   }
 }
+
+DiscussionPage.contextType = AuthContext
 
 export default DiscussionPage;

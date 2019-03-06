@@ -25,13 +25,14 @@ class MainMenuNavbar extends Component {
               inverted
               pointing
               secondary
+              stackable
               size='large'
             >
               <ContainerSemantic>
                 <Menu.Item as='a' active>
                   Espacio de trabajo
                 </Menu.Item>
-                <Menu.Item as='a'>Mis discusiónes</Menu.Item>
+                <Menu.Item as='a'>Mis discusiones</Menu.Item>
                 <Menu.Item as='a'>Explorar</Menu.Item>
                 <Menu.Item as='a'>Ajustes</Menu.Item>
                 <Menu.Item position='right'>
