@@ -9,11 +9,9 @@ class API {
     return res.data;
   }
 
-  static getUserById(id){
-    return {
-      id: 1,
-      name: 'user1234'
-    }
+  static async getUserById(id){
+    let res = await axios.get(`${ENDPOINT}/users/${id}`);
+    return res.data;
   }
 
   static async sendArgument(discussionId, object) {

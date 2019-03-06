@@ -6,7 +6,6 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
-import Login from '../../components/Login';
 
 //API
 import API from '../../services/api/app';
@@ -16,8 +15,8 @@ import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card, Button, Icon, Header, Segment, Menu, Input,
-  TextArea, Form, Dropdown, Rail, Sticky, Responsive, Container as ContainerSemantic } from 'semantic-ui-react';
+import { Table, Card, Button, Icon, Header, Menu, Input,
+  TextArea, Form, Dropdown, Rail, Sticky, Responsive} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -141,10 +140,6 @@ class DiscussionPage extends Component {
     });
   }
 
-  getUserId = (id) => {
-    this.setState({user_id_LoggedIn: id});
-  }
-
   componentDidMount() {
     //API calls here
     API.getDiscussion(this.props.id)
@@ -177,37 +172,11 @@ class DiscussionPage extends Component {
     return (
       <div style={{backgroundColor: '#eee'}}>
 
-        <Segment inverted style={{marginBottom: '0px'}}>
-          <Menu
-              inverted
-              pointing
-              secondary
-              size='large'
-            >
-              <ContainerSemantic>
-                <Menu.Item as='a' active>
-                  Espacio de trabajo
-                </Menu.Item>
-                <Menu.Item as='a'>Mis discusiónes</Menu.Item>
-                <Menu.Item as='a'>Explorar</Menu.Item>
-                <Menu.Item as='a'>Ajustes</Menu.Item>
-                <Menu.Item position='right'>
-                  <Button as='a' inverted primary={false} style={{ marginLeft: '0.5em' }}>
-                    Accede con Google
-                  </Button>
-                </Menu.Item>
-              </ContainerSemantic>
-            </Menu>
-        </Segment>
-
         <Responsive maxWidth={1650}>
           <Headroom>
               <br/>
               <Container>
                 <Menu stackable>
-                  <Menu.Item>
-                    <img src='https://react.semantic-ui.com/logo.png' alt=''/>
-                  </Menu.Item>
                   <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
                     <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
                   </Menu.Item>
@@ -230,12 +199,9 @@ class DiscussionPage extends Component {
                       <Icon name='add' /> Añadir argumento
                     </Button>
                   </Menu.Item>
-                  <Menu.Item>
-                    <Login getUserId={this.getUserId}/>
-                  </Menu.Item>
                   <Menu.Menu position='right'>
                     <Menu.Item>
-                      <Input icon='search' placeholder='Search argument...' />
+                      <Input icon='search' placeholder='Buscar argumento...' />
                     </Menu.Item>
                   </Menu.Menu>
                 </Menu>
