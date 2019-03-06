@@ -15,7 +15,8 @@ import Headroom from 'react-headroom';
 import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
-import { Table, Card, Button, Icon, Header, Segment, Menu, Input, TextArea, Form, Dropdown } from 'semantic-ui-react';
+import { Table, Card, Button, Icon, Header, Menu, Input,
+  TextArea, Form, Dropdown, Rail, Sticky, Responsive} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -44,7 +45,7 @@ class DiscussionPage extends Component {
       validAvatar: false,
       user_avatars: []
     };
-
+    this.argumentsRef = React.createRef();
   }
 
   handleTextEditorSidebarVisibility = () => {
@@ -75,7 +76,6 @@ class DiscussionPage extends Component {
     })
     .then(argument => {
       this.setState(prevState => ({
-        ...this.state,
         discussion: {
           ...this.state.discussion,
           arguments: [...prevState.discussion.arguments, argument]
@@ -112,7 +112,7 @@ class DiscussionPage extends Component {
       this.setState({
         discussion: {
           ...this.state.discussion,
-          agreements: this.state.discussion.agreements.slice()
+          agreements: this.state.discussion.agreements
             .filter(i => i.id !== agreementId)
         }
       });
@@ -120,23 +120,21 @@ class DiscussionPage extends Component {
   }
 
   handleAcceptedAgreement = (agreementId, avatarId) => {
-    API.rejectAgreement(this.state.discussion.id, agreementId, {
+    API.acceptAgreement(this.state.discussion.id, agreementId, {
       'user_id': this.state.user_id_LoggedIn,
       'avatar_id': avatarId,
       'isAccepted': false
     })
     .then(message => {
-      let newAgreement = this.state.discussion.agreements.slice().find(i => i.id === agreementId)
+      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
       newAgreement.isAccepted = true
 
       this.setState({
         discussion: {
           ...this.state.discussion,
-          agreements: this.state.discussion.agreements.slice().map(agreement => {
-            if (agreement.id === agreementId)
-              return newAgreement;
-            return agreement;
-          })
+          agreements: this.state.discussion.agreements.map(agreement =>
+            (agreement.id === agreementId)? newAgreement : agreement
+          )
         }
       });
     });
@@ -173,45 +171,43 @@ class DiscussionPage extends Component {
   render() {
     return (
       <div style={{backgroundColor: '#eee'}}>
-        <Segment style={{marginBottom: '0px'}} inverted color='grey'>
-        <Headroom>
-          <Container>
-            <Menu stackable>
-              <Menu.Item>
-                <img src='https://react.semantic-ui.com/logo.png' alt=''/>
-              </Menu.Item>
-              <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
-                <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Titulo</Link>
-              </Menu.Item>
-              <Menu.Item className='botonMenu'
-                name='argumentos'
-                active={false}
-                onClick={this.handleItemClick}
-              >
-                <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
-              </Menu.Item>
-              <Menu.Item className='botonMenu'
-                name='puntos de concordancia'
-                active={false}
-                onClick={this.handleItemClick}
-              >
-                <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
-              </Menu.Item>
-              <Menu.Item
-              >
-                <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
-                  <Icon name='add' /> Añadir argumento
-                </Button>
-              </Menu.Item>
-              <Menu.Menu position='right'>
-                <Menu.Item>
-                  <Input icon='search' placeholder='Search argument...' />
-                </Menu.Item>
-              </Menu.Menu>
-            </Menu>
-          </Container>
-        </Headroom>
-      </Segment>
+
+        <Responsive maxWidth={1650}>
+          <Headroom>
+              <br/>
+              <Container>
+                <Menu stackable>
+                  <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
+                    <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
+                  </Menu.Item>
+                  <Menu.Item className='botonMenu'
+                    name='argumentos'
+                    active={false}
+                    onClick={this.handleItemClick}
+                  >
+                    <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
+                  </Menu.Item>
+                  <Menu.Item className='botonMenu'
+                    name='puntos de concordancia'
+                    active={false}
+                    onClick={this.handleItemClick}
+                  >
+                    <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                      <Icon name='add' /> Añadir argumento
+                    </Button>
+                  </Menu.Item>
+                  <Menu.Menu position='right'>
+                    <Menu.Item>
+                      <Input icon='search' placeholder='Buscar argumento...' />
+                    </Menu.Item>
+                  </Menu.Menu>
+                </Menu>
+              </Container>
+          </Headroom>
+        </Responsive>
 
         <Element name="test1" className="element" >
           <Card fluid>
@@ -230,90 +226,124 @@ class DiscussionPage extends Component {
         </Element>
 
         <Container>
-          <Card fluid>
-            <br/>
-            <Element name="test2" className="element" >
-              <Container>
-                <Row>
-                  <Col sm={1}/>
-                  <Col sm={4}>
-                    {this.state.discussion.avatarOne &&
-                    <Avatar avatar={this.state.discussion.avatarOne}/>}
-                  </Col>
-                  <Col sm={2}/>
-                  <Col sm={4}>
-                    {this.state.discussion.avatarTwo &&
-                    <Avatar avatar={this.state.discussion.avatarTwo}/>}
-                  </Col>
-                  <Col sm={1}/>
-                </Row>
-              </Container>
+          <div ref={this.argumentsRef}>
+            <Responsive minWidth={1650}>
+              <Rail position='right'>
+                <Sticky offset={100} context={this.argumentsRef.current}>
+                  <Menu vertical>
+                    <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
+                      <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
+                    </Menu.Item>
+                    <Menu.Item className='botonMenu'
+                      name='argumentos'
+                      active={false}
+                      onClick={this.handleItemClick}
+                    >
+                      <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
+                    </Menu.Item>
+                    <Menu.Item className='botonMenu'
+                      name='puntos de concordancia'
+                      active={false}
+                      onClick={this.handleItemClick}
+                    >
+                      <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                        <Icon name='add' /> Argumento
+                      </Button>
+                    </Menu.Item>
+                  </Menu>
+                </Sticky>
+              </Rail>
+            </Responsive>
+            <Card fluid>
               <br/>
-              <Container>
-                {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
-                   <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
-                ))}
-              </Container>
-            </Element>
+              <Element name="test2" className="element" >
+                <Container>
+                  <Row>
+                    <Col sm={1}/>
+                    <Col sm={4}>
+                      {this.state.discussion.avatarOne &&
+                      <Avatar avatar={this.state.discussion.avatarOne}/>}
+                    </Col>
+                    <Col sm={2}/>
+                    <Col sm={4}>
+                      {this.state.discussion.avatarTwo &&
+                      <Avatar avatar={this.state.discussion.avatarTwo}/>}
+                    </Col>
+                    <Col sm={1}/>
+                  </Row>
+                </Container>
+                <br/>
+                <Container>
+                  {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
+                     <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
+                  ))}
+                  <br/>
+                </Container>
+              </Element>
 
-            <Element name="test3" className="element" >
-              <Container>
-                <br/>
-                <br/>
-                <Header as='h2' attached='top' style={{textAlign: 'center'}}>
-                  Tabla de puntos en acuerdo y en desacuerdo
-                </Header>
-                <Table>
-                  <Table.Body>
-                    {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
-                      <Agreement
-                        point={item}
-                        isAgree={item.isAgree}
-                        user_avatars={this.state.user_avatars}
-                        passAcceptClick={this.handleAcceptedAgreement}
-                        passRejectClick={this.handleRejectedAgreement}
-                      />
-                    ))}
-                    <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
-                      <Table.Cell colSpan='3'>
-                        <Row>
-                          <Col sm={2}>
-                            <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
-                          </Col>
-                          <Col sm={3}>
-                            <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
-                          </Col>
-                          <Col sm={7}>
-                            <Form>
-                              <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
-                            </Form>
-                          </Col>
-                        </Row>
-                        <br/>
-                        <Row>
-                          <Col>
-                            <Button disabled={!(this.state.validAgree && this.state.validAvatar)} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleSendAgreement}>
-                              <Icon name='send' /> Enviar
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                  <Table.Footer fullWidth>
-                    <Table.Row>
-                      <Table.HeaderCell />
-                      <Table.HeaderCell colSpan='4'>
-                        <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
-                          <Icon name='add' /> Añadir punto
-                        </Button>
-                      </Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Footer>
-                </Table>
-              </Container>
-            </Element>
-          </Card>
+              <Element name="test3" className="element" >
+                <Container>
+                  <br/>
+                  <br/>
+                  <Header as='h2' attached='top' style={{textAlign: 'center'}}>
+                    Tabla de puntos en acuerdo y en desacuerdo
+                  </Header>
+                  <Table>
+                    <Table.Body>
+                      {this.state.discussion.agreements && this.state.discussion.agreements.map((item) => (
+                        <Agreement
+                          key={item.id}
+                          point={item}
+                          isAgree={item.isAgree}
+                          user_avatars={this.state.user_avatars}
+                          passAcceptClick={this.handleAcceptedAgreement}
+                          passRejectClick={this.handleRejectedAgreement}
+                        />
+                      ))}
+                      <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
+                        <Table.Cell colSpan='3'>
+                          <Row>
+                            <Col sm={2}>
+                              <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                            </Col>
+                            <Col sm={3}>
+                              <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                            </Col>
+                            <Col sm={7}>
+                              <Form>
+                                <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
+                              </Form>
+                            </Col>
+                          </Row>
+                          <br/>
+                          <Row>
+                            <Col>
+                              <Button disabled={!(this.state.validAgree && this.state.validAvatar)} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleSendAgreement}>
+                                <Icon name='send' /> Enviar
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                    <Table.Footer fullWidth>
+                      <Table.Row>
+                        <Table.HeaderCell />
+                        <Table.HeaderCell colSpan='4'>
+                          <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
+                            <Icon name='add' /> Añadir punto
+                          </Button>
+                        </Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Footer>
+                  </Table>
+                </Container>
+              </Element>
+            </Card>
+          </div>
         </Container>
 
         <Container>

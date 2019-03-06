@@ -9,11 +9,9 @@ class API {
     return res.data;
   }
 
-  static getUserById(id){
-    return {
-      id: 1,
-      name: 'user1234'
-    }
+  static async getUserById(id){
+    let res = await axios.get(`${ENDPOINT}/users/${id}`);
+    return res.data;
   }
 
   static async sendArgument(discussionId, object) {
@@ -33,6 +31,11 @@ class API {
 
   static async rejectAgreement(discussionId, agreementId, object) {
     let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/agreements/${agreementId}`, object);
+    return res.data;
+  }
+
+  static async varifyGoogleTokenId(object) {
+    let res = await axios.post(`${ENDPOINT}/tokensignin`, object);
     return res.data;
   }
 }
