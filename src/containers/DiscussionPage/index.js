@@ -78,7 +78,7 @@ class DiscussionPage extends Component {
   };
 
   handleSendArgument = (who, textContent) => {
-    API.sendArgument(this.state.discussion.id, {
+    API.sendArgument(this.context.authUser.token,this.state.discussion.id, {
       'user_id': this.context.authUser.id,
       'avatar_id': who,
       'content': textContent
@@ -94,7 +94,7 @@ class DiscussionPage extends Component {
   }
 
   handleSendAgreement = () => {
-    API.sendAgreement(this.state.discussion.id, {
+    API.sendAgreement(this.context.authUser.token, this.state.discussion.id, {
       'user_id': this.context.authUser.id,
       'avatar_id': this.state.whoProposed,
       'content': this.state.proposedText,
@@ -112,7 +112,7 @@ class DiscussionPage extends Component {
   }
 
   handleRejectedAgreement = (agreementId, avatarId) => {
-    API.rejectAgreement(this.state.discussion.id, agreementId, {
+    API.rejectAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
       'isAccepted': false
@@ -129,7 +129,7 @@ class DiscussionPage extends Component {
   }
 
   handleAcceptedAgreement = (agreementId, avatarId) => {
-    API.acceptAgreement(this.state.discussion.id, agreementId, {
+    API.acceptAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
       'isAccepted': true
