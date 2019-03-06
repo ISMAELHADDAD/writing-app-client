@@ -49,6 +49,14 @@ class DiscussionPage extends Component {
     this.argumentsRef = React.createRef();
   }
 
+  userIsParticipating() {
+    return (
+      this.context.authUser.id === this.state.discussion.avatarOne.assigned_to_UserID
+      ||
+      this.context.authUser.id === this.state.discussion.avatarTwo.assigned_to_UserID
+    )
+  }
+
   handleTextEditorSidebarVisibility = () => {
     this.setState({ textEditorSidebarVisibility: !this.state.textEditorSidebarVisibility })
   }
@@ -189,7 +197,7 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  {this.context.logged_in &&
+                  {this.context.logged_in && this.userIsParticipating &&
                     <Menu.Item>
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
@@ -240,7 +248,7 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    {this.context.logged_in &&
+                    {this.context.logged_in && this.userIsParticipating &&
                       <Menu.Item>
                         <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
@@ -298,7 +306,7 @@ class DiscussionPage extends Component {
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      {this.context.logged_in &&
+                      {this.context.logged_in && this.userIsParticipating &&
                         <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
                           <Table.Cell colSpan='3'>
                             <Row>
@@ -326,7 +334,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.logged_in &&
+                    {this.context.logged_in && this.userIsParticipating &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />
