@@ -36,16 +36,10 @@ class Login extends Component {
     this.props.getUserId(null,'','')
   }
 
-  isExpired() {// false if expired or not registered
-    if(this.context.authUser.session_token_expires_at !== '')
-      return (new Date(this.context.authUser.session_token_expires_at) > new Date())
-    return false
-  }
-
   render() {
     let buttonLogin;
 
-    if (!this.context.logged_in && this.isExpired) {
+    if (!this.context.logged_in) {
       buttonLogin = (
         <GoogleLogin
           clientId={this.state.clientId}

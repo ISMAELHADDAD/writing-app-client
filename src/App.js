@@ -12,15 +12,29 @@ import AuthContext from "./AuthContext";
 //API
 import API from './services/api/app';
 
+//Helpers
+import { checkIfExpired } from './helpers/AuthHelper'
+
 import 'semantic-ui-css/semantic.min.css'
 
 class App extends Component {
 
   constructor(props) {
     super(props);
+
+    // Check if session_token expired
+    let is_valid_login = false
+    if (localStorage['logged_in'] === "true") {
+      is_valid_login = !checkIfExpired(JSON.parse(localStorage['authUser']).expires_at)
+      if (!is_valid_login){
+        localStorage.removeItem('authUser')
+        localStorage.removeItem('logged_in')
+      }
+    }
+
     this.state = {
       authUser: localStorage['logged_in'] === "true"? JSON.parse(localStorage['authUser']) : null,
-      logged_in: localStorage['logged_in'] === "true"? true : false
+      logged_in: is_valid_login
     };
   }
 
