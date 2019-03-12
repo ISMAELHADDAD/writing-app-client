@@ -10,7 +10,7 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import AuthContext from "../../AuthContext";
 
 //UI framework
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
 class Login extends Component {
 
@@ -45,7 +45,7 @@ class Login extends Component {
           clientId={this.state.clientId}
           render={renderProps => (
             <Button as='a' inverted primary={false} style={{ marginLeft: '0.5em' }} onClick={renderProps.onClick}>
-              Accede con Google
+              <Icon name='google' /> Accede con Google
             </Button>
           )}
           buttonText="Login"

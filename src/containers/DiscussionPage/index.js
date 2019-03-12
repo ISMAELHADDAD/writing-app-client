@@ -151,7 +151,7 @@ class DiscussionPage extends Component {
 
   componentDidMount() {
     //API calls here
-    API.getDiscussion(this.props.id)
+    API.getDiscussion(1) //this.props.match.params.id
       .then(discussion => {
         this.setState({...this.state,
           discussion: discussion,
