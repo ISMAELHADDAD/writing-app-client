@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+// React Context API
+import AuthContext from "../../AuthContext";
+
 //UI framework
 import { Table, Icon, Card, Button } from 'semantic-ui-react';
 
@@ -12,24 +15,33 @@ class Agreement extends Component {
     };
   }
 
+  // If I'm owner of Avatar X && Avatar X didn't proposed
+  checkAvatarOwnership = (x) =>
+  (this.props.x.assigned_to_UserID === this.context.authUser.id
+    && this.props.point.proposed_by_AvatarID !== this.props.x.id)
+
   handleAcceptClick = () => {
-    this.props.user_avatars.forEach(aID => {
-      if (aID !== this.props.point.proposed_by_AvatarID)
-        this.props.passAcceptClick(this.props.point.id, aID);
-    });
+    if (this.checkAvatarOwnership(this.props.avatarOne))
+      this.props.passAcceptClick(this.props.point.id, this.props.avatarOne.id);
+    else if (this.checkAvatarOwnership(this.props.avatarTwo))
+      this.props.passAcceptClick(this.props.point.id, this.props.avatarTwo.id);
   };
 
   handleRejectClick = () => {
-    this.props.user_avatars.forEach(aID => {
-      if (aID !== this.props.point.proposed_by_AvatarID)
-        this.props.passRejectClick(this.props.point.id, aID);
-    });
+    if (this.checkAvatarOwnership(this.props.avatarOne))
+      this.props.passRejectClick(this.props.point.id, this.props.avatarOne.id);
+    else if (this.checkAvatarOwnership(this.props.avatarTwo))
+      this.props.passRejectClick(this.props.point.id, this.props.avatarTwo.id);
   };
 
   render() {
+    if (!this.props.point.isAccepted && !this.context.logged_in)
+      return null;
 
     let dialog;
-    if (!this.props.point.isAccepted && this.props.user_avatars.includes(this.props.point.proposed_by_AvatarID)) {
+    if (!this.props.point.isAccepted
+        && ( (this.checkAvatarOwnership(this.props.avatarOne)) || (this.checkAvatarOwnership(this.props.avatarTwo)) ))
+    {
       dialog = <Card>
                 <Card.Content>
                   <Card.Description>
@@ -70,5 +82,7 @@ class Agreement extends Component {
     );
   }
 }
+
+Agreement.contextType = AuthContext
 
 export default Agreement;
