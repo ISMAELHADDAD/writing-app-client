@@ -75,7 +75,7 @@ class App extends Component {
             <div>
               <Route exact path="/" component={DiscussionPage}/>
               <Route exact path="/discussion/:id" component={DiscussionPage} />
-              <Route exact path="/authorize" component={AuthorizePage} getUser={this.handleGetUser}/>
+              <Route exact path="/authorize" component={AuthorizePage} getUserId={this.handleGetUser}/>
             </div>
           </BrowserRouter>
         </AuthContext.Provider>
