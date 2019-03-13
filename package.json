@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "query-string": "^6.3.0",
     "react": "^16.8.0",
     "react-axios": "^2.0.3",
     "react-dom": "^16.8.0",

@@ -70,11 +70,12 @@ class App extends Component {
       <div>
         <AuthContext.Provider value={this.state}>
           <BrowserRouter>
-            <MainMenuNavbar getUserId={this.handleGetUser}/>
+            {!(window.location.pathname === '/authorize') && //Hide MainMenuNavbar on authorize
+            <MainMenuNavbar getUserId={this.handleGetUser}/>}
             <div>
               <Route exact path="/" component={DiscussionPage}/>
               <Route exact path="/discussion/:id" component={DiscussionPage} />
-              <Route exact path="/authorize" component={AuthorizePage} />
+              <Route exact path="/authorize" component={AuthorizePage} getUser={this.handleGetUser}/>
             </div>
           </BrowserRouter>
         </AuthContext.Provider>

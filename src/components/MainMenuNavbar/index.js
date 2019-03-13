@@ -32,16 +32,16 @@ class MainMenuNavbar extends Component {
               size='large'
             >
               <ContainerSemantic>
-                <Menu.Item as='a' active>
+                <Menu.Item link active>
                   <Link to="/discussion/1">Espacio de trabajo</Link>
                 </Menu.Item>
-                <Popup trigger={<Menu.Item as='a'>Mis discusiones</Menu.Item>} content='No disponible' position='bottom center'>
+                <Popup trigger={<Menu.Item link>Mis discusiones</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>
-                <Popup trigger={<Menu.Item as='a'>Explorar</Menu.Item>} content='No disponible' position='bottom center'>
+                <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>
-                <Popup trigger={<Menu.Item as='a'>Ajustes</Menu.Item>} content='No disponible' position='bottom center'>
+                <Popup trigger={<Menu.Item link>Ajustes</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>
                 <Menu.Item position='right'>
