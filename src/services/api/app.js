@@ -42,6 +42,18 @@ class API {
     let res = await axios.post(`${ENDPOINT}/tokensignin`, object);
     return res.data;
   }
+
+  static async inviteToParticipate(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/invite`, object, {headers: headers});
+    return res.data;
+  }
+
+  static async verifyInvitation(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/verify_invitation`, object, {headers: headers});
+    return res.data;
+  }
 }
 
 export default API

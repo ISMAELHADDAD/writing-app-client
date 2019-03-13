@@ -3,8 +3,11 @@ import React, { Component } from 'react';
 //Components
 import Login from '../../components/Login';
 
+//Routing
+import { Link } from 'react-router-dom';
+
 //UI framework
-import { Segment, Menu, Container as ContainerSemantic } from 'semantic-ui-react';
+import { Segment, Menu, Container as ContainerSemantic, Popup, Icon } from 'semantic-ui-react';
 
 class MainMenuNavbar extends Component {
 
@@ -29,12 +32,18 @@ class MainMenuNavbar extends Component {
               size='large'
             >
               <ContainerSemantic>
-                <Menu.Item as='a' active>
-                  Espacio de trabajo
+                <Menu.Item link active>
+                  <Link to="/discussion/1">Espacio de trabajo</Link>
                 </Menu.Item>
-                <Menu.Item as='a'>Mis discusiones</Menu.Item>
-                <Menu.Item as='a'>Explorar</Menu.Item>
-                <Menu.Item as='a'>Ajustes</Menu.Item>
+                <Popup trigger={<Menu.Item link>Mis discusiones</Menu.Item>} position='bottom center'>
+                  <Icon name='ban'/> No disponible
+                </Popup>
+                <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
+                  <Icon name='ban'/> No disponible
+                </Popup>
+                <Popup trigger={<Menu.Item link>Ajustes</Menu.Item>} position='bottom center'>
+                  <Icon name='ban'/> No disponible
+                </Popup>
                 <Menu.Item position='right'>
                   <Login getUserId={this.handleGetUserId}/>
                 </Menu.Item>
