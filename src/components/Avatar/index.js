@@ -19,7 +19,8 @@ class Avatar extends Component {
       is_assigned: false,
       participant_select: [],
       emailText: '',
-      emailError: false
+      emailError: false,
+      is_invitation_send: false
     };
   }
 
@@ -36,6 +37,7 @@ class Avatar extends Component {
     if (this.state.emailText.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
       API.inviteToParticipate(this.context.authUser.token, this.props.discussion_id, {email: this.state.emailText})
       .then(result => {
+        this.setState({is_invitation_send: true})
         //TODO Maybe in DiscussionPage?? in order to add the participant id??
       })
     else
@@ -101,7 +103,7 @@ class Avatar extends Component {
           <Divider vertical>O</Divider>
 
           <Row>
-            <Col style={{textAlign: 'center'}}>
+            <Col sm={6} style={{textAlign: 'center'}}>
               <Header icon>
                 <Icon name='tag' />
                 Asignar a un participante
@@ -119,15 +121,24 @@ class Avatar extends Component {
               </Popup>
             </Col>
 
-            <Col style={{textAlign: 'center'}}>
-              <Header icon>
-                <Icon name='user plus' />
-                Invitar a participar
-              </Header>
-              <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeEmailText}/>
-              <br/>
-              <br/>
-              <Button primary onClick={this.handleOnClickInvite}>Invitar</Button>
+            <Col sm={6} style={{textAlign: 'center'}}>
+              {this.state.is_invitation_send &&
+                <Header icon>
+                  <Icon color='green' name='checkmark' size='massive' />
+                  Invitación enviada
+                </Header>
+              }
+              {!this.state.is_invitation_send &&
+                <div>
+                  <Header icon>
+                    <Icon name='user plus' />
+                    Invitar a participar
+                  </Header>
+                  <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeEmailText}/>
+                  <br/>
+                  <br/>
+                  <Button primary onClick={this.handleOnClickInvite}>Invitar</Button>
+                </div>}
             </Col>
           </Row>
         </Popup>
