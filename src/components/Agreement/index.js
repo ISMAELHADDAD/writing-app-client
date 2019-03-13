@@ -16,9 +16,11 @@ class Agreement extends Component {
   }
 
   // If I'm owner of Avatar X && Avatar X didn't proposed
-  checkAvatarOwnership = (x) =>
-  (this.props.x.assigned_to_UserID === this.context.authUser.id
-    && this.props.point.proposed_by_AvatarID !== this.props.x.id)
+  checkAvatarOwnership = (x) => {
+    if (x !== undefined && x !== null)
+      return (this.props.x.assigned_to_UserID === this.context.authUser.id
+        && this.props.point.proposed_by_AvatarID !== this.props.x.id)
+  }
 
   handleAcceptClick = () => {
     if (this.checkAvatarOwnership(this.props.avatarOne))
