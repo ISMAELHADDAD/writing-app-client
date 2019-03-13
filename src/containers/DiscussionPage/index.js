@@ -267,12 +267,18 @@ class DiscussionPage extends Component {
                     <Col sm={1}/>
                     <Col sm={4}>
                       {this.state.discussion.avatarOne &&
-                      <Avatar avatar={this.state.discussion.avatarOne}/>}
+                      <Avatar
+                        avatar={this.state.discussion.avatarOne}
+                        participants_ids={this.state.discussion.participants}
+                        discussion_id={this.state.discussion.id}/>}
                     </Col>
                     <Col sm={2}/>
                     <Col sm={4}>
                       {this.state.discussion.avatarTwo &&
-                      <Avatar avatar={this.state.discussion.avatarTwo}/>}
+                      <Avatar
+                        avatar={this.state.discussion.avatarTwo}
+                        participants_ids={this.state.discussion.participants}
+                        discussion_id={this.state.discussion.id}/>}
                     </Col>
                     <Col sm={1}/>
                   </Row>

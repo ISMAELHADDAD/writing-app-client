@@ -26,20 +26,21 @@ class AuthorizePage extends Component {
   }
 
   responseSuccessGoogle = (response) => {
-    // Verify Google Account
+    //Verify Google Account
     API.varifyGoogleTokenId({id_token: response.tokenId})
       .then(result => {
-        //TODO Verify Invitation
-        // API.verifyInvitation(
-        //   result.session_token,
-        //   this.state.discussion_id,
-        //   {token: this.state.token}
-        // )
+        //Verify Invitation
+        API.verifyInvitation(
+          result.session_token,
+          this.state.discussion_id,
+          {token: this.state.token}
+        )
 
         //Set up the user login
         this.props.getUserId(result.user_id, result.session_token, result.session_token_expires_at)
 
-        //TODO Redirect to discussion page with id= this.state.discussion_id
+        // Redirect to discussion page with id= this.state.discussion_id
+        this.props.history.push(`/discussion/${this.state.discussion_id}`)
       })
   }
 
