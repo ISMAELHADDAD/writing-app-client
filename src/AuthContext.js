@@ -5,10 +5,10 @@ const AuthContext = React.createContext({
     id: null,
     name: '',
     token: '',
-    expires_at: '',
-    image_url: ''
+    expiresAt: '',
+    imageUrl: ''
   },
-  logged_in: false
+  loggedIn: false
 });
 
 export default AuthContext;

@@ -25,23 +25,23 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // Check if session_token expired
-    let is_valid_login = false
-    if (localStorage['logged_in'] === "true") {
-      is_valid_login = !checkIfExpired(JSON.parse(localStorage['authUser']).expires_at)
-      if (!is_valid_login){
+    // Check if sessionToken expired
+    let isValidLogin = false
+    if (localStorage['loggedIn'] === "true") {
+      isValidLogin = !checkIfExpired(JSON.parse(localStorage['authUser']).expiresAt)
+      if (!isValidLogin){
         localStorage.removeItem('authUser')
-        localStorage.removeItem('logged_in')
+        localStorage.removeItem('loggedIn')
       }
     }
 
     this.state = {
-      authUser: localStorage['logged_in'] === "true"? JSON.parse(localStorage['authUser']) : null,
-      logged_in: is_valid_login
+      authUser: localStorage['loggedIn'] === "true"? JSON.parse(localStorage['authUser']) : null,
+      loggedIn: isValidLogin
     };
   }
 
-  handleGetUser = (id, token, expires_at) => {
+  handleGetUser = (id, token, expiresAt) => {
     if (id !== null) {
       API.getUserById(id)
       .then(result =>{
@@ -50,18 +50,18 @@ class App extends Component {
             id: id,
             name: result.name,
             token: token,
-            expires_at: expires_at,
-            image_url: result.image_url
+            expiresAt: expiresAt,
+            imageUrl: result.imageUrl
           },
-          logged_in: true
+          loggedIn: true
         })
         localStorage.setItem('authUser', JSON.stringify(this.state.authUser))
-        localStorage.setItem('logged_in', true)
+        localStorage.setItem('loggedIn', true)
       })
     } else {
       localStorage.removeItem('authUser');
-      localStorage.removeItem('logged_in');
-      this.setState({ authUser: null, logged_in: false })
+      localStorage.removeItem('loggedIn');
+      this.setState({ authUser: null, loggedIn: false })
     }
   }
 

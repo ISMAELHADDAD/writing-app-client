@@ -51,9 +51,9 @@ class DiscussionPage extends Component {
 
   userIsParticipating() {
     return (
-      this.context.authUser.id === this.state.discussion.avatarOne.assigned_to_UserID
+      this.context.authUser.id === this.state.discussion.avatarOne.assignedtoUserId
       ||
-      this.context.authUser.id === this.state.discussion.avatarTwo.assigned_to_UserID
+      this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId
     )
   }
 
@@ -197,7 +197,7 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  {this.context.logged_in && this.userIsParticipating &&
+                  {this.context.loggedIn && this.userIsParticipating &&
                     <Menu.Item>
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
@@ -248,7 +248,7 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    {this.context.logged_in && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating &&
                       <Menu.Item>
                         <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
@@ -269,16 +269,16 @@ class DiscussionPage extends Component {
                       {this.state.discussion.avatarOne &&
                       <Avatar
                         avatar={this.state.discussion.avatarOne}
-                        participants_ids={this.state.discussion.participants}
-                        discussion_id={this.state.discussion.id}/>}
+                        participantsIds={this.state.discussion.participants}
+                        discussionId={this.state.discussion.id}/>}
                     </Col>
                     <Col sm={2}/>
                     <Col sm={4}>
                       {this.state.discussion.avatarTwo &&
                       <Avatar
                         avatar={this.state.discussion.avatarTwo}
-                        participants_ids={this.state.discussion.participants}
-                        discussion_id={this.state.discussion.id}/>}
+                        participantsIds={this.state.discussion.participants}
+                        discussionId={this.state.discussion.id}/>}
                     </Col>
                     <Col sm={1}/>
                   </Row>
@@ -286,7 +286,7 @@ class DiscussionPage extends Component {
                 <br/>
                 <Container>
                   {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
-                     <Argument key={item.num} argument={item} avatarOneID={this.state.discussion.avatarOne.id}/>
+                     <Argument key={item.num} argument={item} avatarOneId={this.state.discussion.avatarOne.id}/>
                   ))}
                   <br/>
                 </Container>
@@ -312,7 +312,7 @@ class DiscussionPage extends Component {
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      {this.context.logged_in && this.userIsParticipating &&
+                      {this.context.loggedIn && this.userIsParticipating &&
                         <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
                           <Table.Cell colSpan='3'>
                             <Row>
@@ -340,7 +340,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.logged_in && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />

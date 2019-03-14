@@ -16,7 +16,7 @@ class Argument extends Component {
   render() {
 
     let speech;
-    if (this.props.argument.from_AvatarID === this.props.avatarOneID) {
+    if (this.props.argument.fromAvatarId === this.props.avatarOneId) {
       speech = <Row>
                 <Col sm={8}>
                   <Card fluid>

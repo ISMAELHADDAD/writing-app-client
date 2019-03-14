@@ -18,7 +18,7 @@ class MainMenuNavbar extends Component {
     };
   }
 
-  handleGetUserId = (id, token, expires_at) => this.props.getUserId(id, token, expires_at)
+  handleGetUserId = (id, token, expiresAt) => this.props.getUserId(id, token, expiresAt)
 
   render() {
     return (
