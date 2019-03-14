@@ -20,7 +20,8 @@ class Avatar extends Component {
       participant_select: [],
       emailText: '',
       emailError: false,
-      is_invitation_send: false
+      is_invitation_send: false,
+      idAssign: 0
     };
   }
 
@@ -42,6 +43,26 @@ class Avatar extends Component {
       })
     else
       this.setState({emailError: true})
+  }
+
+  handleOnChangeAssignDropdown = (event,data) => {
+    this.setState({idAssign: data.value})
+  }
+
+  handleOnClickAssignButton = (event,data) => {
+    API.assignAvatar(this.context.authUser.token, this.props.discussion_id, this.props.avatar.id, {user_id: this.state.idAssign})
+    .then(result => {
+      API.getUserById(this.props.avatar.assigned_to_UserID)
+      .then(result =>{
+        this.setState({
+          user: {
+            name: result.name,
+            image_url: result.image_url
+          },
+          is_assigned: true
+        })
+      })
+    })
   }
 
   componentDidMount() {
@@ -71,7 +92,8 @@ class Avatar extends Component {
         }
 
         this.setState({
-          participant_select: [...this.state.participant_select, newParticipant]
+          participant_select: [...this.state.participant_select, newParticipant],
+          idAssign: this.props.avatar.assigned_to_UserID
         })
       })
     })
@@ -114,11 +136,10 @@ class Avatar extends Component {
                 fluid
                 selection
                 options={this.state.participant_select}
+                onChange={this.handleOnChangeAssignDropdown}
               />
               <br/>
-              <Popup trigger={<Button primary>Asignar</Button>} position='bottom center'>
-                <Icon name='ban'/> No disponible
-              </Popup>
+              <Button primary onClick={this.handleOnClickAssignButton}>Asignar</Button>
             </Col>
 
             <Col sm={6} style={{textAlign: 'center'}}>
