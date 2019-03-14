@@ -53,6 +53,11 @@ class TextEditorSidebar extends Component {
 
   handleClick = () => {
     this.props.passClick(this.state.who, this.state.textContent);
+    this.props.passClickClose();
+  };
+
+  handleClickClose = () => {
+    this.props.passClickClose();
   };
 
   render() {
@@ -62,6 +67,7 @@ class TextEditorSidebar extends Component {
           <Card fluid>
             <Card.Content>
               <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleChangeSelect}/>
+              <Button floated='right' icon='delete' onClick={this.handleClickClose}/>
             </Card.Content>
             <Card.Content>
               <Form>
