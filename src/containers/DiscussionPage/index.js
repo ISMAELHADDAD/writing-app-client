@@ -117,7 +117,7 @@ class DiscussionPage extends Component {
           }
         })
       }, 3000)
-      
+
     });
   }
 
@@ -269,7 +269,7 @@ class DiscussionPage extends Component {
           <div ref={this.argumentsRef}>
             <Responsive minWidth={1650}>
               <Rail position='right'>
-                <Sticky offset={100} context={this.argumentsRef.current}>
+                <Sticky offset={100} context={this.argumentsRef.current} active={false}>
                   <Menu vertical>
                     <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
                       <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
