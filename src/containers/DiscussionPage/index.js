@@ -99,7 +99,7 @@ class DiscussionPage extends Component {
       'user_id': this.context.authUser.id,
       'avatar_id': this.state.whoProposed,
       'content': this.state.proposedText,
-      'isAgree': this.state.isAgree
+      'is_agree': this.state.isAgree
     })
     .then(agreement => {
       this.setState(prevState => ({
@@ -116,7 +116,7 @@ class DiscussionPage extends Component {
     API.rejectAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'isAccepted': false
+      'is_accepted': false
     })
     .then(message => {
       this.setState({
@@ -133,7 +133,7 @@ class DiscussionPage extends Component {
     API.acceptAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'isAccepted': true
+      'is_accepted': true
     })
     .then(message => {
       let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
