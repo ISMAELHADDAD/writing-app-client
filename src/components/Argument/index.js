@@ -19,7 +19,7 @@ class Argument extends Component {
     if (this.props.argument.fromAvatarId === this.props.avatarOneId) {
       speech = <Row>
                 <Col sm={8}>
-                  <Card fluid>
+                  <Card fluid style={this.props.argument.highlight? {border: '4px solid yellow'}:null }>
                     <Card.Content>
                       <Card.Header>#{this.props.argument.num}</Card.Header>
                       <Card.Description>{this.props.argument.content}</Card.Description>
@@ -39,7 +39,7 @@ class Argument extends Component {
       speech = <Row>
                 <Col sm={4}></Col>
                 <Col sm={8}>
-                  <Card fluid>
+                  <Card fluid style={this.props.argument.highlight? {border: '4px solid yellow'}:null }>
                     <Card.Content>
                       <Card.Header>#{this.props.argument.num}</Card.Header>
                       <Card.Description>{this.props.argument.content}</Card.Description>

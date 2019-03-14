@@ -15,7 +15,7 @@ import AuthContext from "../../AuthContext";
 
 //UI framework
 import Headroom from 'react-headroom';
-import { Link, Element} from 'react-scroll';
+import { Link, Element, scroller} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
@@ -59,11 +59,24 @@ class DiscussionPage extends Component {
   }
 
   handleTextEditorSidebarVisibility = () => {
-    this.setState({ textEditorSidebarVisibility: !this.state.textEditorSidebarVisibility })
+    this.setState({ textEditorSidebarVisibility: true })
+  }
+
+  handleHideTextEditorSidebar = () => {
+    this.setState({ textEditorSidebarVisibility: false })
+  }
+
+  scrollToNewArgument() {
+    scroller.scrollTo('scroll-to-new-argument', {
+      duration: 800,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+      offset: -300
+    })
   }
 
   handleAgreePointVisibility = () => {
-    this.setState({ agreePointVisibility: !this.state.agreePointVisibility })
+    this.setState({ agreePointVisibility: true })
   }
 
   handleAgreePointChangeSelect = (event, data) => {
@@ -85,12 +98,26 @@ class DiscussionPage extends Component {
       'content': textContent
     })
     .then(argument => {
+      argument.highlight = true
       this.setState(prevState => ({
         discussion: {
           ...this.state.discussion,
           arguments: [...prevState.discussion.arguments, argument]
         }
-      }));
+      }))
+
+      this.scrollToNewArgument()
+      setTimeout(() => {
+        const updatedArguments = this.state.discussion.arguments.slice()
+        updatedArguments[updatedArguments.length-1].highlight = false
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            arguments: updatedArguments
+          }
+        })
+      }, 3000)
+      
     });
   }
 
@@ -99,11 +126,11 @@ class DiscussionPage extends Component {
       'user_id': this.context.authUser.id,
       'avatar_id': this.state.whoProposed,
       'content': this.state.proposedText,
-      'isAgree': this.state.isAgree
+      'is_agree': this.state.isAgree
     })
     .then(agreement => {
       this.setState(prevState => ({
-        ...this.state,
+        agreePointVisibility: false,
         discussion: {
           ...this.state.discussion,
           agreements: [...prevState.discussion.agreements, agreement]
@@ -116,7 +143,7 @@ class DiscussionPage extends Component {
     API.rejectAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'isAccepted': false
+      'is_accepted': false
     })
     .then(message => {
       this.setState({
@@ -133,7 +160,7 @@ class DiscussionPage extends Component {
     API.acceptAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'isAccepted': true
+      'is_accepted': true
     })
     .then(message => {
       let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
@@ -210,7 +237,7 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  {this.context.loggedIn && this.userIsParticipating &&
+                  {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
                     <Menu.Item>
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
@@ -261,7 +288,7 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    {this.context.loggedIn && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
                       <Menu.Item>
                         <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
@@ -304,6 +331,8 @@ class DiscussionPage extends Component {
                   <br/>
                 </Container>
               </Element>
+
+              <Element name="scroll-to-new-argument" className="element"/>
 
               <Element name="test3" className="element" >
                 <Container>
@@ -353,7 +382,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.loggedIn && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating && !this.state.agreePointVisibility &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />
@@ -378,6 +407,7 @@ class DiscussionPage extends Component {
             avatarOne={this.state.discussion.avatarOne}
             avatarTwo={this.state.discussion.avatarTwo}
             passClick={this.handleSendArgument}
+            passClickClose={this.handleHideTextEditorSidebar}
           />
         </Container>
 
