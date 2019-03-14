@@ -19,13 +19,14 @@ import { Link, Element} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
-  Rail, Sticky, Responsive} from 'semantic-ui-react';
+  Rail, Sticky, Responsive, Segment, Dimmer, Loader} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isDiscussionLoaded: false,
       discussion: {},
       textEditorSidebarVisibility: false,
       agreePointVisibility: false,
@@ -153,7 +154,8 @@ class DiscussionPage extends Component {
     //API calls here
     API.getDiscussion(1) //this.props.match.params.id
       .then(discussion => {
-        this.setState({...this.state,
+        this.setState({
+          isDiscussionLoaded: true,
           discussion: discussion,
           avatarSelect: [
             {
@@ -172,6 +174,17 @@ class DiscussionPage extends Component {
   }
 
   render() {
+
+    if (!this.state.isDiscussionLoaded) {
+      return (
+        <Segment style={{minHeight: '90.5vh'}}>
+          <Dimmer active inverted>
+            <Loader inverted size='massive'>Cargando</Loader>
+          </Dimmer>
+        </Segment>
+      );
+    }
+
     return (
       <div style={{backgroundColor: '#eee'}}>
 
