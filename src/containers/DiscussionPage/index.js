@@ -63,7 +63,7 @@ class DiscussionPage extends Component {
   }
 
   handleAgreePointVisibility = () => {
-    this.setState({ agreePointVisibility: !this.state.agreePointVisibility })
+    this.setState({ agreePointVisibility: true })
   }
 
   handleAgreePointChangeSelect = (event, data) => {
@@ -103,7 +103,7 @@ class DiscussionPage extends Component {
     })
     .then(agreement => {
       this.setState(prevState => ({
-        ...this.state,
+        agreePointVisibility: false,
         discussion: {
           ...this.state.discussion,
           agreements: [...prevState.discussion.agreements, agreement]
@@ -353,7 +353,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.loggedIn && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating && this.state.agreePointVisibility &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />
