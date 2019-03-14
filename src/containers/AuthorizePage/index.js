@@ -50,7 +50,7 @@ class AuthorizePage extends Component {
 
   componentDidMount() {
     const values = queryString.parse(this.props.location.search)
-    this.setState({discussionId: values.discussionId, token: values.token})
+    this.setState({discussionId: values.discussion_id, token: values.token})
   }
 
   render() {
