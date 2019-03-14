@@ -15,7 +15,7 @@ import AuthContext from "../../AuthContext";
 
 //UI framework
 import Headroom from 'react-headroom';
-import { Link, Element} from 'react-scroll';
+import { Link, Element, scroller} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
@@ -66,6 +66,15 @@ class DiscussionPage extends Component {
     this.setState({ textEditorSidebarVisibility: false })
   }
 
+  scrollToNewArgument() {
+    scroller.scrollTo('scroll-to-new-argument', {
+      duration: 800,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+      offset: -300
+    })
+  }
+
   handleAgreePointVisibility = () => {
     this.setState({ agreePointVisibility: true })
   }
@@ -89,12 +98,26 @@ class DiscussionPage extends Component {
       'content': textContent
     })
     .then(argument => {
+      argument.highlight = true
       this.setState(prevState => ({
         discussion: {
           ...this.state.discussion,
           arguments: [...prevState.discussion.arguments, argument]
         }
-      }));
+      }))
+
+      this.scrollToNewArgument()
+      setTimeout(() => {
+        const updatedArguments = this.state.discussion.arguments.slice()
+        updatedArguments[updatedArguments.length-1].highlight = false
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            arguments: updatedArguments
+          }
+        })
+      }, 3000)
+      
     });
   }
 
@@ -308,6 +331,8 @@ class DiscussionPage extends Component {
                   <br/>
                 </Container>
               </Element>
+
+              <Element name="scroll-to-new-argument" className="element"/>
 
               <Element name="test3" className="element" >
                 <Container>
