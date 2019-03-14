@@ -59,7 +59,11 @@ class DiscussionPage extends Component {
   }
 
   handleTextEditorSidebarVisibility = () => {
-    this.setState({ textEditorSidebarVisibility: !this.state.textEditorSidebarVisibility })
+    this.setState({ textEditorSidebarVisibility: true })
+  }
+
+  handleHideTextEditorSidebar = () => {
+    this.setState({ textEditorSidebarVisibility: false })
   }
 
   handleAgreePointVisibility = () => {
@@ -210,7 +214,7 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  {this.context.loggedIn && this.userIsParticipating &&
+                  {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
                     <Menu.Item>
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
@@ -261,7 +265,7 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    {this.context.loggedIn && this.userIsParticipating &&
+                    {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
                       <Menu.Item>
                         <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
@@ -353,7 +357,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.loggedIn && this.userIsParticipating && this.state.agreePointVisibility &&
+                    {this.context.loggedIn && this.userIsParticipating && !this.state.agreePointVisibility &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />
@@ -378,6 +382,7 @@ class DiscussionPage extends Component {
             avatarOne={this.state.discussion.avatarOne}
             avatarTwo={this.state.discussion.avatarTwo}
             passClick={this.handleSendArgument}
+            passClickClose={this.handleHideTextEditorSidebar}
           />
         </Container>
 
