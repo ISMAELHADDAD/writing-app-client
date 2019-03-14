@@ -24,7 +24,7 @@ class Login extends Component {
   responseSuccessGoogle = (response) => {
     API.varifyGoogleTokenId({id_token: response.tokenId})
       .then(result => {
-        this.props.getUserId(result.user_id, result.session_token, result.session_token_expires_at)
+        this.props.getUserId(result.userId, result.sessionToken, result.sessionTokenExpiresAt)
       })
   }
 
@@ -39,7 +39,7 @@ class Login extends Component {
   render() {
     let buttonLogin;
 
-    if (!this.context.logged_in) {
+    if (!this.context.loggedIn) {
       buttonLogin = (
         <GoogleLogin
           clientId={this.state.clientId}

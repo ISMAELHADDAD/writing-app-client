@@ -54,6 +54,12 @@ class API {
     let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/verify_invitation`, object, {headers: headers});
     return res.data;
   }
+
+  static async assignAvatar(token, discussionId, avatarId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/assign`, object, {headers: headers});
+    return res.data;
+  }
 }
 
 export default API

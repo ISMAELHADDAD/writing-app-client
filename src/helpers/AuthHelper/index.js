@@ -1,6 +1,6 @@
 
-export function checkIfExpired(expires_at) {// false if expired or not registered
-  if(expires_at !== '')
-    return !(new Date(expires_at) > new Date())
+export function checkIfExpired(expiresAt) {// false if expired or not registered
+  if(expiresAt !== '')
+    return !(new Date(expiresAt) > new Date())
   return true
 }

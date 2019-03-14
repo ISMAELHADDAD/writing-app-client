@@ -20,7 +20,7 @@ class AuthorizePage extends Component {
     super(props);
     this.state = {
       clientId: '92526793961-oujhblthl5mck9mu282mkqgelqje1ur9.apps.googleusercontent.com',
-      discussion_id: null,
+      discussionId: null,
       token: ''
     };
   }
@@ -31,16 +31,16 @@ class AuthorizePage extends Component {
       .then(result => {
         //Verify Invitation
         API.verifyInvitation(
-          result.session_token,
-          this.state.discussion_id,
+          result.sessionToken,
+          this.state.discussionId,
           {token: this.state.token}
         )
 
         //Set up the user login
-        this.props.getUserId(result.user_id, result.session_token, result.session_token_expires_at)
+        this.props.getUserId(result.userId, result.sessionToken, result.sessionTokenExpiresAt)
 
-        // Redirect to discussion page with id= this.state.discussion_id
-        this.props.history.push(`/discussion/${this.state.discussion_id}`)
+        // Redirect to discussion page with id= this.state.discussionId
+        this.props.history.push(`/discussion/${this.state.discussionId}`)
       })
   }
 
@@ -50,7 +50,7 @@ class AuthorizePage extends Component {
 
   componentDidMount() {
     const values = queryString.parse(this.props.location.search)
-    this.setState({discussion_id: values.discussion_id, token: values.token})
+    this.setState({discussionId: values.discussionId, token: values.token})
   }
 
   render() {

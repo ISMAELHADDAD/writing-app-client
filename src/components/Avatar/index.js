@@ -16,49 +16,70 @@ class Avatar extends Component {
     super(props);
     this.state = {
       user: {},
-      is_assigned: false,
-      participant_select: [],
+      isAssigned: false,
+      participantSelect: [],
       emailText: '',
       emailError: false,
-      is_invitation_send: false
+      isInvitationSend: false,
+      idToAssign: 0
     };
   }
 
   handleOnRemove = (event,data) => {
-    this.setState({is_assigned: false})
+    this.setState({isAssigned: false})
   }
 
-  handleOnChangeEmailText = (event,data) => {
+  handleOnChangeemailText = (event,data) => {
     this.setState({emailText: data.value, emailError: false})
   }
 
   handleOnClickInvite = (event, data) => {
     //Verify if email is valid
     if (this.state.emailText.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
-      API.inviteToParticipate(this.context.authUser.token, this.props.discussion_id, {email: this.state.emailText})
+      API.inviteToParticipate(this.context.authUser.token, this.props.discussionId, {email: this.state.emailText})
       .then(result => {
-        this.setState({is_invitation_send: true})
+        this.setState({isInvitationSend: true})
         //TODO Maybe in DiscussionPage?? in order to add the participant id??
       })
     else
       this.setState({emailError: true})
   }
 
+  handleOnChangeAssignDropdown = (event,data) => {
+    this.setState({idToAssign: data.value})
+  }
+
+  handleOnClickAssignButton = (event,data) => {
+    API.assignAvatar(this.context.authUser.token, this.props.discussionId, this.props.avatar.id, {user_id: this.state.idToAssign})
+    .then(result => {
+      API.getUserById(this.props.avatar.assignedToUserId)
+      .then(result =>{
+        this.setState({
+          user: {
+            name: result.name,
+            imageUrl: result.imageUrl
+          },
+          isAssigned: true
+        })
+      })
+    })
+  }
+
   componentDidMount() {
     //Get User assigned for this avatar
-    API.getUserById(this.props.avatar.assigned_to_UserID)
+    API.getUserById(this.props.avatar.assignedToUserId)
     .then(result =>{
       this.setState({
         user: {
           name: result.name,
-          image_url: result.image_url
+          imageUrl: result.imageUrl
         },
-        is_assigned: true
+        isAssigned: true
       })
     })
 
-    //Populate participant_select
-    this.props.participants_ids.forEach(id => {
+    //Populate participantSelect
+    this.props.participantsIds.forEach(id => {
       API.getUserById(id)
       .then(result =>{
         let newParticipant = {
@@ -67,11 +88,12 @@ class Avatar extends Component {
           value: id,
           image: {
             avatar: true,
-            src: result.image_url}
+            src: result.imageUrl}
         }
 
         this.setState({
-          participant_select: [...this.state.participant_select, newParticipant]
+          participantSelect: [...this.state.participantSelect, newParticipant],
+          idToAssign: this.props.avatar.assignedToUserId
         })
       })
     })
@@ -79,18 +101,18 @@ class Avatar extends Component {
 
   render() {
 
-    let user_assigned
-    if (this.state.is_assigned) {
-      user_assigned =
+    let userAssigned
+    if (this.state.isAssigned) {
+      userAssigned =
         <Label image>
-          <img src={this.state.user.image_url} alt=''/>
+          <img src={this.state.user.imageUrl} alt=''/>
           @{this.state.user.name}
-          {this.context.logged_in &&
+          {this.context.loggedIn &&
             <Icon name='delete' onClick={this.handleOnRemove}/>
           }
         </Label>
-    } else if (this.context.logged_in) {
-      user_assigned =
+    } else if (this.context.loggedIn) {
+      userAssigned =
         <Popup
           flowing
           trigger={
@@ -113,28 +135,27 @@ class Avatar extends Component {
                 placeholder='Selecciona participante'
                 fluid
                 selection
-                options={this.state.participant_select}
+                options={this.state.participantSelect}
+                onChange={this.handleOnChangeAssignDropdown}
               />
               <br/>
-              <Popup trigger={<Button primary>Asignar</Button>} position='bottom center'>
-                <Icon name='ban'/> No disponible
-              </Popup>
+              <Button primary onClick={this.handleOnClickAssignButton}>Asignar</Button>
             </Col>
 
             <Col sm={6} style={{textAlign: 'center'}}>
-              {this.state.is_invitation_send &&
+              {this.state.isInvitationSend &&
                 <Header icon>
                   <Icon color='green' name='checkmark' size='massive' />
                   Invitación enviada
                 </Header>
               }
-              {!this.state.is_invitation_send &&
+              {!this.state.isInvitationSend &&
                 <div>
                   <Header icon>
                     <Icon name='user plus' />
                     Invitar a participar
                   </Header>
-                  <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeEmailText}/>
+                  <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeemailText}/>
                   <br/>
                   <br/>
                   <Button primary onClick={this.handleOnClickInvite}>Invitar</Button>
@@ -153,7 +174,7 @@ class Avatar extends Component {
             <Card.Description>{this.props.avatar.opinion}</Card.Description>
           </Card.Content>
           <Card.Content extra>
-            {user_assigned}
+            {userAssigned}
           </Card.Content>
         </Card>
         <br/>

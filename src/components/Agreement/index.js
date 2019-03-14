@@ -18,8 +18,8 @@ class Agreement extends Component {
   // If I'm owner of Avatar X && Avatar X didn't proposed
   checkAvatarOwnership = (x) => {
     if (x !== undefined && x !== null)
-      return (x.assigned_to_UserID === this.context.authUser.id
-        && this.props.point.proposed_by_AvatarID !== x.id)
+      return (x.assignedToUserId === this.context.authUser.id
+        && this.props.point.proposedByAvatarId !== x.id)
   }
 
   handleAcceptClick = () => {
@@ -37,7 +37,7 @@ class Agreement extends Component {
   };
 
   render() {
-    if (!this.props.point.isAccepted && !this.context.logged_in)
+    if (!this.props.point.isAccepted && !this.context.loggedIn)
       return null;
 
     let dialog;
@@ -47,7 +47,7 @@ class Agreement extends Component {
       dialog = <Card>
                 <Card.Content>
                   <Card.Description>
-                    <strong>{this.props.point.proposed_by_AvatarName}</strong> a propuesto esto:
+                    <strong>{this.props.point.proposedByAvatarName}</strong> a propuesto esto:
                   </Card.Description>
                   </Card.Content>
                   <Card.Content extra>
