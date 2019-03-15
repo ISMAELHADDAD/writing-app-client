@@ -12,7 +12,7 @@ import queryString from 'query-string';
 import { GoogleLogin } from 'react-google-login';
 
 //UI framework
-import { Modal, Icon, Button, Header } from 'semantic-ui-react';
+import { Modal, Icon, Button, Header, Dimmer, Loader } from 'semantic-ui-react';
 
 class AuthorizePage extends Component {
 
@@ -21,7 +21,8 @@ class AuthorizePage extends Component {
     this.state = {
       clientId: '92526793961-oujhblthl5mck9mu282mkqgelqje1ur9.apps.googleusercontent.com',
       discussionId: null,
-      token: ''
+      token: '',
+      loadingRedirection: false
     };
   }
 
@@ -39,8 +40,14 @@ class AuthorizePage extends Component {
         //Set up the user login
         this.props.getUserId(result.userId, result.sessionToken, result.sessionTokenExpiresAt)
 
-        // Redirect to discussion page with id= this.state.discussionId
-        this.props.history.push(`/discussion/${this.state.discussionId}`)
+        //Loading component to wait participation is added to the discussion
+        this.setState({loadingRedirection: true})
+
+        setTimeout(() => {
+          this.setState({loadingRedirection: false})
+          // Redirect to discussion page with id= this.state.discussionId
+          this.props.history.push(`/discussion/${this.state.discussionId}`)
+        }, 5000)
       })
   }
 
@@ -54,6 +61,14 @@ class AuthorizePage extends Component {
   }
 
   render() {
+
+    if (this.state.loadingRedirection)
+      return (
+        <Dimmer active blurring page>
+          <Loader size='massive'>Redirigiendo</Loader>
+        </Dimmer>
+      )
+
     return (
       <div style={{backgroundImage: "url(" + wallpaper + ")", minHeight: '100vh'}}>
         <Modal dimmer={'blurring'} open={true} basic>

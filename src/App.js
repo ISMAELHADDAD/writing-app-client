@@ -66,15 +66,31 @@ class App extends Component {
   }
 
   render() {
+
+    const BlankContainer = () => (
+      <div className="container">
+        <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
+      </div>
+    )
+
+
+     const WithNavbarContainer = () => (
+        <div className="container">
+          <MainMenuNavbar getUserId={this.handleGetUser}/>
+          <div>
+            <Route exact path="/" component={DiscussionPage}/>
+            <Route exact path="/discussion/:id" component={DiscussionPage} />
+          </div>
+        </div>
+     )
+
     return (
       <div>
         <AuthContext.Provider value={this.state}>
           <BrowserRouter>
-            <MainMenuNavbar getUserId={this.handleGetUser}/>
             <div>
-              <Route exact path="/" component={DiscussionPage}/>
-              <Route exact path="/discussion/:id" component={DiscussionPage} />
-              <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
+              <Route exact path="/authorize" component={BlankContainer}/>
+              <Route component={WithNavbarContainer}/>
             </div>
           </BrowserRouter>
         </AuthContext.Provider>
