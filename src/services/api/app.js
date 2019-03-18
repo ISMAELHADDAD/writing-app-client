@@ -66,6 +66,12 @@ class API {
     let res = await axios.get(`${ENDPOINT}/discussions`, null, {headers: headers});
     return res.data;
   }
+
+  static async createNewDiscussion(token, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions`, object, {headers: headers});
+    return res.data;
+  }
 }
 
 export default API
