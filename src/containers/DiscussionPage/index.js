@@ -179,7 +179,7 @@ class DiscussionPage extends Component {
 
   componentDidMount() {
     //API calls here
-    API.getDiscussion(1) //this.props.match.params.id
+    API.getDiscussion(this.props.match.params.id)
       .then(discussion => {
         this.setState({
           isDiscussionLoaded: true,
@@ -250,7 +250,7 @@ class DiscussionPage extends Component {
         </Responsive>
 
         <Element name="test1" className="element" >
-          <Card fluid>
+          <Segment>
             <Container>
 
                 <br/>
@@ -261,7 +261,7 @@ class DiscussionPage extends Component {
                 <br/>
 
             </Container>
-          </Card>
+          </Segment>
           <br/>
         </Element>
 

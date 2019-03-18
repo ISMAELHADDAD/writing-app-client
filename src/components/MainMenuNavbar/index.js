@@ -33,11 +33,11 @@ class MainMenuNavbar extends Component {
             >
               <ContainerSemantic>
                 <Menu.Item link active>
-                  <Link to="/discussion/1">Espacio de trabajo</Link>
+                  <Link to={'discussion/1'}>Espacio de trabajo</Link>
                 </Menu.Item>
-                <Popup trigger={<Menu.Item link>Mis discusiones</Menu.Item>} position='bottom center'>
-                  <Icon name='ban'/> No disponible
-                </Popup>
+                <Menu.Item link>
+                  <Link to="/my_discussions">Mis discusiones</Link>
+                </Menu.Item>
                 <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>

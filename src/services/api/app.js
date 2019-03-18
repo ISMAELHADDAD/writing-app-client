@@ -60,6 +60,12 @@ class API {
     let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/assign`, object, {headers: headers});
     return res.data;
   }
+
+  static async getMyDiscussions(token) {
+    let headers = { 'Authorization': token }
+    let res = await axios.get(`${ENDPOINT}/discussions`, null, {headers: headers});
+    return res.data;
+  }
 }
 
 export default API

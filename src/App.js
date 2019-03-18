@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 //Pages/Containers
 import DiscussionPage from './containers/DiscussionPage';
+import MyDiscussionsPage from './containers/MyDiscussionsPage';
 import AuthorizePage from './containers/AuthorizePage';
 
 //Components
@@ -74,15 +75,16 @@ class App extends Component {
     )
 
 
-     const WithNavbarContainer = () => (
-        <div className="container">
-          <MainMenuNavbar getUserId={this.handleGetUser}/>
-          <div>
-            <Route exact path="/" component={DiscussionPage}/>
-            <Route exact path="/discussion/:id" component={DiscussionPage} />
-          </div>
+   const WithNavbarContainer = () => (
+      <div className="container">
+        <MainMenuNavbar getUserId={this.handleGetUser}/>
+        <div>
+          <Route exact path="/" component={MyDiscussionsPage}/>
+          <Route exact path="/discussion/:id" render={(props)=><DiscussionPage {...props} setCurrentDiscussion={this.handleSetCurrentDiscussion}/>}/>
+          <Route exact path="/my_discussions" component={MyDiscussionsPage} />
         </div>
-     )
+      </div>
+   )
 
     return (
       <div>
