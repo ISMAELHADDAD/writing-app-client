@@ -72,6 +72,12 @@ class API {
     let res = await axios.post(`${ENDPOINT}/discussions`, object, {headers: headers});
     return res.data;
   }
+
+  static async deleteDiscussion(token, discussionId) {
+    let headers = { 'Authorization': token }
+    let res = await axios.delete(`${ENDPOINT}/discussions/${discussionId}`, {headers: headers});
+    return res.data;
+  }
 }
 
 export default API

@@ -46,6 +46,17 @@ class MyDiscussionsPage extends Component {
     })
   }
 
+  handleOnClickDelete = (id) => {
+    if (this.context.loggedIn)
+      API.deleteDiscussion(this.context.authUser.token, id)
+      .then(result => {
+        this.setState({
+          discussions: this.state.discussions
+            .filter(i => i.id !== id)
+        })
+      })
+  }
+
   componentDidMount() {
     if (this.context.loggedIn)
       API.getMyDiscussions(this.context.authUser.token)
@@ -71,6 +82,7 @@ class MyDiscussionsPage extends Component {
           {this.state.discussions && this.state.discussions.map((discussion) => (
             <li key={discussion.id}>
               <Link to={'/discussion/'+discussion.id}> {discussion.topicTitle} </Link> by @{discussion.owner.name}
+              <Button icon onClick={() => this.handleOnClickDelete(discussion.id)}> <Icon name='remove'/> </Button>
             </li>
           ))}
         </ul>
