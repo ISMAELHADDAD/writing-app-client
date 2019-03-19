@@ -178,8 +178,12 @@ class DiscussionPage extends Component {
   }
 
   componentDidMount() {
+    if (this.props.match.params.id > 0)
+      // Pass discussion Id to CurrentSessionContext
+      this.props.getDiscussionId(this.props.match.params.id)
+
     //API calls here
-    API.getDiscussion(1) //this.props.match.params.id
+    API.getDiscussion(this.props.match.params.id)
       .then(discussion => {
         this.setState({
           isDiscussionLoaded: true,
@@ -196,8 +200,13 @@ class DiscussionPage extends Component {
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
             }
           ]
-        });
-      });
+        })
+      })
+  }
+
+  componentWillUnmount() {
+    // Pass discussion Id to CurrentSessionContext
+    this.props.getDiscussionId(this.state.discussion.id)
   }
 
   render() {
@@ -250,7 +259,7 @@ class DiscussionPage extends Component {
         </Responsive>
 
         <Element name="test1" className="element" >
-          <Card fluid>
+          <Segment>
             <Container>
 
                 <br/>
@@ -261,7 +270,7 @@ class DiscussionPage extends Component {
                 <br/>
 
             </Container>
-          </Card>
+          </Segment>
           <br/>
         </Element>
 

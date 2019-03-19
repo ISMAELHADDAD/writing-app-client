@@ -4,7 +4,10 @@ import React, { Component } from 'react';
 import Login from '../../components/Login';
 
 //Routing
-import { Link } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
+
+// React Context API
+import CurrentSessionContext from "../../CurrentSessionContext";
 
 //UI framework
 import { Segment, Menu, Container as ContainerSemantic, Popup, Icon } from 'semantic-ui-react';
@@ -32,12 +35,8 @@ class MainMenuNavbar extends Component {
               size='large'
             >
               <ContainerSemantic>
-                <Menu.Item link active>
-                  <Link to="/discussion/1">Espacio de trabajo</Link>
-                </Menu.Item>
-                <Popup trigger={<Menu.Item link>Mis discusiones</Menu.Item>} position='bottom center'>
-                  <Icon name='ban'/> No disponible
-                </Popup>
+                <Menu.Item as={NavLink} to={'/discussion/'+this.context} content='Espacio de trabajo'/>
+                <Menu.Item as={NavLink} to={'/my-discussions'} content='Mis discusiones'/>
                 <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>
@@ -55,4 +54,6 @@ class MainMenuNavbar extends Component {
   }
 }
 
-export default MainMenuNavbar;
+MainMenuNavbar.contextType = CurrentSessionContext
+
+export default withRouter(MainMenuNavbar);
