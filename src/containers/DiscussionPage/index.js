@@ -178,6 +178,10 @@ class DiscussionPage extends Component {
   }
 
   componentDidMount() {
+    if (this.props.match.params.id > 0)
+      // Pass discussion Id to CurrentSessionContext
+      this.props.getDiscussionId(this.props.match.params.id)
+
     //API calls here
     API.getDiscussion(this.props.match.params.id)
       .then(discussion => {
@@ -196,8 +200,13 @@ class DiscussionPage extends Component {
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
             }
           ]
-        });
-      });
+        })
+      })
+  }
+
+  componentWillUnmount() {
+    // Pass discussion Id to CurrentSessionContext
+    this.props.getDiscussionId(this.state.discussion.id)
   }
 
   render() {

@@ -10,6 +10,7 @@ import MainMenuNavbar from './components/MainMenuNavbar';
 
 //React Context API
 import AuthContext from "./AuthContext";
+import CurrentSessionContext from "./CurrentSessionContext";
 
 //API
 import API from './services/api/app';
@@ -18,7 +19,7 @@ import API from './services/api/app';
 import { checkIfExpired } from './helpers/AuthHelper';
 
 //Routing
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 
 class App extends Component {
@@ -38,7 +39,8 @@ class App extends Component {
 
     this.state = {
       authUser: localStorage['loggedIn'] === "true"? JSON.parse(localStorage['authUser']) : null,
-      loggedIn: isValidLogin
+      loggedIn: isValidLogin,
+      currentDiscussion: 1
     };
   }
 
@@ -66,33 +68,23 @@ class App extends Component {
     }
   }
 
+  handleGetDiscussionId = (id) => this.setState({ currentDiscussion: id })
+
   render() {
-
-    const BlankContainer = () => (
-      <div className="container">
-        <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
-      </div>
-    )
-
-
-   const WithNavbarContainer = () => (
-      <div className="container">
-        <MainMenuNavbar getUserId={this.handleGetUser}/>
-        <div>
-          <Route exact path="/" component={MyDiscussionsPage}/>
-          <Route exact path="/discussion/:id" render={(props)=><DiscussionPage {...props} setCurrentDiscussion={this.handleSetCurrentDiscussion}/>}/>
-          <Route exact path="/my_discussions" component={MyDiscussionsPage} />
-        </div>
-      </div>
-   )
-
     return (
       <div>
         <AuthContext.Provider value={this.state}>
           <BrowserRouter>
+            <CurrentSessionContext.Provider value={this.state.currentDiscussion}>
+              {!window.location.pathname.includes('/authorize') && <MainMenuNavbar getUserId={this.handleGetUser}/>}
+            </CurrentSessionContext.Provider>
             <div>
-              <Route exact path="/authorize" component={BlankContainer}/>
-              <Route component={WithNavbarContainer}/>
+              <Switch>
+                <Route exact path="/" render={(props)=><Redirect to="/discussion/1"/>}/>
+                <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
+                <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
+                <Route path="/my-discussions" component={MyDiscussionsPage} />
+              </Switch>
             </div>
           </BrowserRouter>
         </AuthContext.Provider>

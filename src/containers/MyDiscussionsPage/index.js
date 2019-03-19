@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 //UI framework
 import { Container, Row, Col } from 'react-grid-system';
-import { Segment, Button, Icon, Modal, Form, Image } from 'semantic-ui-react';
+import { Segment, Button, Icon, Modal, Form, Image, Header } from 'semantic-ui-react';
 
 class MyDiscussionsPage extends Component {
 
@@ -50,18 +50,38 @@ class MyDiscussionsPage extends Component {
     if (this.context.loggedIn)
       API.getMyDiscussions(this.context.authUser.token)
       .then(result => {
-        console.log(result.discussions);
         this.setState({discussions: result.discussions})
       })
   }
 
   render() {
+
+    let topicList
+    if (this.state.discussions.length < 1) {
+      topicList =
+        <Container style={{textAlign: 'center'}}>
+          <br/>
+          <Header as='h2' disabled>
+            No hay discusiones
+          </Header>
+        </Container>
+    } else {
+      topicList =
+        <ul>
+          {this.state.discussions && this.state.discussions.map((discussion) => (
+            <li key={discussion.id}>
+              <Link to={'/discussion/'+discussion.id}> {discussion.topicTitle} </Link> by @{discussion.owner.name}
+            </li>
+          ))}
+        </ul>
+    }
+
     return (
       <div style={{backgroundColor: '#eee', minHeight: '90.5vh'}}>
         <Container>
           <br/>
           <Segment>
-
+            {this.context.loggedIn &&
             <Modal
               trigger={
                 <Button primary animated floated='right'>
@@ -108,15 +128,9 @@ class MyDiscussionsPage extends Component {
                   <Icon name='checkmark'/> Crear
                 </Button>
               </Modal.Actions>
-            </Modal>
+            </Modal>}
 
-            <ul>
-              {this.state.discussions && this.state.discussions.map((discussion) => (
-                <li key={discussion.id}>
-                  <Link to={'discussion/'+discussion.id}> {discussion.topicTitle} </Link> by @{discussion.owner.name}
-                </li>
-              ))}
-            </ul>
+            {topicList}
           </Segment>
         </Container>
       </div>
