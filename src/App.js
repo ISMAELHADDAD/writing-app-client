@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 //Pages/Containers
+import FrontPage from './containers/FrontPage';
 import DiscussionPage from './containers/DiscussionPage';
 import DiscussionsPage from './containers/DiscussionsPage';
 import AuthorizePage from './containers/AuthorizePage';
@@ -80,7 +81,7 @@ class App extends Component {
             </CurrentSessionContext.Provider>
             <div>
               <Switch>
-                <Route exact path="/" render={(props)=><Redirect to="/discussion/1"/>}/>
+                <Route exact path="/" render={(props)=><FrontPage/>}/>
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
                 <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
                 <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true}/>} />
