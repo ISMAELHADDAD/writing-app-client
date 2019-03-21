@@ -37,9 +37,7 @@ class MainMenuNavbar extends Component {
               <ContainerSemantic>
                 <Menu.Item as={NavLink} to={'/discussion/'+this.context} content='Espacio de trabajo'/>
                 <Menu.Item as={NavLink} to={'/my-discussions'} content='Mis discusiones'/>
-                <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
-                  <Icon name='ban'/> No disponible
-                </Popup>
+                <Menu.Item as={NavLink} to={'/explore'} content='Explorar'/>
                 <Popup trigger={<Menu.Item link>Ajustes</Menu.Item>} position='bottom center'>
                   <Icon name='ban'/> No disponible
                 </Popup>

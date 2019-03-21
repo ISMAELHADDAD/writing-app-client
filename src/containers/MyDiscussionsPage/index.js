@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
+//Components
+import DiscussionItem from '../../components/DiscussionItem';
+
 //API
 import API from '../../services/api/app';
 
 // React Context API
 import AuthContext from "../../AuthContext";
 
-//Routing
-import { Link } from 'react-router-dom';
-
 //UI framework
 import { Container, Row, Col } from 'react-grid-system';
-import { Segment, Button, Icon, Modal, Form, Image, Header } from 'semantic-ui-react';
+import { Segment, Button, Icon, Modal, Form, Image, Header, Item } from 'semantic-ui-react';
 
 class MyDiscussionsPage extends Component {
 
@@ -78,14 +78,11 @@ class MyDiscussionsPage extends Component {
         </Container>
     } else {
       topicList =
-        <ul>
+        <Item.Group link divided>
           {this.state.discussions && this.state.discussions.map((discussion) => (
-            <li key={discussion.id}>
-              <Link to={'/discussion/'+discussion.id}> {discussion.topicTitle} </Link> by @{discussion.owner.name}
-              <Button icon onClick={() => this.handleOnClickDelete(discussion.id)}> <Icon name='remove'/> </Button>
-            </li>
+            <DiscussionItem key={discussion.id} discussion={discussion} passClickDelete={this.handleOnClickDelete}/>
           ))}
-        </ul>
+        </Item.Group>
     }
 
     return (

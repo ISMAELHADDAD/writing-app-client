@@ -78,6 +78,12 @@ class API {
     let res = await axios.delete(`${ENDPOINT}/discussions/${discussionId}`, {headers: headers});
     return res.data;
   }
+
+  static async getPublicDiscussions(page) {
+    let res = await axios.get(`${ENDPOINT}/discussions?page=${page}`);
+    return res.data;
+  }
+  
 }
 
 export default API

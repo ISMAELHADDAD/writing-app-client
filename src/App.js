@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import DiscussionPage from './containers/DiscussionPage';
 import MyDiscussionsPage from './containers/MyDiscussionsPage';
 import AuthorizePage from './containers/AuthorizePage';
+import ExplorePage from './containers/ExplorePage';
 
 //Components
 import MainMenuNavbar from './components/MainMenuNavbar';
@@ -84,6 +85,7 @@ class App extends Component {
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
                 <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
                 <Route path="/my-discussions" component={MyDiscussionsPage} />
+                <Route path="/explore" component={ExplorePage} />
               </Switch>
             </div>
           </BrowserRouter>
