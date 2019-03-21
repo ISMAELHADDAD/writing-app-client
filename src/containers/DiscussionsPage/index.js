@@ -14,7 +14,7 @@ import AuthContext from "../../AuthContext";
 import { Container } from 'react-grid-system';
 import { Segment, Header, Item, Pagination } from 'semantic-ui-react';
 
-class MyDiscussionsPage extends Component {
+class DiscussionsPage extends Component {
 
   constructor(props) {
     super(props);
@@ -41,35 +41,49 @@ class MyDiscussionsPage extends Component {
 
   handleOnPageChange = (event, data) => {
     if (data.activePage !== this.state.pages.current)
-      API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
+      if (this.props.isMyDiscussions)
+        API.getMyDiscussions(data.activePage, this.context.authUser.id)
+        .then(result => {
+          this.setState({discussions: result.discussions,  pages: result.pages})
+        })
+      else
+        API.getPublicDiscussions(data.activePage)
+        .then(result => {
+          this.setState({discussions: result.discussions, pages: result.pages})
+        })
+  }
+
+  componentDidMount() {
+    if (this.props.isMyDiscussions)
+      if (this.context.loggedIn)
+        API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
+        .then(result => {
+          this.setState({discussions: result.discussions,  pages: result.pages})
+        })
+    else
+      API.getPublicDiscussions(this.state.pages.current)
       .then(result => {
         this.setState({discussions: result.discussions, pages: result.pages})
       })
   }
 
-  componentDidMount() {
-    if (this.context.loggedIn)
-      API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
-      .then(result => {
-        this.setState({discussions: result.discussions,  pages: result.pages})
-      })
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    if (this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
-      API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
-      .then(result => {
-        this.setState({discussions: result.discussions, loggedIn: true})
-      })
+    if (this.props.isMyDiscussions) {
+      if (this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
+        API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
+        .then(result => {
+          this.setState({discussions: result.discussions, loggedIn: true})
+        })
 
-    if (!this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
-      this.setState({loggedIn: false})
+      if (!this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
+        this.setState({loggedIn: false})
+    }
   }
 
   render() {
 
     let topicList
-    if (this.state.discussions.length < 1 || !this.context.loggedIn) {
+    if (this.state.discussions.length < 1 || (!this.context.loggedIn && this.props.isMyDiscussions)) {
       topicList =
         <Container style={{textAlign: 'center'}}>
           <br/>
@@ -97,14 +111,13 @@ class MyDiscussionsPage extends Component {
             {topicList}
           </Segment>
           <br/>
-          {this.context.loggedIn && this.state.discussions.length > 0 &&
-          <Pagination defaultActivePage={this.state.pages.current} totalPages={this.state.pages.total} onPageChange={this.handleOnPageChange}/>}
+          <Pagination defaultActivePage={this.state.pages.current} totalPages={this.state.pages.total} onPageChange={this.handleOnPageChange}/>
         </Container>
       </div>
     );
   }
 }
 
-MyDiscussionsPage.contextType = AuthContext
+DiscussionsPage.contextType = AuthContext
 
-export default MyDiscussionsPage;
+export default DiscussionsPage;
