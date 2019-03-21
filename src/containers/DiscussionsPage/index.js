@@ -93,7 +93,7 @@ class DiscussionsPage extends Component {
         </Container>
     } else {
       topicList =
-        <Item.Group link divided>
+        <Item.Group divided>
           {this.state.discussions && this.state.discussions.map((discussion) => (
             <DiscussionItem key={discussion.id} discussion={discussion} passClickDelete={this.handleOnClickDelete}/>
           ))}
