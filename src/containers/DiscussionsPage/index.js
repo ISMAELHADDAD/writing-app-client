@@ -54,17 +54,19 @@ class DiscussionsPage extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isMyDiscussions)
+    if (this.props.isMyDiscussions){
       if (this.context.loggedIn)
         API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
         .then(result => {
           this.setState({discussions: result.discussions,  pages: result.pages})
         })
-    else
+    }
+    else {
       API.getPublicDiscussions(this.state.pages.current)
       .then(result => {
         this.setState({discussions: result.discussions, pages: result.pages})
       })
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
