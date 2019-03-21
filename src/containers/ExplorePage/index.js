@@ -39,14 +39,14 @@ class ExplorePage extends Component {
 
   handleOnPageChange = (event, data) => {
     if (data.activePage !== this.state.pages.current)
-      API.getPublicDiscussions(1)
+      API.getPublicDiscussions(this.state.pages.current)
       .then(result => {
         this.setState({discussions: result.discussions, pages: result.pages})
       })
   }
 
   componentDidMount() {
-    API.getPublicDiscussions(1)
+    API.getPublicDiscussions(this.state.pages.current)
     .then(result => {
       this.setState({discussions: result.discussions, pages: result.pages})
     })

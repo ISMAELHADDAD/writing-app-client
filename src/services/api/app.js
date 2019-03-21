@@ -61,9 +61,8 @@ class API {
     return res.data;
   }
 
-  static async getMyDiscussions(token) {
-    let headers = { 'Authorization': token }
-    let res = await axios.get(`${ENDPOINT}/discussions`, null, {headers: headers});
+  static async getMyDiscussions(page, id) {
+    let res = await axios.get(`${ENDPOINT}/discussions?page=${page}&user_id=${id}`);
     return res.data;
   }
 
@@ -83,7 +82,7 @@ class API {
     let res = await axios.get(`${ENDPOINT}/discussions?page=${page}`);
     return res.data;
   }
-  
+
 }
 
 export default API
