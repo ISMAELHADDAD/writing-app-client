@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 // React Context API
 import AuthContext from "../../AuthContext";
 
-//UI framework
-import { Container } from 'react-grid-system';
-import { Button, Icon, Menu, Segment, Header, Item, Pagination, Container as ContainerSemantic } from 'semantic-ui-react';
+import { Button, Icon, Segment, Header, Container as ContainerSemantic } from 'semantic-ui-react';
 
 class FrontPage extends Component {
 
@@ -46,7 +44,7 @@ class FrontPage extends Component {
                   marginTop: '1.5em',
                 }}
               />
-              <Button primary size='huge'>
+              <Button primary size='huge' onClick={() => this.props.history.push('/explore')}>
                 Explorar
                 <Icon name='right arrow' />
               </Button>

@@ -41,7 +41,7 @@ class App extends Component {
     this.state = {
       authUser: localStorage['loggedIn'] === "true"? JSON.parse(localStorage['authUser']) : null,
       loggedIn: isValidLogin,
-      currentDiscussion: 1
+      currentDiscussion: 0
     };
   }
 
@@ -77,11 +77,16 @@ class App extends Component {
         <AuthContext.Provider value={this.state}>
           <BrowserRouter>
             <CurrentSessionContext.Provider value={this.state.currentDiscussion}>
-              {!window.location.pathname.includes('/authorize') && <MainMenuNavbar getUserId={this.handleGetUser}/>}
+              {!window.location.pathname.includes('/authorize') && <MainMenuNavbar getUserId={this.handleGetUser} loggedIn={this.state.loggedIn}/>}
             </CurrentSessionContext.Provider>
             <div>
               <Switch>
-                <Route exact path="/" render={(props)=><FrontPage/>}/>
+                <Route exact path="/" render={(props)=> (
+                    this.state.loggedIn ?
+                    (<Redirect to='/my-discussions'/>) :
+                    (<FrontPage {...props}/>)
+                  )
+                }/>
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
                 <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
                 <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true}/>} />
