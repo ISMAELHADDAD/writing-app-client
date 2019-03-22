@@ -10,7 +10,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import CurrentSessionContext from "../../CurrentSessionContext";
 
 //UI framework
-import { Segment, Menu, Container as ContainerSemantic, Popup, Icon } from 'semantic-ui-react';
+import { Segment, Menu, Container as ContainerSemantic } from 'semantic-ui-react';
 
 class MainMenuNavbar extends Component {
 
@@ -35,14 +35,11 @@ class MainMenuNavbar extends Component {
               size='large'
             >
               <ContainerSemantic>
-                <Menu.Item as={NavLink} to={'/discussion/'+this.context} content='Espacio de trabajo'/>
-                <Menu.Item as={NavLink} to={'/my-discussions'} content='Mis discusiones'/>
-                <Popup trigger={<Menu.Item link>Explorar</Menu.Item>} position='bottom center'>
-                  <Icon name='ban'/> No disponible
-                </Popup>
-                <Popup trigger={<Menu.Item link>Ajustes</Menu.Item>} position='bottom center'>
-                  <Icon name='ban'/> No disponible
-                </Popup>
+                {this.context !== 0 &&
+                <Menu.Item as={NavLink} to={'/discussion/'+this.context} content='Espacio de trabajo'/>}
+                {this.props.loggedIn &&
+                <Menu.Item as={NavLink} to={'/my-discussions'} content='Mis discusiones'/>}
+                <Menu.Item as={NavLink} to={'/explore'} content='Explorar'/>
                 <Menu.Item position='right'>
                   <Login getUserId={this.handleGetUserId}/>
                 </Menu.Item>

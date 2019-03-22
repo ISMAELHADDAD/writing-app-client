@@ -39,7 +39,6 @@ class Avatar extends Component {
       API.inviteToParticipate(this.context.authUser.token, this.props.discussionId, {email: this.state.emailText})
       .then(result => {
         this.setState({isInvitationSend: true})
-        //TODO Maybe in DiscussionPage?? in order to add the participant id??
       })
     else
       this.setState({emailError: true})
@@ -52,16 +51,7 @@ class Avatar extends Component {
   handleOnClickAssignButton = (event,data) => {
     API.assignAvatar(this.context.authUser.token, this.props.discussionId, this.props.avatar.id, {user_id: this.state.idToAssign})
     .then(result => {
-      API.getUserById(this.props.avatar.assignedToUserId)
-      .then(result =>{
-        this.setState({
-          user: {
-            name: result.name,
-            imageUrl: result.imageUrl
-          },
-          isAssigned: true
-        })
-      })
+      //Error control???
     })
   }
 
@@ -97,6 +87,21 @@ class Avatar extends Component {
         })
       })
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.avatar !== this.props.avatar) {
+      API.getUserById(this.props.avatar.assignedToUserId)
+      .then(result =>{
+        this.setState({
+          user: {
+            name: result.name,
+            imageUrl: result.imageUrl
+          },
+          isAssigned: true
+        })
+      })
+    }
   }
 
   render() {

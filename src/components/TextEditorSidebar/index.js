@@ -9,31 +9,12 @@ class TextEditorSidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatarSelect: [],
       who: null,
       textContent: '',
       validContent: true,
       words: 0,
       validAvatar: true
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.avatarOne && this.props.avatarTwo)
-    this.setState({
-      avatarSelect: [
-        {
-          text: this.props.avatarOne.name,
-          value: this.props.avatarOne.id,
-          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-        },
-        {
-          text: this.props.avatarTwo.name,
-          value: this.props.avatarTwo.id,
-          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-        }
-      ]
-    });
   }
 
   handleChangeSelect = (event, data) => {
@@ -66,7 +47,7 @@ class TextEditorSidebar extends Component {
         <Container>
           <Card fluid>
             <Card.Content>
-              <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleChangeSelect}/>
+              <Dropdown placeholder='Selecciona el avatar' selection options={this.props.avatarSelect} onChange={this.handleChangeSelect}/>
               <Button floated='right' icon='delete' onClick={this.handleClickClose}/>
             </Card.Content>
             <Card.Content>
