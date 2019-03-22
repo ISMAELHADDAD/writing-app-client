@@ -39,7 +39,6 @@ class Avatar extends Component {
       API.inviteToParticipate(this.context.authUser.token, this.props.discussionId, {email: this.state.emailText})
       .then(result => {
         this.setState({isInvitationSend: true})
-        //TODO Maybe in DiscussionPage?? in order to add the participant id??
       })
     else
       this.setState({emailError: true})

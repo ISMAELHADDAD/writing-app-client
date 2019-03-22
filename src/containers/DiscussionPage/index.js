@@ -84,6 +84,7 @@ class DiscussionPage extends Component {
         }
       }))
 
+      //Scroll and highlight the new argument
       this.scrollToNewArgument()
       setTimeout(() => {
         const updatedArguments = this.state.discussion.arguments.slice()
@@ -129,6 +130,14 @@ class DiscussionPage extends Component {
             .filter(i => i.id !== agreementId)
         }
       })
+    }
+    else if (data.type === 'participant-verified') {
+      this.setState(prevState => ({
+        discussion: {
+          ...this.state.discussion,
+          participants: [...prevState.discussion.participants, data.content]
+        }
+      }))
     }
   }
 
