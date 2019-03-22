@@ -58,7 +58,7 @@ class DiscussionPage extends Component {
   }
 
   createSocket() {
-    let cable = Cable.createConsumer('ws://localhost:3000/cable')
+    let cable = Cable.createConsumer(process.env.REACT_APP_CABLE_URL)
 
     //Subscribe to discussion channel
     this.discussion = cable.subscriptions.create({
