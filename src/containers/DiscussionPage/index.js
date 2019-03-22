@@ -139,11 +139,34 @@ class DiscussionPage extends Component {
         }
       }))
     }
+    else if (data.type === 'avatar-assign') {
+      let content = JSON.parse(data.content);
+      if (this.state.discussion.avatarOne.id === content.avatarId)
+        this.setState(prevState => ({
+          discussion: {
+            ...this.state.discussion,
+            avatarOne: {
+              ...this.state.discussion.avatarOne,
+              assignedToUserId: content.userId
+            }
+          }
+        }))
+      else if (this.state.discussion.avatarTwo.id === content.avatarId)
+        this.setState(prevState => ({
+          discussion: {
+            ...this.state.discussion,
+            avatarTwo: {
+              ...this.state.discussion.avatarTwo,
+              assignedToUserId: content.userId
+            }
+          }
+        }))
+    }
   }
 
   userIsParticipating() {
     return (
-      this.context.authUser.id === this.state.discussion.avatarOne.assignedtoUserId
+      this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId
       ||
       this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId
     )
