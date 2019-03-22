@@ -13,6 +13,9 @@ import API from '../../services/api/app';
 // React Context API
 import AuthContext from "../../AuthContext";
 
+//Sockets
+import Cable from 'actioncable';
+
 //UI framework
 import Headroom from 'react-headroom';
 import { Link, Element, scroller} from 'react-scroll';
@@ -48,6 +51,50 @@ class DiscussionPage extends Component {
       validAvatar: false
     };
     this.argumentsRef = React.createRef();
+
+    //1. Create a connection to this discussion room
+    if (this.props.match.params.id > 0)
+      this.createSocket()
+  }
+
+  createSocket() {
+    let cable = Cable.createConsumer('ws://localhost:3000/cable')
+
+    //Subscribe to discussion channel
+    this.discussion = cable.subscriptions.create({
+      channel: 'DiscussionChannel', room: `${this.props.match.params.id}`
+    }, {
+      connected: () => {console.log('connected to socket')},
+      received: (data) => {
+        console.log('data received from socket')
+        this.processDataReceivedFromSocket(data)
+      }
+    });
+  }
+
+  processDataReceivedFromSocket = (data) => {
+    if (data.type === 'argument') {
+      let argument = JSON.parse(data.content)
+      argument.highlight = true
+      this.setState(prevState => ({
+        discussion: {
+          ...this.state.discussion,
+          arguments: [...prevState.discussion.arguments, argument]
+        }
+      }))
+
+      this.scrollToNewArgument()
+      setTimeout(() => {
+        const updatedArguments = this.state.discussion.arguments.slice()
+        updatedArguments[updatedArguments.length-1].highlight = false
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            arguments: updatedArguments
+          }
+        })
+      }, 3000)
+    }
   }
 
   userIsParticipating() {
@@ -98,26 +145,7 @@ class DiscussionPage extends Component {
       'content': textContent
     })
     .then(argument => {
-      argument.highlight = true
-      this.setState(prevState => ({
-        discussion: {
-          ...this.state.discussion,
-          arguments: [...prevState.discussion.arguments, argument]
-        }
-      }))
-
-      this.scrollToNewArgument()
-      setTimeout(() => {
-        const updatedArguments = this.state.discussion.arguments.slice()
-        updatedArguments[updatedArguments.length-1].highlight = false
-        this.setState({
-          discussion: {
-            ...this.state.discussion,
-            arguments: updatedArguments
-          }
-        })
-      }, 3000)
-
+      //Error control???
     });
   }
 
