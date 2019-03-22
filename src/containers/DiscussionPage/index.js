@@ -66,7 +66,8 @@ class DiscussionPage extends Component {
     }, {
       connected: () => {console.log('connected to socket')},
       received: (data) => {
-        console.log('data received from socket')
+        console.log('data received from socket:')
+        console.log(data)
         this.processDataReceivedFromSocket(data)
       }
     });
@@ -94,6 +95,40 @@ class DiscussionPage extends Component {
           }
         })
       }, 3000)
+    }
+    else if (data.type === 'agreement-propose') {
+      let agreement = JSON.parse(data.content)
+      this.setState(prevState => ({
+        agreePointVisibility: false,
+        discussion: {
+          ...this.state.discussion,
+          agreements: [...prevState.discussion.agreements, agreement]
+        }
+      }))
+    }
+    else if (data.type === 'agreement-accept') {
+      let agreementId = data.content
+      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
+      newAgreement.isAccepted = true
+
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements.map(agreement =>
+            (agreement.id === agreementId)? newAgreement : agreement
+          )
+        }
+      })
+    }
+    else if (data.type === 'agreement-reject') {
+      let agreementId = data.content
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements
+            .filter(i => i.id !== agreementId)
+        }
+      })
     }
   }
 
@@ -157,13 +192,7 @@ class DiscussionPage extends Component {
       'is_agree': this.state.isAgree
     })
     .then(agreement => {
-      this.setState(prevState => ({
-        agreePointVisibility: false,
-        discussion: {
-          ...this.state.discussion,
-          agreements: [...prevState.discussion.agreements, agreement]
-        }
-      }));
+      //Error control???
     });
   }
 
@@ -174,13 +203,7 @@ class DiscussionPage extends Component {
       'is_accepted': false
     })
     .then(message => {
-      this.setState({
-        discussion: {
-          ...this.state.discussion,
-          agreements: this.state.discussion.agreements
-            .filter(i => i.id !== agreementId)
-        }
-      });
+      //Error control???
     });
   }
 
@@ -191,17 +214,7 @@ class DiscussionPage extends Component {
       'is_accepted': true
     })
     .then(message => {
-      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
-      newAgreement.isAccepted = true
-
-      this.setState({
-        discussion: {
-          ...this.state.discussion,
-          agreements: this.state.discussion.agreements.map(agreement =>
-            (agreement.id === agreementId)? newAgreement : agreement
-          )
-        }
-      });
+      //Error control???
     });
   }
 
