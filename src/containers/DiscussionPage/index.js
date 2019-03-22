@@ -13,6 +13,9 @@ import API from '../../services/api/app';
 // React Context API
 import AuthContext from "../../AuthContext";
 
+//Sockets
+import Cable from 'actioncable';
+
 //UI framework
 import Headroom from 'react-headroom';
 import { Link, Element, scroller} from 'react-scroll';
@@ -48,11 +51,137 @@ class DiscussionPage extends Component {
       validAvatar: false
     };
     this.argumentsRef = React.createRef();
+
+    //1. Create a connection to this discussion room
+    if (this.props.match.params.id > 0)
+      this.createSocket()
+  }
+
+  createSocket() {
+    let cable = Cable.createConsumer(process.env.REACT_APP_CABLE_URL)
+
+    //Subscribe to discussion channel
+    this.discussion = cable.subscriptions.create({
+      channel: 'DiscussionChannel', room: `${this.props.match.params.id}`
+    }, {
+      connected: () => {console.log('connected to socket')},
+      received: (data) => {
+        console.log('data received from socket:')
+        console.log(data)
+        this.processDataReceivedFromSocket(data)
+      }
+    });
+  }
+
+  processDataReceivedFromSocket = (data) => {
+    if (data.type === 'argument') {
+      let argument = JSON.parse(data.content)
+      argument.highlight = true
+      this.setState(prevState => ({
+        discussion: {
+          ...this.state.discussion,
+          arguments: [...prevState.discussion.arguments, argument]
+        }
+      }))
+
+      //Scroll and highlight the new argument
+      this.scrollToNewArgument()
+      setTimeout(() => {
+        const updatedArguments = this.state.discussion.arguments.slice()
+        updatedArguments[updatedArguments.length-1].highlight = false
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            arguments: updatedArguments
+          }
+        })
+      }, 3000)
+    }
+    else if (data.type === 'agreement-propose') {
+      let agreement = JSON.parse(data.content)
+      this.setState(prevState => ({
+        agreePointVisibility: false,
+        discussion: {
+          ...this.state.discussion,
+          agreements: [...prevState.discussion.agreements, agreement]
+        }
+      }))
+    }
+    else if (data.type === 'agreement-accept') {
+      let agreementId = data.content
+      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
+      newAgreement.isAccepted = true
+
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements.map(agreement =>
+            (agreement.id === agreementId)? newAgreement : agreement
+          )
+        }
+      })
+    }
+    else if (data.type === 'agreement-reject') {
+      let agreementId = data.content
+      this.setState({
+        discussion: {
+          ...this.state.discussion,
+          agreements: this.state.discussion.agreements
+            .filter(i => i.id !== agreementId)
+        }
+      })
+    }
+    else if (data.type === 'participant-verified') {
+      this.setState(prevState => ({
+        discussion: {
+          ...this.state.discussion,
+          participants: [...prevState.discussion.participants, data.content]
+        }
+      }))
+    }
+    else if (data.type === 'avatar-assign') {
+      let content = JSON.parse(data.content);
+      this.setState({ avatarSelect: [] })
+      if (this.state.discussion.avatarOne.id === content.avatarId)
+        this.setState(prevState => ({
+          discussion: {
+            ...this.state.discussion,
+            avatarOne: {
+              ...this.state.discussion.avatarOne,
+              assignedToUserId: content.userId
+            }
+          }
+        }))
+      else if (this.state.discussion.avatarTwo.id === content.avatarId)
+        this.setState(prevState => ({
+          discussion: {
+            ...this.state.discussion,
+            avatarTwo: {
+              ...this.state.discussion.avatarTwo,
+              assignedToUserId: content.userId
+            }
+          }
+        }))
+
+      //Update avatarSelect
+      if (this.state.discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+        this.setState({ avatarSelect: [...this.state.avatarSelect, {
+          text: this.state.discussion.avatarOne.name,
+          value: this.state.discussion.avatarOne.id,
+          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+        }]})
+      if (this.state.discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+        this.setState({ avatarSelect: [...this.state.avatarSelect, {
+          text: this.state.discussion.avatarTwo.name,
+          value: this.state.discussion.avatarTwo.id,
+          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+        }]})
+    }
   }
 
   userIsParticipating() {
     return (
-      this.context.authUser.id === this.state.discussion.avatarOne.assignedtoUserId
+      this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId
       ||
       this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId
     )
@@ -98,26 +227,7 @@ class DiscussionPage extends Component {
       'content': textContent
     })
     .then(argument => {
-      argument.highlight = true
-      this.setState(prevState => ({
-        discussion: {
-          ...this.state.discussion,
-          arguments: [...prevState.discussion.arguments, argument]
-        }
-      }))
-
-      this.scrollToNewArgument()
-      setTimeout(() => {
-        const updatedArguments = this.state.discussion.arguments.slice()
-        updatedArguments[updatedArguments.length-1].highlight = false
-        this.setState({
-          discussion: {
-            ...this.state.discussion,
-            arguments: updatedArguments
-          }
-        })
-      }, 3000)
-
+      //Error control???
     });
   }
 
@@ -129,13 +239,7 @@ class DiscussionPage extends Component {
       'is_agree': this.state.isAgree
     })
     .then(agreement => {
-      this.setState(prevState => ({
-        agreePointVisibility: false,
-        discussion: {
-          ...this.state.discussion,
-          agreements: [...prevState.discussion.agreements, agreement]
-        }
-      }));
+      //Error control???
     });
   }
 
@@ -146,13 +250,7 @@ class DiscussionPage extends Component {
       'is_accepted': false
     })
     .then(message => {
-      this.setState({
-        discussion: {
-          ...this.state.discussion,
-          agreements: this.state.discussion.agreements
-            .filter(i => i.id !== agreementId)
-        }
-      });
+      //Error control???
     });
   }
 
@@ -163,17 +261,7 @@ class DiscussionPage extends Component {
       'is_accepted': true
     })
     .then(message => {
-      let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
-      newAgreement.isAccepted = true
-
-      this.setState({
-        discussion: {
-          ...this.state.discussion,
-          agreements: this.state.discussion.agreements.map(agreement =>
-            (agreement.id === agreementId)? newAgreement : agreement
-          )
-        }
-      });
+      //Error control???
     });
   }
 
@@ -187,20 +275,23 @@ class DiscussionPage extends Component {
       .then(discussion => {
         this.setState({
           isDiscussionLoaded: true,
-          discussion: discussion,
-          avatarSelect: [
-            {
+          discussion: discussion
+        })
+
+        if (this.context.loggedIn) {
+          if (discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+            this.setState({ avatarSelect: [...this.state.avatarSelect, {
               text: discussion.avatarOne.name,
               value: discussion.avatarOne.id,
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-            },
-            {
+            }]})
+          if (discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+            this.setState({ avatarSelect: [...this.state.avatarSelect, {
               text: discussion.avatarTwo.name,
               value: discussion.avatarTwo.id,
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-            }
-          ]
-        })
+            }]})
+        }
       })
   }
 
@@ -208,6 +299,25 @@ class DiscussionPage extends Component {
     // Pass discussion Id to CurrentSessionContext
     this.props.getDiscussionId(this.state.discussion.id)
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.context.loggedIn)
+  //     if (this.state.avatarSelect !== prevState.avatarSelect)
+  //     {
+  //       if (this.state.discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
+  //           text: this.state.discussion.avatarOne.name,
+  //           value: this.state.discussion.avatarOne.id,
+  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+  //         }]})
+  //       if (this.state.discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
+  //           text: this.state.discussion.avatarTwo.name,
+  //           value: this.state.discussion.avatarTwo.id,
+  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+  //         }]})
+  //     }
+  // }
 
   render() {
 
@@ -417,6 +527,7 @@ class DiscussionPage extends Component {
             avatarTwo={this.state.discussion.avatarTwo}
             passClick={this.handleSendArgument}
             passClickClose={this.handleHideTextEditorSidebar}
+            avatarSelect={this.state.avatarSelect}
           />
         </Container>
 
