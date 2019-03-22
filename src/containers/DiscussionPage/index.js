@@ -141,6 +141,7 @@ class DiscussionPage extends Component {
     }
     else if (data.type === 'avatar-assign') {
       let content = JSON.parse(data.content);
+      this.setState({ avatarSelect: [] })
       if (this.state.discussion.avatarOne.id === content.avatarId)
         this.setState(prevState => ({
           discussion: {
@@ -161,6 +162,20 @@ class DiscussionPage extends Component {
             }
           }
         }))
+
+      //Update avatarSelect
+      if (this.state.discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+        this.setState({ avatarSelect: [...this.state.avatarSelect, {
+          text: this.state.discussion.avatarOne.name,
+          value: this.state.discussion.avatarOne.id,
+          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+        }]})
+      if (this.state.discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+        this.setState({ avatarSelect: [...this.state.avatarSelect, {
+          text: this.state.discussion.avatarTwo.name,
+          value: this.state.discussion.avatarTwo.id,
+          image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+        }]})
     }
   }
 
@@ -260,20 +275,23 @@ class DiscussionPage extends Component {
       .then(discussion => {
         this.setState({
           isDiscussionLoaded: true,
-          discussion: discussion,
-          avatarSelect: [
-            {
+          discussion: discussion
+        })
+
+        if (this.context.loggedIn) {
+          if (discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+            this.setState({ avatarSelect: [...this.state.avatarSelect, {
               text: discussion.avatarOne.name,
               value: discussion.avatarOne.id,
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-            },
-            {
+            }]})
+          if (discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+            this.setState({ avatarSelect: [...this.state.avatarSelect, {
               text: discussion.avatarTwo.name,
               value: discussion.avatarTwo.id,
               image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-            }
-          ]
-        })
+            }]})
+        }
       })
   }
 
@@ -281,6 +299,25 @@ class DiscussionPage extends Component {
     // Pass discussion Id to CurrentSessionContext
     this.props.getDiscussionId(this.state.discussion.id)
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.context.loggedIn)
+  //     if (this.state.avatarSelect !== prevState.avatarSelect)
+  //     {
+  //       if (this.state.discussion.avatarOne.assignedToUserId === this.context.authUser.id)
+  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
+  //           text: this.state.discussion.avatarOne.name,
+  //           value: this.state.discussion.avatarOne.id,
+  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+  //         }]})
+  //       if (this.state.discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
+  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
+  //           text: this.state.discussion.avatarTwo.name,
+  //           value: this.state.discussion.avatarTwo.id,
+  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
+  //         }]})
+  //     }
+  // }
 
   render() {
 
@@ -490,6 +527,7 @@ class DiscussionPage extends Component {
             avatarTwo={this.state.discussion.avatarTwo}
             passClick={this.handleSendArgument}
             passClickClose={this.handleHideTextEditorSidebar}
+            avatarSelect={this.state.avatarSelect}
           />
         </Container>
 
