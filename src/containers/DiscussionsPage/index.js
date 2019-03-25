@@ -41,32 +41,27 @@ class DiscussionsPage extends Component {
 
   handleOnPageChange = (event, data) => {
     if (data.activePage !== this.state.pages.current)
-      if (this.props.isMyDiscussions)
-        API.getMyDiscussions(data.activePage, this.context.authUser.id)
-        .then(result => {
-          this.setState({discussions: result.discussions,  pages: result.pages})
-        })
-      else
-        API.getPublicDiscussions(data.activePage)
-        .then(result => {
-          this.setState({discussions: result.discussions, pages: result.pages})
-        })
+      this.populateList(data.activePage)
   }
 
-  componentDidMount() {
+  populateList = (page) => {
     if (this.props.isMyDiscussions){
       if (this.context.loggedIn)
-        API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
+        API.getMyDiscussions(page, this.context.authUser.id)
         .then(result => {
           this.setState({discussions: result.discussions,  pages: result.pages})
         })
     }
     else {
-      API.getPublicDiscussions(this.state.pages.current)
+      API.getPublicDiscussions(page)
       .then(result => {
         this.setState({discussions: result.discussions, pages: result.pages})
       })
     }
+  }
+
+  componentDidMount() {
+    this.populateList(1)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,6 +74,10 @@ class DiscussionsPage extends Component {
 
       if (!this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
         this.setState({loggedIn: false})
+    }
+
+    if (this.props.isMyDiscussions !== prevProps.isMyDiscussions) {
+      this.populateList(1)
     }
   }
 
