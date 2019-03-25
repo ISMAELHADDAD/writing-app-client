@@ -99,7 +99,7 @@ class Avatar extends Component {
             <Label image>
               <img src={this.state.user.imageUrl} alt=''/>
               @{this.state.user.name}
-              {this.context.loggedIn &&
+              {this.context.loggedIn && this.context.authUser.id === this.props.ownerUserId &&
                 <Popup
                   open={!this.state.isAssigned}
                   trigger={<Icon name='delete' onClick={this.handleOnRemove}/>}
