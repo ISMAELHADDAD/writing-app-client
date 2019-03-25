@@ -6,6 +6,7 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
+import InviteButton from '../../components/InviteButton';
 
 //API
 import API from '../../services/api/app';
@@ -179,7 +180,7 @@ class DiscussionPage extends Component {
     }
   }
 
-  userIsParticipating() {
+  userIsParticipating = () => {
     return (
       this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId
       ||
@@ -300,25 +301,6 @@ class DiscussionPage extends Component {
     this.props.getDiscussionId(this.state.discussion.id)
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.context.loggedIn)
-  //     if (this.state.avatarSelect !== prevState.avatarSelect)
-  //     {
-  //       if (this.state.discussion.avatarOne.assignedToUserId === this.context.authUser.id)
-  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
-  //           text: this.state.discussion.avatarOne.name,
-  //           value: this.state.discussion.avatarOne.id,
-  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-  //         }]})
-  //       if (this.state.discussion.avatarTwo.assignedToUserId === this.context.authUser.id)
-  //         this.setState({ avatarSelect: [...this.state.avatarSelect, {
-  //           text: this.state.discussion.avatarTwo.name,
-  //           value: this.state.discussion.avatarTwo.id,
-  //           image: { avatar: true, src: 'https://react.semantic-ui.com/images/avatar/large/matthew.png' },
-  //         }]})
-  //     }
-  // }
-
   render() {
 
     if (!this.state.isDiscussionLoaded) {
@@ -356,13 +338,16 @@ class DiscussionPage extends Component {
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                   </Menu.Item>
-                  {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
+                  {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility &&
                     <Menu.Item>
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
                       </Button>
-                    </Menu.Item>
-                  }
+                    </Menu.Item>}
+                  {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
+                    <Menu.Item>
+                      <InviteButton discussionId={this.state.discussion.id}/>
+                    </Menu.Item>}
                 </Menu>
               </Container>
           </Headroom>
@@ -407,13 +392,17 @@ class DiscussionPage extends Component {
                     >
                       <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
                     </Menu.Item>
-                    {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
+                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility &&
                       <Menu.Item>
                         <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
                         </Button>
                       </Menu.Item>
                     }
+                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
+                      <Menu.Item>
+                        <InviteButton discussionId={this.state.discussion.id}/>
+                      </Menu.Item>}
                   </Menu>
                 </Sticky>
               </Rail>
@@ -429,7 +418,8 @@ class DiscussionPage extends Component {
                       <Avatar
                         avatar={this.state.discussion.avatarOne}
                         participantsIds={this.state.discussion.participants}
-                        discussionId={this.state.discussion.id}/>}
+                        discussionId={this.state.discussion.id}
+                        ownerUserId={this.state.discussion.ownerUserId}/>}
                     </Col>
                     <Col sm={2}/>
                     <Col sm={4}>
@@ -437,7 +427,8 @@ class DiscussionPage extends Component {
                       <Avatar
                         avatar={this.state.discussion.avatarTwo}
                         participantsIds={this.state.discussion.participants}
-                        discussionId={this.state.discussion.id}/>}
+                        discussionId={this.state.discussion.id}
+                        ownerUserId={this.state.discussion.ownerUserId}/>}
                     </Col>
                     <Col sm={1}/>
                   </Row>
@@ -473,7 +464,7 @@ class DiscussionPage extends Component {
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      {this.context.loggedIn && this.userIsParticipating &&
+                      {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) &&
                         <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
                           <Table.Cell colSpan='3'>
                             <Row>
@@ -501,7 +492,7 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.loggedIn && this.userIsParticipating && !this.state.agreePointVisibility &&
+                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.agreePointVisibility &&
                       <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell />
