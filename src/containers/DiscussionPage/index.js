@@ -6,6 +6,7 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
+import InviteButton from '../../components/InviteButton';
 
 //API
 import API from '../../services/api/app';
@@ -361,8 +362,11 @@ class DiscussionPage extends Component {
                       <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                         <Icon name='add' /> Añadir argumento
                       </Button>
-                    </Menu.Item>
-                  }
+                    </Menu.Item>}
+                  {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
+                    <Menu.Item>
+                      <InviteButton discussionId={this.state.discussion.id}/>
+                    </Menu.Item>}
                 </Menu>
               </Container>
           </Headroom>
@@ -414,6 +418,10 @@ class DiscussionPage extends Component {
                         </Button>
                       </Menu.Item>
                     }
+                    {this.context.loggedIn && this.userIsParticipating && !this.state.textEditorSidebarVisibility &&
+                      <Menu.Item>
+                        <InviteButton discussionId={this.state.discussion.id}/>
+                      </Menu.Item>}
                   </Menu>
                 </Sticky>
               </Rail>
