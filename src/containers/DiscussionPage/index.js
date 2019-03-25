@@ -108,10 +108,10 @@ class DiscussionPage extends Component {
       }))
     }
     else if (data.type === 'agreement-accept') {
-      let agreementId = data.content
+      let agreementId = parseInt(data.content)
       let newAgreement = this.state.discussion.agreements.find(i => i.id === agreementId)
       newAgreement.isAccepted = true
-
+      console.log(newAgreement);
       this.setState({
         discussion: {
           ...this.state.discussion,
@@ -122,7 +122,7 @@ class DiscussionPage extends Component {
       })
     }
     else if (data.type === 'agreement-reject') {
-      let agreementId = data.content
+      let agreementId = parseInt(data.content)
       this.setState({
         discussion: {
           ...this.state.discussion,
@@ -247,7 +247,7 @@ class DiscussionPage extends Component {
     API.rejectAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'is_accepted': false
+      'is_accepted': "false"
     })
     .then(message => {
       //Error control???
@@ -258,7 +258,7 @@ class DiscussionPage extends Component {
     API.acceptAgreement(this.context.authUser.token, this.state.discussion.id, agreementId, {
       'user_id': this.context.authUser.id,
       'avatar_id': avatarId,
-      'is_accepted': true
+      'is_accepted': "true"
     })
     .then(message => {
       //Error control???
