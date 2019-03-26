@@ -61,8 +61,9 @@ class API {
     return res.data;
   }
 
-  static async getMyDiscussions(page, id) {
-    let res = await axios.get(`${ENDPOINT}/discussions?page=${page}&user_id=${id}`);
+  static async getMyDiscussions(token, page, id) {
+    let headers = { 'Authorization': token }
+    let res = await axios.get(`${ENDPOINT}/discussions?page=${page}&user_id=${id}`, {headers: headers});
     return res.data;
   }
 
@@ -85,7 +86,7 @@ class API {
 
   static async forkDiscussion(token, discussionId) {
     let headers = { 'Authorization': token }
-    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/fork`,null, {headers: headers});
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/fork`, null, {headers: headers});
     return res.data;
   }
 

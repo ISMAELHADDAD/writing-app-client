@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 import TextTruncate from 'react-text-truncate';
 
 //UI framework
-import { Item } from 'semantic-ui-react';
+import { Item, Button, Icon } from 'semantic-ui-react';
 
 class DiscussionItem extends Component {
 
@@ -40,6 +40,10 @@ class DiscussionItem extends Component {
               <DeleteDiscussionButton discussionId={this.props.discussion.id} passClickDelete={this.handleOnClickDelete}/>}
             {this.context.loggedIn &&
               <ForkDiscussionButton discussionId={this.props.discussion.id}/>}
+            {this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id && this.props.discussion.private &&
+            <Button basic icon floated='right'>
+                <Icon name='lock'/>
+            </Button>}
           </Item.Extra>
         </Item.Content>
       </Item>

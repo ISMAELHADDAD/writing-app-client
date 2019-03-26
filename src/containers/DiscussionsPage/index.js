@@ -48,7 +48,7 @@ class DiscussionsPage extends Component {
   populateList = (page) => {
     if (this.props.isMyDiscussions){
       if (this.context.loggedIn)
-        API.getMyDiscussions(page, this.context.authUser.id)
+        API.getMyDiscussions(this.context.authUser.token, page, this.context.authUser.id)
         .then(result => {
           this.setState({discussions: result.discussions,  pages: result.pages})
         })
@@ -68,7 +68,7 @@ class DiscussionsPage extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.isMyDiscussions) {
       if (this.context.loggedIn && prevState.loggedIn !== this.context.loggedIn)
-        API.getMyDiscussions(this.state.pages.current, this.context.authUser.id)
+        API.getMyDiscussions(this.context.authUser.token, this.state.pages.current, this.context.authUser.id)
         .then(result => {
           this.setState({discussions: result.discussions, loggedIn: true})
         })
