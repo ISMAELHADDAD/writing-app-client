@@ -83,6 +83,12 @@ class API {
     return res.data;
   }
 
+  static async forkDiscussion(token, discussionId) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/fork`,null, {headers: headers});
+    return res.data;
+  }
+
 }
 
 export default API

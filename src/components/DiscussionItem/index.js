@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-//API
-//import API from '../../services/api/app';
+//Components
+import ForkButton from '../../components/ForkButton';
 
 // React Context API
 import AuthContext from "../../AuthContext";
@@ -66,6 +66,8 @@ class DiscussionItem extends Component {
           <Item.Extra>
             @{this.props.discussion.owner.name}
             {deleteButton}
+            {this.context.loggedIn &&
+              <ForkButton discussionId={this.props.discussion.id}/>}
           </Item.Extra>
         </Item.Content>
       </Item>
