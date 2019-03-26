@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-//API
-//import API from '../../services/api/app';
+//Components
+import ForkDiscussionButton from '../../components/ForkDiscussionButton';
+import DeleteDiscussionButton from '../../components/DeleteDiscussionButton';
 
 // React Context API
 import AuthContext from "../../AuthContext";
@@ -13,43 +14,13 @@ import { Link } from 'react-router-dom';
 import TextTruncate from 'react-text-truncate';
 
 //UI framework
-//import { Container, Row, Col } from 'react-grid-system';
-import { Button, Icon, Item, Modal, Header } from 'semantic-ui-react';
+import { Item } from 'semantic-ui-react';
 
 class DiscussionItem extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
   handleOnClickDelete = (id) => this.props.passClickDelete(id)
 
-  componentDidMount() {
-
-  }
-
   render() {
-
-    let deleteButton;
-    if (this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id)
-      deleteButton =
-      <Modal closeIcon trigger={<Button as='button' floated='right' icon><Icon name='remove'/> Borrar </Button>} basic size='small'>
-        <Header icon='trash' content='Borrar discussion' />
-        <Modal.Content>
-          <p>
-            Estas seguro de querer borrar esta discussion?
-          </p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color='red' inverted onClick={() => this.handleOnClickDelete(this.props.discussion.id)}>
-            <Icon name='trash' /> Eliminar
-          </Button>
-        </Modal.Actions>
-      </Modal>
-
     return (
       <Item>
         <Item.Image size='tiny' rounded src={this.props.discussion.owner.imageUrl} />
@@ -65,7 +36,10 @@ class DiscussionItem extends Component {
           </Item.Description>
           <Item.Extra>
             @{this.props.discussion.owner.name}
-            {deleteButton}
+            {this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id &&
+              <DeleteDiscussionButton discussionId={this.props.discussion.id} passClickDelete={this.handleOnClickDelete}/>}
+            {this.context.loggedIn &&
+              <ForkDiscussionButton discussionId={this.props.discussion.id}/>}
           </Item.Extra>
         </Item.Content>
       </Item>

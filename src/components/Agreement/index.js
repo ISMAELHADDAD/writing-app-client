@@ -8,13 +8,6 @@ import { Table, Icon, Card, Button } from 'semantic-ui-react';
 
 class Agreement extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
   // If I'm owner of Avatar X && Avatar X didn't proposed
   checkAvatarOwnership = (x) => {
     if (x !== undefined && x !== null)
@@ -24,21 +17,21 @@ class Agreement extends Component {
 
   handleAcceptClick = () => {
     if (this.checkAvatarOwnership(this.props.avatarOne))
-      this.props.passAcceptClick(this.props.point.id, this.props.avatarOne.id);
+      this.props.passAcceptClick(this.props.point.id, this.props.avatarOne.id)
     else if (this.checkAvatarOwnership(this.props.avatarTwo))
-      this.props.passAcceptClick(this.props.point.id, this.props.avatarTwo.id);
+      this.props.passAcceptClick(this.props.point.id, this.props.avatarTwo.id)
   };
 
   handleRejectClick = () => {
     if (this.checkAvatarOwnership(this.props.avatarOne))
-      this.props.passRejectClick(this.props.point.id, this.props.avatarOne.id);
+      this.props.passRejectClick(this.props.point.id, this.props.avatarOne.id)
     else if (this.checkAvatarOwnership(this.props.avatarTwo))
-      this.props.passRejectClick(this.props.point.id, this.props.avatarTwo.id);
+      this.props.passRejectClick(this.props.point.id, this.props.avatarTwo.id)
   };
 
   render() {
     if (!this.props.point.isAccepted && !this.context.loggedIn)
-      return null;
+      return null
 
     let dialog;
     if (!this.props.point.isAccepted

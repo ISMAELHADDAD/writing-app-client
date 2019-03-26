@@ -7,7 +7,7 @@ import API from '../../services/api/app';
 import AuthContext from "../../AuthContext";
 
 //UI framework
-import { Icon, Button, Popup, Header, Input } from 'semantic-ui-react'
+import { Icon, Button, Popup, Header, Input } from 'semantic-ui-react';
 
 class InviteButton extends Component {
 
@@ -53,17 +53,17 @@ class InviteButton extends Component {
               Invitación enviada
             </Header>
           }
-            {!this.state.isInvitationSend &&
-            <div style={{textAlign: 'center'}}>
-              <Header icon>
-                <Icon name='user plus' />
-                Invitar a participar
-              </Header>
-              <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeemailText}/>
-              <br/>
-              <br/>
-              <Button primary onClick={this.handleOnClickInvite}>Invitar</Button>
-            </div>}
+          {!this.state.isInvitationSend &&
+          <div style={{textAlign: 'center'}}>
+            <Header icon>
+              <Icon name='user plus' />
+              Invitar a participar
+            </Header>
+            <Input label='Email' placeholder='tuemail@ejemplo.org' error={this.state.emailError} onChange={this.handleOnChangeemailText}/>
+            <br/>
+            <br/>
+            <Button primary onClick={this.handleOnClickInvite}>Invitar</Button>
+          </div>}
         </Popup>
       </div>
     );

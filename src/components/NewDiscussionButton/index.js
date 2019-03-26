@@ -42,10 +42,6 @@ class NewDiscussionButton extends Component {
     })
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     return (
       <Modal

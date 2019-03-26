@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 
-// React Context API
-import AuthContext from "../../AuthContext";
-
+//UI framework
 import { Button, Icon, Segment, Header, Container as ContainerSemantic } from 'semantic-ui-react';
 
 class FrontPage extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
 
   render() {
     return (
@@ -54,7 +46,5 @@ class FrontPage extends Component {
     );
   }
 }
-
-FrontPage.contextType = AuthContext
 
 export default FrontPage;

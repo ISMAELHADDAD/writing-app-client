@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Login from '../../components/Login';
 
 //Routing
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 // React Context API
 import CurrentSessionContext from "../../CurrentSessionContext";
@@ -13,13 +13,6 @@ import CurrentSessionContext from "../../CurrentSessionContext";
 import { Segment, Menu, Container as ContainerSemantic } from 'semantic-ui-react';
 
 class MainMenuNavbar extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
 
   handleGetUserId = (id, token, expiresAt) => this.props.getUserId(id, token, expiresAt)
 
@@ -53,4 +46,4 @@ class MainMenuNavbar extends Component {
 
 MainMenuNavbar.contextType = CurrentSessionContext
 
-export default withRouter(MainMenuNavbar);
+export default MainMenuNavbar;

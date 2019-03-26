@@ -51,7 +51,7 @@ class DiscussionPage extends Component {
       validAgree: false,
       validAvatar: false
     };
-    this.argumentsRef = React.createRef();
+    this.argumentsRef = React.createRef()
 
     //1. Create a connection to this discussion room
     if (this.props.match.params.id > 0)
@@ -180,21 +180,9 @@ class DiscussionPage extends Component {
     }
   }
 
-  userIsParticipating = () => {
-    return (
-      this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId
-      ||
-      this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId
-    )
-  }
+  handleTextEditorSidebarVisibility = () => this.setState({ textEditorSidebarVisibility: true })
 
-  handleTextEditorSidebarVisibility = () => {
-    this.setState({ textEditorSidebarVisibility: true })
-  }
-
-  handleHideTextEditorSidebar = () => {
-    this.setState({ textEditorSidebarVisibility: false })
-  }
+  handleHideTextEditorSidebar = () => this.setState({ textEditorSidebarVisibility: false })
 
   scrollToNewArgument() {
     scroller.scrollTo('scroll-to-new-argument', {
@@ -205,21 +193,13 @@ class DiscussionPage extends Component {
     })
   }
 
-  handleAgreePointVisibility = () => {
-    this.setState({ agreePointVisibility: true })
-  }
+  handleAgreePointVisibility = () => this.setState({ agreePointVisibility: true })
 
-  handleAgreePointChangeSelect = (event, data) => {
-    this.setState({ isAgree: data.value, validAgree: true });
-  };
+  handleAgreePointChangeSelect = (event, data) => this.setState({ isAgree: data.value, validAgree: true })
 
-  handleAgreePointAvatarChangeSelect = (event, data) => {
-    this.setState({ whoProposed: data.value, validAvatar: true });
-  };
+  handleAgreePointAvatarChangeSelect = (event, data) => this.setState({ whoProposed: data.value, validAvatar: true })
 
-  handleAgreePointChangeText = (event, data) => {
-    this.setState({ proposedText: data.value });
-  };
+  handleAgreePointChangeText = (event, data) => this.setState({ proposedText: data.value })
 
   handleSendArgument = (who, textContent) => {
     API.sendArgument(this.context.authUser.token,this.state.discussion.id, {
@@ -227,9 +207,9 @@ class DiscussionPage extends Component {
       'avatar_id': who,
       'content': textContent
     })
-    .then(argument => {
-      //Error control???
-    });
+    .catch(error => {
+      this.props.history.push('/error')
+    })
   }
 
   handleSendAgreement = () => {
@@ -239,9 +219,9 @@ class DiscussionPage extends Component {
       'content': this.state.proposedText,
       'is_agree': this.state.isAgree
     })
-    .then(agreement => {
-      //Error control???
-    });
+    .catch(error => {
+      this.props.history.push('/error')
+    })
   }
 
   handleRejectedAgreement = (agreementId, avatarId) => {
@@ -250,9 +230,9 @@ class DiscussionPage extends Component {
       'avatar_id': avatarId,
       'is_accepted': "false"
     })
-    .then(message => {
-      //Error control???
-    });
+    .catch(error => {
+      this.props.history.push('/error')
+    })
   }
 
   handleAcceptedAgreement = (agreementId, avatarId) => {
@@ -261,9 +241,9 @@ class DiscussionPage extends Component {
       'avatar_id': avatarId,
       'is_accepted': "true"
     })
-    .then(message => {
-      //Error control???
-    });
+    .catch(error => {
+      this.props.history.push('/error')
+    })
   }
 
   componentDidMount() {
