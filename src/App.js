@@ -89,8 +89,8 @@ class App extends Component {
                 }/>
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
                 <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
-                <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true}/>} />
-                <Route path="/explore" render={(props)=><DiscussionsPage {...props} isMyDiscussions={false}/>} />
+                <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true} getDiscussionId={this.handleGetDiscussionId}/>} />
+                <Route path="/explore" render={(props)=><DiscussionsPage {...props} isMyDiscussions={false} getDiscussionId={this.handleGetDiscussionId}/>} />
               </Switch>
             </div>
           </BrowserRouter>

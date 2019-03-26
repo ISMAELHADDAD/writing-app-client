@@ -17,29 +17,27 @@ class TextEditorSidebar extends Component {
     };
   }
 
-  handleChangeSelect = (event, data) => {
-    this.setState({ who: data.value, validAvatar: false });
-  };
+  handleChangeSelect = (event, data) => this.setState({ who: data.value, validAvatar: false })
 
   handleChangeText = (event, data) => {
     var words = 0
     if (data.value.match(/\S+/g) != null)
       words = data.value.match(/\S+/g).length;
     if (words > 100 || words < 1) {
-      this.setState({ textContent: data.value, validContent: true, words: words });
+      this.setState({ textContent: data.value, validContent: true, words: words })
     } else {
-      this.setState({ textContent: data.value, validContent: false, words: words });
+      this.setState({ textContent: data.value, validContent: false, words: words })
     }
-  };
+  }
 
   handleClick = () => {
-    this.props.passClick(this.state.who, this.state.textContent);
-    this.props.passClickClose();
-  };
+    this.props.passClick(this.state.who, this.state.textContent)
+    this.props.passClickClose()
+  }
 
   handleClickClose = () => {
-    this.props.passClickClose();
-  };
+    this.props.passClickClose()
+  }
 
   render() {
     return (

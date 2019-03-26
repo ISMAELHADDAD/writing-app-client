@@ -12,7 +12,7 @@ import { withRouter } from 'react-router-dom';
 //UI framework
 import { Button, Icon, Modal, Header } from 'semantic-ui-react';
 
-class ForkButton extends Component {
+class ForkDiscussionButton extends Component {
 
   handleOnClickFork = () => {
     API.forkDiscussion(this.context.authUser.token, this.props.discussionId)
@@ -38,6 +38,6 @@ class ForkButton extends Component {
   }
 }
 
-ForkButton.contextType = AuthContext
+ForkDiscussionButton.contextType = AuthContext
 
-export default withRouter(ForkButton);
+export default withRouter(ForkDiscussionButton);

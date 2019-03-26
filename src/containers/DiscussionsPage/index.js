@@ -36,6 +36,7 @@ class DiscussionsPage extends Component {
           discussions: this.state.discussions
             .filter(i => i.id !== id)
         })
+        this.props.getDiscussionId(0)
       })
   }
 
