@@ -17,6 +17,7 @@ class NewDiscussionButton extends Component {
     this.state = {
       titleText: '',
       descriptionText: '',
+      private: false,
       nameOneText: '',
       opinionOneText: '',
       nameTwoText: '',
@@ -24,13 +25,16 @@ class NewDiscussionButton extends Component {
     };
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+  handleChange = (e, { name, value }) => {this.setState({ [name]: value })}
+
+  handleChangeOnCheckBox = (e,d) => this.setState({ private: d.checked })
 
   handleOnClickCreate = () => {
     API.createNewDiscussion(this.context.authUser.token,
       {
         topic_title: this.state.titleText,
         topic_description: this.state.descriptionText,
+        private: this.state.private,
         name_avatar_one: this.state.nameOneText,
         opinion_avatar_one: this.state.opinionOneText,
         name_avatar_two: this.state.nameTwoText,
@@ -59,6 +63,7 @@ class NewDiscussionButton extends Component {
           <Form>
             <Form.Input label='Título' placeholder='Título' name='titleText' value={this.state.titleText} onChange={this.handleChange}/>
             <Form.TextArea label='Descripción' placeholder='Descripción' name='descriptionText' value={this.state.descriptionText} onChange={this.handleChange} style={{ minHeight: 100, maxHeight: 100 }}/>
+            <Row style={{padding: '20px'}}><Icon name='lock'/> <Form.Checkbox toggle name='private' onChange={this.handleChangeOnCheckBox}/></Row>
           </Form>
         </Modal.Content>
         <Row style={{padding: '20px'}}>
