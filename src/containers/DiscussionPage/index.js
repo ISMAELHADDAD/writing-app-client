@@ -207,8 +207,8 @@ class DiscussionPage extends Component {
       'avatar_id': who,
       'content': textContent
     })
-    .then(argument => {
-      //Error control???
+    .catch(error => {
+      this.props.history.push('/error')
     })
   }
 
@@ -219,8 +219,8 @@ class DiscussionPage extends Component {
       'content': this.state.proposedText,
       'is_agree': this.state.isAgree
     })
-    .then(agreement => {
-      //Error control???
+    .catch(error => {
+      this.props.history.push('/error')
     })
   }
 
@@ -230,8 +230,8 @@ class DiscussionPage extends Component {
       'avatar_id': avatarId,
       'is_accepted': "false"
     })
-    .then(message => {
-      //Error control???
+    .catch(error => {
+      this.props.history.push('/error')
     })
   }
 
@@ -241,8 +241,8 @@ class DiscussionPage extends Component {
       'avatar_id': avatarId,
       'is_accepted': "true"
     })
-    .then(message => {
-      //Error control???
+    .catch(error => {
+      this.props.history.push('/error')
     })
   }
 

@@ -5,6 +5,7 @@ import FrontPage from './containers/FrontPage';
 import DiscussionPage from './containers/DiscussionPage';
 import DiscussionsPage from './containers/DiscussionsPage';
 import AuthorizePage from './containers/AuthorizePage';
+import ErrorPage from './containers/ErrorPage';
 
 //Components
 import MainMenuNavbar from './components/MainMenuNavbar';
@@ -77,7 +78,8 @@ class App extends Component {
         <AuthContext.Provider value={this.state}>
           <BrowserRouter>
             <CurrentSessionContext.Provider value={this.state.currentDiscussion}>
-              {!window.location.pathname.includes('/authorize') && <MainMenuNavbar getUserId={this.handleGetUser} loggedIn={this.state.loggedIn}/>}
+              {!window.location.pathname.includes('/authorize') &&
+              <MainMenuNavbar getUserId={this.handleGetUser} loggedIn={this.state.loggedIn}/>}
             </CurrentSessionContext.Provider>
             <div>
               <Switch>
@@ -88,6 +90,7 @@ class App extends Component {
                   )
                 }/>
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
+                <Route exact path="/error" render={(props)=><ErrorPage {...props}/>}/>
                 <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
                 <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true} getDiscussionId={this.handleGetDiscussionId}/>} />
                 <Route path="/explore" render={(props)=><DiscussionsPage {...props} isMyDiscussions={false} getDiscussionId={this.handleGetDiscussionId}/>} />
