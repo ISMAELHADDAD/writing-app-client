@@ -297,7 +297,7 @@ class DiscussionPage extends Component {
       <div style={{backgroundColor: '#eee'}}>
 
         <Responsive maxWidth={1650}>
-          <Headroom>
+          <Headroom disable>
               <br/>
               <Container>
                 <Menu stackable>
@@ -444,15 +444,17 @@ class DiscussionPage extends Component {
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) &&
-                        <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
+                      {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && this.state.agreePointVisibility &&
+                        <Table.Row>
                           <Table.Cell colSpan='3'>
                             <Row>
                               <Col sm={2}>
                                 <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                                <br/>
                               </Col>
                               <Col sm={3}>
                                 <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                                <br/>
                               </Col>
                               <Col sm={7}>
                                 <Form>
