@@ -109,7 +109,7 @@ class DiscussionsPage extends Component {
           <Segment>
             {this.context.loggedIn &&
             <NewDiscussionButton history={this.props.history}/>}
-
+            <br/><br/>
             {topicList}
           </Segment>
           <br/>

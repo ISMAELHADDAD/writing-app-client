@@ -23,7 +23,8 @@ class DiscussionItem extends Component {
   render() {
     return (
       <Item>
-        <Item.Image size='tiny' rounded src={this.props.discussion.owner.imageUrl} />
+        {window.innerWidth > 770 &&
+        <Item.Image size='tiny' rounded src={this.props.discussion.owner.imageUrl} />}
 
         <Item.Content>
           <Item.Header as={Link} to={'/discussion/'+this.props.discussion.id}>{this.props.discussion.topicTitle}</Item.Header>
