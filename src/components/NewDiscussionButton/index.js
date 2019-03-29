@@ -66,7 +66,7 @@ class NewDiscussionButton extends Component {
             <Row style={{padding: '20px'}}><Icon name='lock'/> <Form.Checkbox toggle name='private' onChange={this.handleChangeOnCheckBox}/></Row>
           </Form>
         </Modal.Content>
-        <Row style={{padding: '20px'}}>
+        <Row style={{padding: '20px', marginLeft: '0px', marginRight: '0px'}}>
           <Col>
             <Modal.Content style={{textAlign: 'center'}}>
               <Image circular wrapped size='small' src='https://react.semantic-ui.com/images/avatar/large/matthew.png' />

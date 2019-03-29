@@ -281,6 +281,12 @@ class DiscussionPage extends Component {
     this.props.getDiscussionId(this.state.discussion.id)
   }
 
+  componentDidUpdate(prevProps,prevState) {
+    if (prevState.avatarSelect !== this.state.avatarSelect)
+      if (this.state.avatarSelect.length > 0)
+        this.setState({ whoProposed: this.state.avatarSelect[0].value, validAvatar: true })
+  }
+
   render() {
 
     if (!this.state.isDiscussionLoaded) {
@@ -297,7 +303,7 @@ class DiscussionPage extends Component {
       <div style={{backgroundColor: '#eee'}}>
 
         <Responsive maxWidth={1650}>
-          <Headroom>
+          <Headroom disable>
               <br/>
               <Container>
                 <Menu stackable>
@@ -444,17 +450,20 @@ class DiscussionPage extends Component {
                           passRejectClick={this.handleRejectedAgreement}
                         />
                       ))}
-                      {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) &&
-                        <Table.Row style={{display: this.state.agreePointVisibility? null:'none'}}>
+                      {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && this.state.agreePointVisibility &&
+                        <Table.Row>
                           <Table.Cell colSpan='3'>
                             <Row>
-                              <Col sm={2}>
+                              <Col sm={2} style={{margin: '5px'}}>
                                 <Dropdown compact placeholder='Tipo' selection options={this.state.agreeSelect} onChange={this.handleAgreePointChangeSelect}/>
+                                <br/>
                               </Col>
-                              <Col sm={3}>
-                                <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                              <Col sm={3} style={{margin: '5px'}}>
+                                {this.state.avatarSelect.length > 0 &&
+                                <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} defaultValue={this.state.avatarSelect[0].value} onChange={this.handleChangeSelect}/>}
+                                <br/>
                               </Col>
-                              <Col sm={7}>
+                              <Col sm={7} style={{margin: '5px'}}>
                                 <Form>
                                   <TextArea placeholder='Propone un punto en acuerdo o en desacuerdo...' style={{ minHeight: 50, maxHeight: 50 }} onChange={this.handleAgreePointChangeText}/>
                                 </Form>
@@ -472,19 +481,11 @@ class DiscussionPage extends Component {
                         </Table.Row>
                       }
                     </Table.Body>
-                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.agreePointVisibility &&
-                      <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell />
-                          <Table.HeaderCell colSpan='4'>
-                            <Button floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
-                              <Icon name='add' /> Añadir punto
-                            </Button>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer>
-                    }
                   </Table>
+                  {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.agreePointVisibility &&
+                    <Button style={{marginBottom: '10px'}} floated='right' icon labelPosition='left' primary size='small' onClick={this.handleAgreePointVisibility}>
+                    <Icon name='add' /> Añadir punto
+                  </Button>}
                 </Container>
               </Element>
             </Card>

@@ -10,7 +10,7 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import AuthContext from "../../AuthContext";
 
 //UI framework
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Responsive } from 'semantic-ui-react';
 
 class Login extends Component {
 
@@ -38,6 +38,7 @@ class Login extends Component {
 
   render() {
     let buttonLogin;
+    let mobileButtonLogin;
 
     if (!this.context.loggedIn) {
       buttonLogin = (
@@ -46,6 +47,19 @@ class Login extends Component {
           render={renderProps => (
             <Button as='a' inverted primary={false} style={{ marginLeft: '0.5em' }} onClick={renderProps.onClick}>
               <Icon name='google' /> Accede con Google
+            </Button>
+          )}
+          buttonText="Login"
+          onSuccess={this.responseSuccessGoogle}
+          onFailure={this.responseFailureGoogle}
+        />
+      )
+      mobileButtonLogin = (
+        <GoogleLogin
+          clientId={this.state.clientId}
+          render={renderProps => (
+            <Button as='a' inverted primary={false} onClick={renderProps.onClick}>
+              <Icon name='google' /> Acceder<br/>
             </Button>
           )}
           buttonText="Login"
@@ -67,11 +81,29 @@ class Login extends Component {
         >
         </GoogleLogout>
       )
+      mobileButtonLogin = (
+        <GoogleLogout
+          clientId={this.state.clientId}
+          render={renderProps => (
+            <Button as='a' inverted icon primary={false} onClick={renderProps.onClick}>
+              <Icon name='sign out'/><br/>Cerrar sessión
+            </Button>
+          )}
+          buttonText="Logout"
+          onLogoutSuccess={this.logout}
+        >
+        </GoogleLogout>
+      )
     }
 
     return (
       <div>
-        {buttonLogin}
+        <Responsive minWidth={770}>
+          {buttonLogin}
+        </Responsive>
+        <Responsive maxWidth={771}>
+          {mobileButtonLogin}
+        </Responsive>
       </div>
     );
   }
