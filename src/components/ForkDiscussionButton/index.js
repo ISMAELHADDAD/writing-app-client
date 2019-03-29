@@ -21,15 +21,15 @@ class ForkDiscussionButton extends Component {
 
   render() {
     return (
-      <Modal closeIcon trigger={<Button as='button' floated='right' color='blue' icon><Icon name='fork'/> Fork </Button>} basic size='small'>
+      <Modal closeIcon trigger={<Button as='button' floated='right' color='blue' icon><Icon name='fork'/> Fork </Button>} size='small'>
         <Header icon='fork' content='Fork' />
         <Modal.Content>
           <p>
-            Estas seguro de querer hacer fork a esta discussion?
+            Estas seguro de querer hacer fork a esta discusión?
           </p>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='green' inverted onClick={this.handleOnClickFork}>
+          <Button color='green' onClick={this.handleOnClickFork}>
             <Icon name='check' /> Confirmar
           </Button>
         </Modal.Actions>
