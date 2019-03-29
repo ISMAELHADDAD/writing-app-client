@@ -37,7 +37,7 @@ class Agreement extends Component {
     if (!this.props.point.isAccepted
         && ( (this.checkAvatarOwnership(this.props.avatarOne)) || (this.checkAvatarOwnership(this.props.avatarTwo)) ))
     {
-      dialog = <Card>
+      dialog = <Card style={{margin: '0 auto'}}>
                 <Card.Content>
                   <Card.Description>
                     <strong>{this.props.point.proposedByAvatarName}</strong> a propuesto esto:
@@ -55,7 +55,7 @@ class Agreement extends Component {
                 </Card.Content>
               </Card>
     } else if (!this.props.point.isAccepted) {
-      dialog = <Card>
+      dialog = <Card style={{margin: '0 auto'}}>
                 <Card.Content>
                   <Card.Description>
                     Esperando respuesta

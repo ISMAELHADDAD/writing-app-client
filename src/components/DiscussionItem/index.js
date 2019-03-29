@@ -37,6 +37,8 @@ class DiscussionItem extends Component {
           </Item.Description>
           <Item.Extra>
             @{this.props.discussion.owner.name}
+          </Item.Extra>
+          <Item.Extra>
             {this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id &&
               <DeleteDiscussionButton discussionId={this.props.discussion.id} passClickDelete={this.handleOnClickDelete}/>}
             {this.context.loggedIn &&
