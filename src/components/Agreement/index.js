@@ -67,13 +67,13 @@ class Agreement extends Component {
     }
 
     return (
-      <Table.Row positive={this.props.isAgree} negative={!this.props.isAgree}>
-        <Table.Cell>{this.props.isAgree ? (<Icon color='green' name='checkmark' size='large' />):(<Icon color='red' name='times' size='large' />)}</Table.Cell>
-        <Table.Cell>{this.props.point.content}</Table.Cell>
-        <Table.Cell collapsing style={{textAlign: 'center'}}>
-          {dialog}
-        </Table.Cell>
-      </Table.Row>
+        <Table.Row positive={this.props.isAgree} negative={!this.props.isAgree}>
+          <Table.Cell style={{textAlign: window.innerWidth > 770? null: 'center'}}>{this.props.isAgree ? (<Icon color='green' name='checkmark' size='large' />):(<Icon color='red' name='times' size='large' />)}</Table.Cell>
+          <Table.Cell style={{textAlign: window.innerWidth > 770? null: 'center'}}>{this.props.point.content}</Table.Cell>
+          <Table.Cell collapsing style={{textAlign: 'center'}}>
+            {dialog}
+          </Table.Cell>
+        </Table.Row>
     );
   }
 }

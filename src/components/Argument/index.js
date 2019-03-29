@@ -13,6 +13,7 @@ class Argument extends Component {
       <Card fluid style={this.props.argument.highlight? {border: '4px solid yellow'}:null }>
         <Card.Content>
           <Card.Header>#{this.props.argument.num}</Card.Header>
+          <Card.Meta>por {this.props.argument.fromAvatarName}</Card.Meta>
           <Card.Description>{this.props.argument.content}</Card.Description>
         </Card.Content>
         <Card.Content extra>

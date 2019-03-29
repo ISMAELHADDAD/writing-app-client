@@ -39,13 +39,20 @@ class TextEditorSidebar extends Component {
     this.props.passClickClose()
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.avatarSelect !== this.props.avatarSelect)
+      if (this.props.avatarSelect.length > 0)
+        this.setState({ who: this.props.avatarSelect[0].value, validAvatar: false })
+  }
+
   render() {
     return (
       <Sidebar as={Segment} animation={'push'} direction={'bottom'} visible={this.props.visible}>
         <Container>
           <Card fluid>
             <Card.Content>
-              <Dropdown placeholder='Selecciona el avatar' selection options={this.props.avatarSelect} onChange={this.handleChangeSelect}/>
+              {this.props.avatarSelect.length > 0 &&
+              <Dropdown placeholder='Selecciona el avatar' selection options={this.props.avatarSelect} defaultValue={this.props.avatarSelect[0].value} onChange={this.handleChangeSelect}/>}
               <Button floated='right' icon='delete' onClick={this.handleClickClose}/>
             </Card.Content>
             <Card.Content>

@@ -9,15 +9,15 @@ class DeleteDiscussionButton extends Component {
 
   render() {
     return (
-      <Modal closeIcon trigger={<Button as='button' floated='right' icon><Icon name='remove'/> Borrar </Button>} basic size='small'>
-        <Header icon='trash' content='Borrar discussion' />
+      <Modal closeIcon trigger={<Button as='button' floated='right' icon><Icon name='remove'/> Borrar </Button>}  size='small'>
+        <Header icon='trash' content='Borrar discusión' />
         <Modal.Content>
           <p>
-            Estas seguro de querer borrar esta discussion?
+            Estas seguro de querer borrar esta discusión?
           </p>
         </Modal.Content>
         <Modal.Actions>
-          <Button color='red' inverted onClick={() => this.handleOnClickDelete(this.props.discussionId)}>
+          <Button color='red' onClick={() => this.handleOnClickDelete(this.props.discussionId)}>
             <Icon name='trash' /> Eliminar
           </Button>
         </Modal.Actions>
