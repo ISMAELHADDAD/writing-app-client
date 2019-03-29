@@ -281,6 +281,12 @@ class DiscussionPage extends Component {
     this.props.getDiscussionId(this.state.discussion.id)
   }
 
+  componentDidUpdate(prevProps,prevState) {
+    if (prevState.avatarSelect !== this.state.avatarSelect)
+      if (this.state.avatarSelect.length > 0)
+        this.setState({ whoProposed: this.state.avatarSelect[0].value, validAvatar: true })
+  }
+
   render() {
 
     if (!this.state.isDiscussionLoaded) {
@@ -453,7 +459,8 @@ class DiscussionPage extends Component {
                                 <br/>
                               </Col>
                               <Col sm={3} style={{margin: '5px'}}>
-                                <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} onChange={this.handleAgreePointAvatarChangeSelect}/>
+                                {this.state.avatarSelect.length > 0 &&
+                                <Dropdown placeholder='Selecciona el avatar' selection options={this.state.avatarSelect} defaultValue={this.state.avatarSelect[0].value} onChange={this.handleChangeSelect}/>}
                                 <br/>
                               </Col>
                               <Col sm={7} style={{margin: '5px'}}>
