@@ -18,12 +18,11 @@ import AuthContext from "../../AuthContext";
 import Cable from 'actioncable';
 
 //UI framework
-import Headroom from 'react-headroom';
 import { Link, Element, scroller} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
-  Rail, Sticky, Responsive, Segment, Dimmer, Loader} from 'semantic-ui-react';
+  Rail, Sticky, Responsive, Segment, Dimmer, Loader, Visibility} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -50,7 +49,8 @@ class DiscussionPage extends Component {
       isAgree: null,
       validAgree: false,
       validAvatar: false,
-      loggedIn: false
+      loggedIn: false,
+      fixedMenu: false
     };
     this.argumentsRef = React.createRef()
 
@@ -304,40 +304,46 @@ class DiscussionPage extends Component {
       <div style={{backgroundColor: '#eee'}}>
 
         <Responsive maxWidth={1650}>
-          <Headroom disable>
-              <br/>
-              <Container>
-                <Menu stackable>
+          <Visibility
+            once={false}
+            onTopPassed={() => this.setState({ fixedMenu: true })}
+            onTopPassedReverse={() => this.setState({ fixedMenu: false })}
+          >
+            <div style={{minHeight: '6vh'}}>
+              <Menu fixed={this.state.fixedMenu ? 'top' : null}>
+                  {window.innerWidth > 770 &&
                   <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
                     <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
-                  </Menu.Item>
+                  </Menu.Item>}
+                  {window.innerWidth > 770 &&
                   <Menu.Item className='botonMenu'
                     name='argumentos'
                     active={false}
                     onClick={this.handleItemClick}
                   >
                     <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
-                  </Menu.Item>
+                  </Menu.Item>}
+                  {window.innerWidth > 770 &&
                   <Menu.Item className='botonMenu'
                     name='puntos de concordancia'
                     active={false}
                     onClick={this.handleItemClick}
                   >
                     <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
-                  </Menu.Item>
-                  {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility &&
-                    <Menu.Item>
-                      <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
-                        <Icon name='add' /> Añadir argumento
-                      </Button>
-                    </Menu.Item>}
-                  {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
-                    <Menu.Item>
-                      <InviteButton discussionId={this.state.discussion.id}/>
-                    </Menu.Item>}
-                </Menu>
-              </Container>
-          </Headroom>
+                  </Menu.Item>}
+                {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility &&
+                  <Menu.Item>
+                    <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                      <Icon name='add' /> Añadir argumento
+                    </Button>
+                  </Menu.Item>}
+                {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
+                  <Menu.Item>
+                    <InviteButton fluid={false} discussionId={this.state.discussion.id}/>
+                  </Menu.Item>}
+              </Menu>
+            </div>
+          </Visibility>
         </Responsive>
 
         <Element name="test1" className="element" >
@@ -360,35 +366,39 @@ class DiscussionPage extends Component {
           <div ref={this.argumentsRef}>
             <Responsive minWidth={1650}>
               <Rail position='right'>
-                <Sticky offset={100} context={this.argumentsRef.current} active={false}>
+                <Sticky offset={100} context={this.argumentsRef.current} active={true}>
                   <Menu vertical>
-                    <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
-                      <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
-                    </Menu.Item>
-                    <Menu.Item className='botonMenu'
-                      name='argumentos'
-                      active={false}
-                      onClick={this.handleItemClick}
-                    >
-                      <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
-                    </Menu.Item>
-                    <Menu.Item className='botonMenu'
-                      name='puntos de concordancia'
-                      active={false}
-                      onClick={this.handleItemClick}
-                    >
-                      <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+                    <Menu.Item>
+                      <Menu.Menu>
+                        <Menu.Item className='botonMenu' name='titulo' active={false} onClick={this.handleItemClick} >
+                          <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} style={{color:'black'}}>Título</Link>
+                        </Menu.Item>
+                        <Menu.Item className='botonMenu'
+                          name='argumentos'
+                          active={false}
+                          onClick={this.handleItemClick}
+                        >
+                          <Link activeClass="active" className="test2" to="test2" spy={true} smooth={true} duration={500} style={{color:'black'}}>Argumentos</Link>
+                        </Menu.Item>
+                        <Menu.Item className='botonMenu'
+                          name='puntos de concordancia'
+                          active={false}
+                          onClick={this.handleItemClick}
+                        >
+                          <Link activeClass="active" className="test3" to="test3" spy={true} smooth={true} duration={500} style={{color:'black'}}>Puntos de concordancia</Link>
+                        </Menu.Item>
+                      </Menu.Menu>
                     </Menu.Item>
                     {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility &&
                       <Menu.Item>
-                        <Button icon labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
+                        <Button icon fluid labelPosition='left' primary size='small' onClick={this.handleTextEditorSidebarVisibility}>
                           <Icon name='add' /> Argumento
                         </Button>
                       </Menu.Item>
                     }
                     {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
                       <Menu.Item>
-                        <InviteButton discussionId={this.state.discussion.id}/>
+                        <InviteButton fluid={true} discussionId={this.state.discussion.id}/>
                       </Menu.Item>}
                   </Menu>
                 </Sticky>
