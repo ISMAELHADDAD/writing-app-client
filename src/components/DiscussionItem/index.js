@@ -12,16 +12,25 @@ import { Link } from 'react-router-dom';
 
 //Utils
 import TextTruncate from 'react-text-truncate';
+import moment from 'moment';
+import 'moment/locale/es';
 
 //UI framework
 import { Row, Col, Visible, Hidden } from 'react-grid-system';
-import { Item, Button, Icon, Image } from 'semantic-ui-react';
+import { Item, Button, Icon, Image, Popup } from 'semantic-ui-react';
 
 class DiscussionItem extends Component {
+
+  constructor(props) {
+    super(props);
+    moment.locale('es');
+  }
 
   handleOnClickDelete = (id) => this.props.passClickDelete(id)
 
   render() {
+
+    let publishTime = new Date(this.props.discussion.publishTime)
 
     let controlButtons;
     if (this.context.loggedIn)
@@ -63,8 +72,11 @@ class DiscussionItem extends Component {
           <Item.Extra>
             <Image floated='left' size='mini' src={this.props.discussion.owner.imageUrl} />
             @{this.props.discussion.owner.name}
-            <br/>
-            Publicado el 08/04/2019
+            <Popup
+              trigger={<p>Publicado {moment(publishTime).fromNow()}</p>}
+              content={moment(publishTime).format('LLLL')}
+              inverted
+            />
           </Item.Extra>
           <Visible xs sm>
             <Item.Extra>
