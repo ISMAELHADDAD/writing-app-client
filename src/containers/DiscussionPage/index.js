@@ -17,6 +17,10 @@ import AuthContext from "../../AuthContext";
 //Routing
 import { Link as LinkRouter } from 'react-router-dom';
 
+//Utils
+import moment from 'moment';
+import 'moment/locale/es';
+
 //Sockets
 import Cable from 'actioncable';
 
@@ -25,7 +29,7 @@ import { Link, Element, scroller} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
-  Rail, Sticky, Responsive, Segment, Dimmer, Loader, Visibility, Label} from 'semantic-ui-react';
+  Rail, Sticky, Responsive, Segment, Dimmer, Loader, Visibility, Label, Image, Popup, Divider} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -56,6 +60,7 @@ class DiscussionPage extends Component {
       fixedMenu: false
     };
     this.argumentsRef = React.createRef()
+    moment.locale('es');
 
     //1. Create a connection to this discussion room
     if (this.props.match.params.id > 0)
@@ -293,6 +298,8 @@ class DiscussionPage extends Component {
 
   render() {
 
+    let publishTime = new Date(this.state.discussion.publishTime)
+
     if (!this.state.isDiscussionLoaded) {
       return (
         <Segment style={{minHeight: '90.5vh'}}>
@@ -340,7 +347,7 @@ class DiscussionPage extends Component {
                       <Icon name='add' /> Añadir argumento
                     </Button>
                   </Menu.Item>}
-                {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
+                {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.owner.id &&
                   <Menu.Item>
                     <InviteButton fluid={false} discussionId={this.state.discussion.id}/>
                   </Menu.Item>}
@@ -361,7 +368,15 @@ class DiscussionPage extends Component {
                 <p>
                   {this.state.discussion.topicDescription}
                 </p>
-                <br/>
+                <Divider/>
+
+                <Image floated='left' size='mini' src={this.state.discussion.owner.imageUrl} />
+                @{this.state.discussion.owner.name}
+                <Popup
+                  trigger={<p>Publicado {moment(publishTime).fromNow()}</p>}
+                  content={moment(publishTime).format('LLLL')}
+                  inverted
+                />
 
             </Container>
           </Segment>
@@ -402,7 +417,7 @@ class DiscussionPage extends Component {
                         </Button>
                       </Menu.Item>
                     }
-                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.ownerUserId &&
+                    {this.context.loggedIn && (this.context.authUser.id === this.state.discussion.avatarOne.assignedToUserId || this.context.authUser.id === this.state.discussion.avatarTwo.assignedToUserId) && !this.state.textEditorSidebarVisibility && this.context.authUser.id === this.state.discussion.owner.id &&
                       <Menu.Item>
                         <InviteButton fluid={true} discussionId={this.state.discussion.id}/>
                       </Menu.Item>}
@@ -422,7 +437,7 @@ class DiscussionPage extends Component {
                         avatar={this.state.discussion.avatarOne}
                         participantsIds={this.state.discussion.participants}
                         discussionId={this.state.discussion.id}
-                        ownerUserId={this.state.discussion.ownerUserId}/>}
+                        ownerUserId={this.state.discussion.owner.id}/>}
                     </Col>
                     <Col sm={2}/>
                     <Col sm={4}>
@@ -431,7 +446,7 @@ class DiscussionPage extends Component {
                         avatar={this.state.discussion.avatarTwo}
                         participantsIds={this.state.discussion.participants}
                         discussionId={this.state.discussion.id}
-                        ownerUserId={this.state.discussion.ownerUserId}/>}
+                        ownerUserId={this.state.discussion.owner.id}/>}
                     </Col>
                     <Col sm={1}/>
                   </Row>
