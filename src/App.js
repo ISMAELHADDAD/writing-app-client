@@ -91,7 +91,7 @@ class App extends Component {
                 }/>
                 <Route exact path="/authorize" render={(props)=><AuthorizePage {...props} getUserId={this.handleGetUser}/>}/>
                 <Route exact path="/error" render={(props)=><ErrorPage {...props}/>}/>
-                <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} getDiscussionId={this.handleGetDiscussionId}/>}/>
+                <Route path="/discussion/:id" render={(props)=><DiscussionPage {...props} key={props.location.key} getDiscussionId={this.handleGetDiscussionId}/>}/>
                 <Route path="/my-discussions" render={(props)=><DiscussionsPage {...props} isMyDiscussions={true} getDiscussionId={this.handleGetDiscussionId}/>} />
                 <Route path="/explore" render={(props)=><DiscussionsPage {...props} isMyDiscussions={false} getDiscussionId={this.handleGetDiscussionId}/>} />
               </Switch>
