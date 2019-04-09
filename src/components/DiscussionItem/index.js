@@ -17,7 +17,7 @@ import 'moment/locale/es';
 
 //UI framework
 import { Row, Col, Visible, Hidden } from 'react-grid-system';
-import { Item, Button, Icon, Image, Popup } from 'semantic-ui-react';
+import { Item, Button, Icon, Image, Popup, Label } from 'semantic-ui-react';
 
 class DiscussionItem extends Component {
 
@@ -53,7 +53,7 @@ class DiscussionItem extends Component {
 
         <Item.Content>
           <Item.Header as={Link} to={'/discussion/'+this.props.discussion.id}>{this.props.discussion.topicTitle}</Item.Header>
-          <Item.Description as={Link} to={'/discussion/'+this.props.discussion.id}>
+          <Item.Description>
             <Row>
               <Col md={this.context.loggedIn? 6:12} lg={this.context.loggedIn? 9:12}>
                 <TextTruncate
@@ -70,13 +70,23 @@ class DiscussionItem extends Component {
             </Row>
           </Item.Description>
           <Item.Extra>
-            <Image floated='left' size='mini' src={this.props.discussion.owner.imageUrl} />
-            @{this.props.discussion.owner.name}
-            <Popup
-              trigger={<p>Publicado {moment(publishTime).fromNow()}</p>}
-              content={moment(publishTime).format('LLLL')}
-              inverted
-            />
+            <Row>
+              <Col md={3}>
+                <Image floated='left' size='mini' src={this.props.discussion.owner.imageUrl} />
+                @{this.props.discussion.owner.name}
+                <Popup
+                  trigger={<p>Publicado {moment(publishTime).fromNow()}</p>}
+                  content={moment(publishTime).format('LLLL')}
+                  inverted
+                />
+              </Col>
+              <Col md={2}>
+                {this.props.discussion.forkedFrom &&
+                <Label as={Link} to={'/discussion/'+this.props.discussion.forkedFrom} color='blue' tag style={{top: '6px'}}>
+                  Forked from
+                </Label>}
+              </Col>
+            </Row>
           </Item.Extra>
           <Visible xs sm>
             <Item.Extra>

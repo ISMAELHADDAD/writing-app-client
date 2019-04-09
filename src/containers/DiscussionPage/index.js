@@ -14,6 +14,9 @@ import API from '../../services/api/app';
 // React Context API
 import AuthContext from "../../AuthContext";
 
+//Routing
+import { Link as LinkRouter } from 'react-router-dom';
+
 //Sockets
 import Cable from 'actioncable';
 
@@ -22,7 +25,7 @@ import { Link, Element, scroller} from 'react-scroll';
 
 import { Container, Row, Col } from 'react-grid-system';
 import { Table, Card, Button, Icon, Header, Menu, TextArea, Form, Dropdown,
-  Rail, Sticky, Responsive, Segment, Dimmer, Loader, Visibility} from 'semantic-ui-react';
+  Rail, Sticky, Responsive, Segment, Dimmer, Loader, Visibility, Label} from 'semantic-ui-react';
 
 class DiscussionPage extends Component {
 
@@ -351,7 +354,10 @@ class DiscussionPage extends Component {
             <Container>
 
                 <br/>
-                <h1>{this.state.discussion.topicTitle}</h1>
+                <h1>{this.state.discussion.topicTitle}  {this.state.discussion.forkedFrom &&
+                <Label as={LinkRouter} to={'/discussion/'+this.state.discussion.forkedFrom} color='blue' tag style={{bottom: '6px'}}>
+                  Forked from
+                </Label>}</h1>
                 <p>
                   {this.state.discussion.topicDescription}
                 </p>
