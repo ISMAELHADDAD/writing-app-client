@@ -9,6 +9,16 @@ class API {
     return res.data;
   }
 
+  static async getDiscussionArguments(id) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${id}/arguments`);
+    return res.data;
+  }
+
+  static async getDiscussionAgreements(id) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${id}/agreements`);
+    return res.data;
+  }
+
   static async getUserById(id){
     let res = await axios.get(`${ENDPOINT}/users/${id}`);
     return res.data;

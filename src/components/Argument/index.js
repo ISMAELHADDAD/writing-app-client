@@ -26,7 +26,7 @@ class Argument extends Component {
           <Card.Header>#{this.props.argument.num}</Card.Header>
           <Card.Meta>
             <Popup
-              trigger={<p>{moment(publishTime).fromNow()} por {this.props.argument.fromAvatarName}</p>}
+              trigger={<p>{moment(publishTime).fromNow()} por {this.props.argument.fromAvatar.name}</p>}
               content={moment(publishTime).format('LLLL')}
               inverted
             />
@@ -44,7 +44,7 @@ class Argument extends Component {
 
     let side
     // Populate argument on the left side
-    if (this.props.argument.fromAvatarId === this.props.avatarOneId) {
+    if (this.props.argument.fromAvatar.id === this.props.avatarOneId) {
       side = <Row>
                 <Col sm={8}>
                   {blockSpeech}
