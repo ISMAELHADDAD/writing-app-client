@@ -12,7 +12,7 @@ import AuthContext from "../../AuthContext";
 
 //UI framework
 import { Container } from 'react-grid-system';
-import { Segment, Header, Item, Pagination } from 'semantic-ui-react';
+import { Segment, Header, Item, Pagination, Divider } from 'semantic-ui-react';
 
 class DiscussionsPage extends Component {
 
@@ -104,16 +104,32 @@ class DiscussionsPage extends Component {
 
     return (
       <div style={{backgroundColor: '#eee', minHeight: '90.5vh'}}>
-        <Container>
-          <br/>
-          <Segment>
+        <Segment>
+          <Container>
+            <br/>
+            <h1>{this.props.isMyDiscussions? 'Mis discusiones':'Explorar discusiones'}</h1>
+            <p>{this.props.isMyDiscussions?
+              'Aqui se encuentran tus discusiones públicas y privadas.':
+              'Aqui encontrarás las discusiones públicas propuestas por todos los usuarios.'}
+            </p>
+            <Divider />
             {this.context.loggedIn &&
             <NewDiscussionButton history={this.props.history}/>}
-            <br/><br/>
+            <br/><br/><br/>
+
+          </Container>
+        </Segment>
+
+        <Container>
+          <Segment>
             {topicList}
           </Segment>
           <br/>
           <Pagination defaultActivePage={this.state.pages.current} totalPages={this.state.pages.total} onPageChange={this.handleOnPageChange}/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
         </Container>
       </div>
     );

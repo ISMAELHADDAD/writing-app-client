@@ -3,16 +3,25 @@ import React, { Component } from 'react';
 // React Context API
 import AuthContext from "../../AuthContext";
 
+//Utils
+import moment from 'moment';
+import 'moment/locale/es';
+
 //UI framework
 import { Table, Icon, Card, Button } from 'semantic-ui-react';
 
 class Agreement extends Component {
 
+  constructor(props) {
+    super(props);
+    moment.locale('es');
+  }
+
   // If I'm owner of Avatar X && Avatar X didn't proposed
   checkAvatarOwnership = (x) => {
     if (x !== undefined && x !== null)
       return (x.assignedToUserId === this.context.authUser.id
-        && this.props.point.proposedByAvatarId !== x.id)
+        && this.props.point.proposedByAvatar.id !== x.id)
   }
 
   handleAcceptClick = () => {
@@ -30,6 +39,8 @@ class Agreement extends Component {
   };
 
   render() {
+    let acceptedAt = new Date(this.props.point.acceptedAt)
+
     if (!this.props.point.isAccepted && !this.context.loggedIn)
       return null
 
@@ -40,7 +51,7 @@ class Agreement extends Component {
       dialog = <Card style={{margin: '0 auto'}}>
                 <Card.Content>
                   <Card.Description>
-                    <strong>{this.props.point.proposedByAvatarName}</strong> a propuesto esto:
+                    <strong>{this.props.point.proposedByAvatar.name}</strong> a propuesto esto:
                   </Card.Description>
                   </Card.Content>
                   <Card.Content extra>
@@ -63,7 +74,8 @@ class Agreement extends Component {
                 </Card.Content>
               </Card>
     } else {
-      dialog = <Button color='green' disabled={true}>Aceptado</Button>
+      dialog =
+        <Button color='green' disabled={true}>Aceptado {moment(acceptedAt).fromNow()}</Button>
     }
 
     return (

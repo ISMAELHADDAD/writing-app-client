@@ -12,42 +12,87 @@ import { Link } from 'react-router-dom';
 
 //Utils
 import TextTruncate from 'react-text-truncate';
+import moment from 'moment';
+import 'moment/locale/es';
 
 //UI framework
-import { Item, Button, Icon } from 'semantic-ui-react';
+import { Row, Col, Visible, Hidden } from 'react-grid-system';
+import { Item, Button, Icon, Image, Popup, Label } from 'semantic-ui-react';
 
 class DiscussionItem extends Component {
+
+  constructor(props) {
+    super(props);
+    moment.locale('es');
+  }
 
   handleOnClickDelete = (id) => this.props.passClickDelete(id)
 
   render() {
+
+    let publishTime = new Date(this.props.discussion.publishTime)
+
+    let controlButtons;
+    if (this.context.loggedIn)
+      controlButtons =
+        <div>
+          {/* Delete Button */}
+          {this.context.authUser.id === this.props.discussion.owner.id &&
+            <DeleteDiscussionButton discussionId={this.props.discussion.id} passClickDelete={this.handleOnClickDelete}/>}
+          {/* Fork Button */}
+          <ForkDiscussionButton discussionId={this.props.discussion.id}/>
+          {/* Private icon */}
+          {this.context.authUser.id === this.props.discussion.owner.id && this.props.discussion.private &&
+          <Button basic icon floated='right'>
+              <Icon name='lock'/>
+          </Button>}
+        </div>
+
     return (
       <Item>
-        {window.innerWidth > 770 &&
-        <Item.Image size='tiny' rounded src={this.props.discussion.owner.imageUrl} />}
 
         <Item.Content>
           <Item.Header as={Link} to={'/discussion/'+this.props.discussion.id}>{this.props.discussion.topicTitle}</Item.Header>
-          <Item.Description as={Link} to={'/discussion/'+this.props.discussion.id}>
-            <TextTruncate
-                line={2}
-                truncateText="…"
-                text={this.props.discussion.topicDescription}
-            />
+          <Item.Description>
+            <Row>
+              <Col md={this.context.loggedIn? 6:12} lg={this.context.loggedIn? 9:12}>
+                <TextTruncate
+                    line={2}
+                    truncateText="…"
+                    text={this.props.discussion.topicDescription}
+                />
+              </Col>
+              <Hidden xs sm>
+                <Col md={6} lg={3}>
+                  {controlButtons}
+                </Col>
+              </Hidden>
+            </Row>
           </Item.Description>
           <Item.Extra>
-            @{this.props.discussion.owner.name}
+            <Row>
+              <Col md={3}>
+                <Image floated='left' size='mini' src={this.props.discussion.owner.imageUrl} />
+                @{this.props.discussion.owner.name}
+                <Popup
+                  trigger={<p>Publicado {moment(publishTime).fromNow()}</p>}
+                  content={moment(publishTime).format('LLLL')}
+                  inverted
+                />
+              </Col>
+              <Col md={2}>
+                {this.props.discussion.forkedFrom &&
+                <Label as={Link} to={'/discussion/'+this.props.discussion.forkedFrom} color='blue' tag style={{top: '6px'}}>
+                  Forked from
+                </Label>}
+              </Col>
+            </Row>
           </Item.Extra>
-          <Item.Extra>
-            {this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id &&
-              <DeleteDiscussionButton discussionId={this.props.discussion.id} passClickDelete={this.handleOnClickDelete}/>}
-            {this.context.loggedIn &&
-              <ForkDiscussionButton discussionId={this.props.discussion.id}/>}
-            {this.context.loggedIn && this.context.authUser.id === this.props.discussion.owner.id && this.props.discussion.private &&
-            <Button basic icon floated='right'>
-                <Icon name='lock'/>
-            </Button>}
-          </Item.Extra>
+          <Visible xs sm>
+            <Item.Extra>
+              {controlButtons}
+            </Item.Extra>
+          </Visible>
         </Item.Content>
       </Item>
     );

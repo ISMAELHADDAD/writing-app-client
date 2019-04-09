@@ -41,7 +41,7 @@ class InviteButton extends Component {
         <Popup
           hideOnScroll
           trigger={
-            <Button icon labelPosition='left' primary size='small'>
+            <Button icon fluid={this.props.fluid} labelPosition='left' primary size='small'>
               <Icon name='add user' /> Invitar
             </Button>}
           position='bottom center'
