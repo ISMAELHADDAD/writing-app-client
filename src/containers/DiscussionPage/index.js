@@ -283,26 +283,26 @@ class DiscussionPage extends Component {
               this.setState({parentDiscussion: parentDiscussion})
             })
         }
-      })
-    //Populate arguments
-    API.getDiscussionArguments(this.props.match.params.id)
-      .then(arrayOfArguments => {
-        this.setState({
-          discussion: {
-            ...this.state.discussion,
-            arguments: arrayOfArguments
-          }
-        })
-      })
-    //Populate agreements
-    API.getDiscussionAgreements(this.props.match.params.id)
-      .then(arrayOfAgreements => {
-        this.setState({
-          discussion: {
-            ...this.state.discussion,
-            agreements: arrayOfAgreements
-          }
-        })
+        //Populate arguments
+        API.getDiscussionArguments(this.props.match.params.id)
+          .then(arrayOfArguments => {
+            this.setState({
+              discussion: {
+                ...this.state.discussion,
+                arguments: arrayOfArguments
+              }
+            })
+          })
+        //Populate agreements
+        API.getDiscussionAgreements(this.props.match.params.id)
+          .then(arrayOfAgreements => {
+            this.setState({
+              discussion: {
+                ...this.state.discussion,
+                agreements: arrayOfAgreements
+              }
+            })
+          })
       })
   }
 
