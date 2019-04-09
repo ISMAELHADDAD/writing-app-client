@@ -126,6 +126,10 @@ class DiscussionsPage extends Component {
           </Segment>
           <br/>
           <Pagination defaultActivePage={this.state.pages.current} totalPages={this.state.pages.total} onPageChange={this.handleOnPageChange}/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
         </Container>
       </div>
     );

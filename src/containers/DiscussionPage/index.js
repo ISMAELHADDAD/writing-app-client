@@ -273,9 +273,36 @@ class DiscussionPage extends Component {
           isDiscussionLoaded: true,
           discussion: discussion
         })
-
         //Update avatarSelect
         this.updateAvatarSelect(discussion)
+        //Get info of discussion from which was forked
+        if (discussion.forkedFrom) {
+          API.getDiscussion(discussion.forkedFrom)
+            .then(d => {
+              let parentDiscussion = '@' + d.owner.name + '/' + d.topicTitle
+              this.setState({parentDiscussion: parentDiscussion})
+            })
+        }
+      })
+    //Populate arguments
+    API.getDiscussionArguments(this.props.match.params.id)
+      .then(arrayOfArguments => {
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            arguments: arrayOfArguments
+          }
+        })
+      })
+    //Populate agreements
+    API.getDiscussionAgreements(this.props.match.params.id)
+      .then(arrayOfAgreements => {
+        this.setState({
+          discussion: {
+            ...this.state.discussion,
+            agreements: arrayOfAgreements
+          }
+        })
       })
   }
 
@@ -361,10 +388,16 @@ class DiscussionPage extends Component {
             <Container>
 
                 <br/>
-                <h1>{this.state.discussion.topicTitle}  {this.state.discussion.forkedFrom &&
-                <Label as={LinkRouter} to={'/discussion/'+this.state.discussion.forkedFrom} color='blue' tag style={{bottom: '6px'}}>
-                  Forked from
-                </Label>}</h1>
+                <h1>{this.state.discussion.topicTitle}  {this.state.discussion.forkedFrom && this.state.parentDiscussion &&
+                <Popup
+                  trigger={
+                    <Label as={LinkRouter} to={'/discussion/'+this.state.discussion.forkedFrom} color='blue' tag style={{bottom: '6px'}}>
+                      Forked from
+                    </Label>
+                  }
+                  content={this.state.parentDiscussion}
+                  inverted
+                />}</h1>
                 <p>
                   {this.state.discussion.topicDescription}
                 </p>

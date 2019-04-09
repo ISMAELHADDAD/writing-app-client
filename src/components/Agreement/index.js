@@ -21,7 +21,7 @@ class Agreement extends Component {
   checkAvatarOwnership = (x) => {
     if (x !== undefined && x !== null)
       return (x.assignedToUserId === this.context.authUser.id
-        && this.props.point.proposedByAvatarId !== x.id)
+        && this.props.point.proposedByAvatar.id !== x.id)
   }
 
   handleAcceptClick = () => {
@@ -51,7 +51,7 @@ class Agreement extends Component {
       dialog = <Card style={{margin: '0 auto'}}>
                 <Card.Content>
                   <Card.Description>
-                    <strong>{this.props.point.proposedByAvatarName}</strong> a propuesto esto:
+                    <strong>{this.props.point.proposedByAvatar.name}</strong> a propuesto esto:
                   </Card.Description>
                   </Card.Content>
                   <Card.Content extra>
