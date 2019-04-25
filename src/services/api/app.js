@@ -100,6 +100,17 @@ class API {
     return res.data;
   }
 
+  static async getGeneralComments(discussionId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/general_comments`);
+    return res.data;
+  }
+
+  static async sendGeneralComment(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/general_comments`, object, {headers: headers});
+    return res.data;
+  }
+
 }
 
 export default API

@@ -6,6 +6,7 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
+import GeneralCommentsSidebar from '../../components/GeneralCommentsSidebar';
 import InviteButton from '../../components/InviteButton';
 
 //API
@@ -39,6 +40,7 @@ class DiscussionPage extends Component {
       isDiscussionLoaded: false,
       discussion: {},
       textEditorSidebarVisibility: false,
+      commentsSidebarVisibility: false,
       agreePointVisibility: false,
       agreeSelect: [
         {
@@ -198,6 +200,10 @@ class DiscussionPage extends Component {
   handleTextEditorSidebarVisibility = () => this.setState({ textEditorSidebarVisibility: true })
 
   handleHideTextEditorSidebar = () => this.setState({ textEditorSidebarVisibility: false })
+
+  handleShowCommentsSidebar = () => this.setState({ commentsSidebarVisibility: true })
+
+  handleHideCommentsSidebar = () => this.setState({ commentsSidebarVisibility: false })
 
   scrollToNewArgument() {
     scroller.scrollTo('scroll-to-new-argument', {
@@ -403,6 +409,11 @@ class DiscussionPage extends Component {
                 </p>
                 <Divider/>
 
+                <Button basic floated='right' onClick={this.handleShowCommentsSidebar}>
+                  <Icon name='comment'/>
+                  Comentarios
+                </Button>
+
                 <Image floated='left' size='mini' src={this.state.discussion.owner.imageUrl} />
                 @{this.state.discussion.owner.name}
                 <Popup
@@ -419,7 +430,7 @@ class DiscussionPage extends Component {
         <Container>
           <div ref={this.argumentsRef}>
             <Responsive minWidth={1650}>
-              <Rail position='right'>
+              <Rail position='right' style={{zIndex: 0}}>
                 <Sticky offset={100} context={this.argumentsRef.current} active={true}>
                   <Menu vertical>
                     <Menu.Item>
@@ -567,6 +578,12 @@ class DiscussionPage extends Component {
             avatarSelect={this.state.avatarSelect}
           />
         </Container>
+
+        <GeneralCommentsSidebar
+          visible={this.state.commentsSidebarVisibility}
+          passClickClose={this.handleHideCommentsSidebar}
+          discussionId={this.state.discussion.id}
+        />
 
         <Header as='h4' block>
           <br/>
