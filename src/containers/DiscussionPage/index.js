@@ -419,7 +419,7 @@ class DiscussionPage extends Component {
         <Container>
           <div ref={this.argumentsRef}>
             <Responsive minWidth={1650}>
-              <Rail position='right'>
+              <Rail position='right' style={{zIndex: 0}}>
                 <Sticky offset={100} context={this.argumentsRef.current} active={true}>
                   <Menu vertical>
                     <Menu.Item>
@@ -487,7 +487,7 @@ class DiscussionPage extends Component {
                 <br/>
                 <Container>
                   {this.state.discussion.arguments && this.state.discussion.arguments.map((item) => (
-                     <Argument key={item.num} argument={item} avatarOneId={this.state.discussion.avatarOne.id}/>
+                     <Argument key={item.num} argument={item} avatarOneId={this.state.discussion.avatarOne.id} discussionId={this.state.discussion.id}/>
                   ))}
                   <br/>
                 </Container>

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+//Components
+import CommentsSidebar from '../../components/CommentsSidebar';
+
 //Utils
 import moment from 'moment';
 import 'moment/locale/es';
@@ -12,8 +15,15 @@ class Argument extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      commentsSidebarVisibility: false
+    };
     moment.locale('es');
   }
+
+  handleShowCommentsSidebar = () => this.setState({ commentsSidebarVisibility: true })
+
+  handleHideCommentsSidebar = () => this.setState({ commentsSidebarVisibility: false })
 
   render() {
 
@@ -35,7 +45,7 @@ class Argument extends Component {
         </Card.Content>
         <Card.Content extra>
           <Rating icon='star' defaultRating={0} maxRating={5} />
-          <Button basic floated='right'>
+          <Button basic floated='right' onClick={this.handleShowCommentsSidebar}>
             <Icon name='comment'/>
             Comentarios
           </Button>
@@ -66,6 +76,12 @@ class Argument extends Component {
       <div>
         {side}
         <br />
+        <CommentsSidebar
+          visible={this.state.commentsSidebarVisibility}
+          passClickClose={this.handleHideCommentsSidebar}
+          discussionId={this.props.discussionId}
+          argumentId={this.props.argument.id}
+        />
       </div>
     );
   }
