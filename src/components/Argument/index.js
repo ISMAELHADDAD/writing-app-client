@@ -6,7 +6,7 @@ import 'moment/locale/es';
 
 //UI framework
 import { Row, Col } from 'react-grid-system';
-import { Card, Icon, Button, Rating, Popup } from 'semantic-ui-react';
+import { Card, Popup } from 'semantic-ui-react';
 
 class Argument extends Component {
 
@@ -32,13 +32,6 @@ class Argument extends Component {
             />
           </Card.Meta>
           <Card.Description>{this.props.argument.content}</Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <Rating icon='star' defaultRating={0} maxRating={5} />
-          <Button basic floated='right'>
-            <Icon name='comment'/>
-            Comentarios
-          </Button>
         </Card.Content>
       </Card>
 
