@@ -111,6 +111,25 @@ class API {
     return res.data;
   }
 
+  static async getCriteria(discussionId) {
+    // let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/criteria`);
+    // return res.data;
+    let criteria = [
+      {id: 1, text: '¿Se recabe suficiente información acerca del tema en discusión?'},
+      {id: 2, text: '¿Se resume el argumento de manera clara y no se repite demás?'},
+      {id: 3, text: '¿Se hace un buen uso de la información?'}
+    ]
+    return criteria;
+  }
+
+  static async addCriteria(token, discussionId, object) {
+    // let headers = { 'Authorization': token }
+    // let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/criteria`, object, {headers: headers});
+    // return res.data;
+    let criteria = {id: 4, text: object.text}
+    return criteria;
+  }
+
 }
 
 export default API
