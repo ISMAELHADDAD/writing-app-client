@@ -122,6 +122,25 @@ class API {
     return res.data;
   }
 
+  static async getRatings(discussionId, avatarId) {
+    // let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/ratings`);
+    // return res.data;
+    let ratings = [
+      {id: 1, criterium: {id: 1, text: '¿Se recabe suficiente información acerca del tema en discusión?'}, rating: 2},
+      {id: 2, criterium: {id: 2, text: '¿Se resume el argumento de manera clara y no se repite demás?'}, rating: 3},
+      {id: 3, criterium: {id: 3, text: '¿Se hace un buen uso de la información?'}, rating: 0}
+    ]
+    return ratings;
+  }
+
+  static async setRating(token, discussionId, avatarId, object) {
+    // let headers = { 'Authorization': token }
+    // let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/ratings`, object, {headers: headers});
+    // return res.data;
+    let rating = {id: 2, criterium: {id: 2, text: '¿Se resume el argumento de manera clara y no se repite demás?'}, rating: object.rating}
+    return rating;
+  }
+
 }
 
 export default API
