@@ -34,13 +34,13 @@ class CriteriaSidebar extends Component {
   handleClickSendComment = () => {
     if (this.state.textToSubmit !== '')
       API.addCriteria(this.context.authUser.token,this.props.discussionId, {text: this.state.textToSubmit})
-      .then(criterion => {this.setState({criteria: [...this.state.criteria, criterion] });})
+      .then(criterium => {this.setState({criteria: [...this.state.criteria, criterium] });console.log(criterium);})
   }
 
   componentDidUpdate(prevProps) {
-    // if (this.props.visible && prevProps.visible !== this.props.visible)
-    //   API.getCriteria(this.props.discussionId)
-    //   .then(criteria => {this.setState({criteria: criteria });})
+    if (this.props.visible && prevProps.visible !== this.props.visible)
+      API.getCriteria(this.props.discussionId)
+      .then(criteria => {this.setState({criteria: criteria });console.log(criteria);})
   }
 
   render() {
@@ -69,7 +69,7 @@ class CriteriaSidebar extends Component {
             </p>
 
             <List bulleted size='medium' relaxed='very'>
-              {this.state.criteria > 0 ?
+              {this.state.criteria.length > 0 ?
                 this.state.criteria.map((item) => (
                   <List.Item key={item.id}>{item.text}</List.Item>
                 ))
