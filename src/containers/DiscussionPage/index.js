@@ -7,6 +7,7 @@ import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
 import GeneralCommentsSidebar from '../../components/GeneralCommentsSidebar';
+import CriteriaSidebar from '../../components/CriteriaSidebar';
 import InviteButton from '../../components/InviteButton';
 
 //API
@@ -41,6 +42,7 @@ class DiscussionPage extends Component {
       discussion: {},
       textEditorSidebarVisibility: false,
       commentsSidebarVisibility: false,
+      criteriaSidebarVisibility: false,
       agreePointVisibility: false,
       agreeSelect: [
         {
@@ -204,6 +206,10 @@ class DiscussionPage extends Component {
   handleShowCommentsSidebar = () => this.setState({ commentsSidebarVisibility: true })
 
   handleHideCommentsSidebar = () => this.setState({ commentsSidebarVisibility: false })
+
+  handleShowCriteriaSidebar = () => this.setState({ criteriaSidebarVisibility: true })
+
+  handleHideCriteriaSidebar = () => this.setState({ criteriaSidebarVisibility: false })
 
   scrollToNewArgument() {
     scroller.scrollTo('scroll-to-new-argument', {
@@ -414,6 +420,11 @@ class DiscussionPage extends Component {
                   Comentarios
                 </Button>
 
+                <Button basic floated='right' onClick={this.handleShowCriteriaSidebar}>
+                  <Icon name='write'/>
+                  Criterios
+                </Button>
+
                 <Image floated='left' size='mini' src={this.state.discussion.owner.imageUrl} />
                 @{this.state.discussion.owner.name}
                 <Popup
@@ -568,6 +579,19 @@ class DiscussionPage extends Component {
           </div>
         </Container>
 
+        <GeneralCommentsSidebar
+          visible={this.state.commentsSidebarVisibility}
+          passClickClose={this.handleHideCommentsSidebar}
+          discussionId={this.state.discussion.id}
+        />
+
+        <CriteriaSidebar
+          visible={this.state.criteriaSidebarVisibility}
+          passClickClose={this.handleHideCriteriaSidebar}
+          discussionId={this.state.discussion.id}
+          ownerId={this.state.discussion.owner.id}
+        />
+
         <Container>
           <TextEditorSidebar
             visible={this.state.textEditorSidebarVisibility}
@@ -578,12 +602,6 @@ class DiscussionPage extends Component {
             avatarSelect={this.state.avatarSelect}
           />
         </Container>
-
-        <GeneralCommentsSidebar
-          visible={this.state.commentsSidebarVisibility}
-          passClickClose={this.handleHideCommentsSidebar}
-          discussionId={this.state.discussion.id}
-        />
 
         <Header as='h4' block>
           <br/>

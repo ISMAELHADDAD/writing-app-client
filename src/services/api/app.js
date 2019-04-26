@@ -111,6 +111,17 @@ class API {
     return res.data;
   }
 
+  static async getCriteria(discussionId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/criteria`);
+    return res.data;
+  }
+
+  static async addCriteria(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/criteria`, object, {headers: headers});
+    return res.data;
+  }
+
 }
 
 export default API
