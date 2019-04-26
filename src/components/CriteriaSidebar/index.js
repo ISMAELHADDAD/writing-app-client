@@ -29,9 +29,9 @@ class CriteriaSidebar extends Component {
     this.props.passClickClose()
   }
 
-  handleChangeTextComment = (e, { value }) => this.setState({ textToSubmit: value })
+  handleChangeTextCriterium = (e, { value }) => this.setState({ textToSubmit: value })
 
-  handleClickSendComment = () => {
+  handleClickSendCriterium = () => {
     if (this.state.textToSubmit !== '')
       API.addCriteria(this.context.authUser.token,this.props.discussionId, {text: this.state.textToSubmit})
       .then(criterium => {this.setState({criteria: [...this.state.criteria, criterium] });console.log(criterium);})
