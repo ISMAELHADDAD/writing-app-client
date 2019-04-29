@@ -122,6 +122,17 @@ class API {
     return res.data;
   }
 
+  static async getRatings(discussionId, avatarId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/ratings`);
+    return res.data;
+  }
+
+  static async setRating(token, discussionId, avatarId, ratingId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/ratings/${ratingId}`, object, {headers: headers});
+    return res.data;
+  }
+
 }
 
 export default API

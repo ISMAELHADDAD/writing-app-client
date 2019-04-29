@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+//Components
+import RatingsSidebar from '../../components/RatingsSidebar';
+
 //API
 import API from '../../services/api/app';
 
@@ -17,9 +20,14 @@ class Avatar extends Component {
       user: {},
       isAssigned: false,
       participantSelect: [],
-      idToAssign: 0
+      idToAssign: 0,
+      ratingsSidebarVisibility: false
     };
   }
+
+  handleShowRatingsSidebar = () => this.setState({ ratingsSidebarVisibility: true })
+
+  handleHideRatingsSidebar = () => this.setState({ ratingsSidebarVisibility: false })
 
   handleOnRemove = (event,data) => {
     this.setState({isAssigned: false})
@@ -126,9 +134,22 @@ class Avatar extends Component {
               }
             </Label>
 
+            <Button basic floated='right' onClick={this.handleShowRatingsSidebar}>
+              <Icon name='star'/>
+              Valoración
+            </Button>
+
           </Card.Content>
         </Card>
         <br/>
+
+        <RatingsSidebar
+          visible={this.state.ratingsSidebarVisibility}
+          passClickClose={this.handleHideRatingsSidebar}
+          discussionId={this.props.discussionId}
+          avatarId={this.props.avatar.id}
+          ownerId={this.props.ownerUserId}
+        />
       </div>
     );
   }

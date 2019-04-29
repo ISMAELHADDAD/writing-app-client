@@ -82,8 +82,8 @@ class CriteriaSidebar extends Component {
             </List>
 
             {this.context.loggedIn &&
-            <Form reply onSubmit={this.handleClickSendComment}>
-              <Form.TextArea onChange={this.handleChangeTextComment} style={{ minHeight: 50, maxHeight: 100 }}/>
+            <Form reply onSubmit={this.handleClickSendCriterium}>
+              <Form.TextArea onChange={this.handleChangeTextCriterium} style={{ minHeight: 50, maxHeight: 100 }}/>
               <Button content='Añadir criterio' labelPosition='left' icon='add' primary />
             </Form>
             }
