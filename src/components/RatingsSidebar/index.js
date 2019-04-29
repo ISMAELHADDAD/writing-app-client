@@ -39,7 +39,7 @@ class RatingsSidebar extends Component {
   }
 
   handleRate = (ratingValue, ratingId) => {
-    API.setRating(this.context.authUser.token, this.props.discussionId, this.props.avatarId, {rating: ratingValue})
+    API.setRating(this.context.authUser.token, this.props.discussionId, this.props.avatarId, ratingId, {rating: ratingValue})
     .then(newRating => {
       this.setState({ratings: this.state.ratings.map(rating => (rating.id === newRating.id)? newRating : rating) })
     })
@@ -47,7 +47,7 @@ class RatingsSidebar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.visible && prevProps.visible !== this.props.visible)
-      API.getRatings(this.props.discussionId)
+      API.getRatings(this.props.discussionId, this.props.avatarId)
       .then(ratings => {this.setState({ratings: ratings })})
 
     if (prevState.ratings !== this.state.ratings)
