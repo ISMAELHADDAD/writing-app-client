@@ -100,6 +100,39 @@ class API {
     return res.data;
   }
 
+  static async getGeneralComments(discussionId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/general_comments`);
+    return res.data;
+  }
+
+  static async sendGeneralComment(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/general_comments`, object, {headers: headers});
+    return res.data;
+  }
+
+  static async getCriteria(discussionId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/criteria`);
+    return res.data;
+  }
+
+  static async addCriteria(token, discussionId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.post(`${ENDPOINT}/discussions/${discussionId}/criteria`, object, {headers: headers});
+    return res.data;
+  }
+
+  static async getRatings(discussionId, avatarId) {
+    let res = await axios.get(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/ratings`);
+    return res.data;
+  }
+
+  static async setRating(token, discussionId, avatarId, ratingId, object) {
+    let headers = { 'Authorization': token }
+    let res = await axios.put(`${ENDPOINT}/discussions/${discussionId}/avatar/${avatarId}/ratings/${ratingId}`, object, {headers: headers});
+    return res.data;
+  }
+
 }
 
 export default API

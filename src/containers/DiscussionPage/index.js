@@ -6,6 +6,8 @@ import Argument from '../../components/Argument';
 import Agreement from '../../components/Agreement';
 import Avatar from '../../components/Avatar';
 import TextEditorSidebar from '../../components/TextEditorSidebar';
+import GeneralCommentsSidebar from '../../components/GeneralCommentsSidebar';
+import CriteriaSidebar from '../../components/CriteriaSidebar';
 import InviteButton from '../../components/InviteButton';
 
 //API
@@ -39,6 +41,8 @@ class DiscussionPage extends Component {
       isDiscussionLoaded: false,
       discussion: {},
       textEditorSidebarVisibility: false,
+      commentsSidebarVisibility: false,
+      criteriaSidebarVisibility: false,
       agreePointVisibility: false,
       agreeSelect: [
         {
@@ -198,6 +202,14 @@ class DiscussionPage extends Component {
   handleTextEditorSidebarVisibility = () => this.setState({ textEditorSidebarVisibility: true })
 
   handleHideTextEditorSidebar = () => this.setState({ textEditorSidebarVisibility: false })
+
+  handleShowCommentsSidebar = () => this.setState({ commentsSidebarVisibility: true })
+
+  handleHideCommentsSidebar = () => this.setState({ commentsSidebarVisibility: false })
+
+  handleShowCriteriaSidebar = () => this.setState({ criteriaSidebarVisibility: true })
+
+  handleHideCriteriaSidebar = () => this.setState({ criteriaSidebarVisibility: false })
 
   scrollToNewArgument() {
     scroller.scrollTo('scroll-to-new-argument', {
@@ -403,6 +415,16 @@ class DiscussionPage extends Component {
                 </p>
                 <Divider/>
 
+                <Button basic floated='right' onClick={this.handleShowCommentsSidebar}>
+                  <Icon name='comment'/>
+                  Comentarios
+                </Button>
+
+                <Button basic floated='right' onClick={this.handleShowCriteriaSidebar}>
+                  <Icon name='write'/>
+                  Criterios
+                </Button>
+
                 <Image floated='left' size='mini' src={this.state.discussion.owner.imageUrl} />
                 @{this.state.discussion.owner.name}
                 <Popup
@@ -419,7 +441,7 @@ class DiscussionPage extends Component {
         <Container>
           <div ref={this.argumentsRef}>
             <Responsive minWidth={1650}>
-              <Rail position='right'>
+              <Rail position='right' style={{zIndex: 0}}>
                 <Sticky offset={100} context={this.argumentsRef.current} active={true}>
                   <Menu vertical>
                     <Menu.Item>
@@ -556,6 +578,19 @@ class DiscussionPage extends Component {
             </Card>
           </div>
         </Container>
+
+        <GeneralCommentsSidebar
+          visible={this.state.commentsSidebarVisibility}
+          passClickClose={this.handleHideCommentsSidebar}
+          discussionId={this.state.discussion.id}
+        />
+
+        <CriteriaSidebar
+          visible={this.state.criteriaSidebarVisibility}
+          passClickClose={this.handleHideCriteriaSidebar}
+          discussionId={this.state.discussion.id}
+          ownerId={this.state.discussion.owner.id}
+        />
 
         <Container>
           <TextEditorSidebar
